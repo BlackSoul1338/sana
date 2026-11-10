@@ -132,6 +132,10 @@ describe('Challenge Match: подбор → отклик → трекер → о
     const a = (await api.post('/api/match/applications', alice, { teamId: team.id, taskId: t.demand.id })).body;
     expect((await api.get(`/api/match/applications?taskId=${t.demand.id}`, biz)).body).toHaveLength(1);
     expect((await api.get(`/api/match/applications?taskId=${t.demand.id}`, other)).status).toBe(403);
+    // Without a filter nobody gets the platform-wide list.
+    const unfiltered = await api.get('/api/match/applications', other);
+    expect(unfiltered.status).toBe(422);
+    expect(unfiltered.body.code).toBe('validation_failed');
     expect((await api.post(`/api/match/applications/${a.id}/withdraw`, alice)).body.status).toBe('withdrawn');
     expect((await api.post(`/api/match/applications/${a.id}/decision`, biz, { decision: 'accept' })).status).toBe(409);
   });

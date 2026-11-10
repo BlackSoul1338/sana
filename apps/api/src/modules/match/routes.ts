@@ -53,7 +53,7 @@ matchRoutes.openapi(
     tags,
     security: secured,
     summary: 'Заявки команды или заявки на задачу (для её владельца)',
-    request: { query: z.object({ teamId: z.uuid().optional(), taskId: z.uuid().optional() }) },
+    request: { query: match.ApplicationsQuery },
     responses: { 200: jsonRes(z.array(match.Application)), ...errorResponses },
   }),
   async (c) => c.json(await svc.listApplications(c.get('ctx'), c.req.valid('query')), 200),
