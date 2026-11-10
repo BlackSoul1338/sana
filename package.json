@@ -3,9 +3,12 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.17.0",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "pnpm --filter @sana/api dev",
+    "dev:web": "pnpm --filter @sana/web dev",
     "typecheck": "pnpm -r typecheck",
     "lint": "eslint .",
     "test": "pnpm -r test",
@@ -20,6 +23,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.0",
     "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.14.0",
     "supabase": "3.1.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.2"

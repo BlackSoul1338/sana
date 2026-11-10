@@ -1,6 +1,6 @@
-# AI Sana — платформа практических заданий (бэкенд)
+# AI Sana — платформа практических заданий
 
-API-first модульный монолит на TypeScript: ядро платформы и три модуля из `docs/5case_og.md`.
+API-first модульный монолит на TypeScript (ядро платформы и три модуля из `docs/5case_og.md`) и отдельный веб-клиент `apps/web`.
 
 | Модуль | Кейс | Что делает |
 | --- | --- | --- |
@@ -9,11 +9,23 @@ API-first модульный монолит на TypeScript: ядро платф
 | Business Challenge Builder | 2 | диалог с бизнесом: проверка полноты, уточняющие вопросы, готовность, карточка задачи, ручная публикация, сравнение до/после |
 | Challenge Match | 3 | рекомендации задач команде с объяснением, отклик, решение бизнеса → проект в трекере, отзыв бизнеса и коэффициент реальной задачи |
 
-Фронтенда пока нет: контракт — OpenAPI (`/docs`, `packages/contracts/openapi.json`) и Zod-схемы в `@sana/contracts`.
+Контракт между ними — OpenAPI (`/docs`, `packages/contracts/openapi.json`) и Zod-схемы в `@sana/contracts`.
+
+## Веб-клиент
+
+Русскоязычное SPA для трёх ролей; домашний экран зависит от роли.
+
+| Роль | Экраны |
+| --- | --- |
+| Студент | команда (участники, роли, навыки), проекты спринта, проект: карта этапов, следующий шаг, задачи, подтверждения с загрузкой файлов, лента баллов, рейтинг; задачи бизнеса с рекомендациями и отклик; заявки |
+| Ментор | очередь проверки (принять / с поправкой / на доработку), проекты: сроки этапов и поправка баллов |
+| Бизнес | конструктор задачи: диалог с живой карточкой, сборка и правка карточки, публикация, «до и после»; мои задачи: отклики, решение по заявке, прогресс команды, отзыв на результат |
+
+Вход — Supabase Auth (почта и пароль), после регистрации — выбор роли (студент или бизнес). Supabase используется только для входа и загрузки файлов по подписанной ссылке; все данные идут через API.
 
 ## Стек
 
-Node 24+, pnpm workspaces, Hono + `@hono/zod-openapi` (OpenAPI 3.1, Scalar), Zod 4, Drizzle ORM + postgres.js, Supabase (Postgres, Auth, Storage) локально на podman/docker, AI SDK 7 + Gemini (`@ai-sdk/google`), Vitest.
+Node 24+, pnpm workspaces. API: Hono + `@hono/zod-openapi` (OpenAPI 3.1, Scalar), Zod 4, Drizzle ORM + postgres.js, Supabase (Postgres, Auth, Storage) локально на podman/docker, AI SDK 7 + Gemini (`@ai-sdk/google`), Vitest. Веб: Vite, React 19, TanStack Router и Query, клиент `openapi-fetch` по сгенерированным типам, react-hook-form + схемы из `@sana/contracts`, Tailwind CSS 4 и shadcn/ui, Feature-Sliced Design (проверка — Steiger).
 
 ## Запуск
 
@@ -29,7 +41,7 @@ systemctl --user enable --now podman.socket
 pnpm db:start
 ```
 
-Скопируйте `.env.example` в `.env` и заполните ключи из `pnpm db:status` и ключ Gemini. Затем:
+Скопируйте `.env.example` в `.env` и заполните ключи из `pnpm db:status` и ключ Gemini. Веб читает тот же `.env` (только переменные `VITE_*`: адрес API и публичный ключ Supabase). Затем:
 
 ```bash
 pnpm db:migrate
@@ -43,7 +55,21 @@ pnpm seed
 pnpm dev
 ```
 
-API: http://localhost:8787, документация: http://localhost:8787/docs. Аккаунты и пароль после seed — в `data/demo-accounts.json` (файл в `.gitignore`).
+```bash
+pnpm dev:web
+```
+
+API: http://localhost:8787, документация: http://localhost:8787/docs. Веб: http://localhost:5173. Аккаунты и пароль после seed — в `data/demo-accounts.json` (файл в `.gitignore`): `alice@sana.local` (студент), `mentor@sana.local`, `daily@sana.local` (бизнес).
+
+## Остановка
+
+Docker Compose в проекте нет: в podman живут только контейнеры Supabase, приложение работает напрямую на Node. Остановите dev-процессы (Ctrl+C) и затем:
+
+```bash
+pnpm db:stop
+```
+
+Полный цикл «с нуля»: `pnpm db:start` → `pnpm db:migrate` → `pnpm seed` → `pnpm dev` (+ `pnpm dev:web`), остановка — `pnpm db:stop`.
 
 Токен для запросов выдаёт Supabase Auth (`POST /auth/v1/token?grant_type=password`), API принимает его в `Authorization: Bearer …`. После регистрации пользователь создаёт профиль: `POST /api/me/profile` (роль куратора самостоятельно не выдаётся).
 
@@ -52,23 +78,32 @@ API: http://localhost:8787, документация: http://localhost:8787/docs
 | Команда | Что проверяет |
 | --- | --- |
 | `pnpm typecheck` | типы во всех пакетах |
-| `pnpm lint` | ESLint, включая границы модулей (модули не импортируют друг друга) |
-| `pnpm test` | unit-тесты правил и интеграционные HTTP-тесты на отдельной базе `sana_test` (нужен запущенный `pnpm db:start`) |
+| `pnpm lint` | ESLint, включая границы модулей API (модули не импортируют друг друга) и правила React-хуков |
+| `pnpm --filter @sana/web lint:fsd` | Steiger: слои и публичные API Feature-Sliced Design в `apps/web` |
+| `pnpm test` | unit-тесты правил и интеграционные HTTP-тесты на отдельной базе `sana_test` (нужен запущенный `pnpm db:start`), unit-тесты веба |
 | `pnpm --filter @sana/api eval:bcb` | живой прогон Gemini на 15 описаниях: сильные описания получают готовность выше слабых |
 | `pnpm --filter @sana/api demo:match [Команда]` | рекомендации и план роста для команды на данных seed |
 | `pnpm --filter @sana/api ai:smoke [модели…]` | доступ к Gemini и структурный ответ |
 | `pnpm --filter @sana/api openapi` | экспорт `packages/contracts/openapi.json` |
+| `pnpm --filter @sana/web gen:api` | типы клиента из `openapi.json` (после изменения API) |
 
 ## Устройство
 
 ```
-packages/contracts/   Zod-схемы API (общие с будущим фронтендом) + openapi.json
+packages/contracts/   Zod-схемы API (общие с вебом) + openapi.json
 apps/api/src/
   platform/           env, БД, auth (проверка JWT), ошибки RFC 9457, события, AI-провайдер, storage
   core/               identity, catalog, evidence, points — общее ядро
   modules/            sprint, challenge-builder, match — не импортируют друг друга
   flows/              межмодульные сценарии (принятие заявки → задача → проект Sprint)
   app.ts              корень композиции
+apps/web/src/         Feature-Sliced Design
+  app/                роутер (файлы маршрутов с проверкой роли), провайдеры, тема
+  pages/              экраны
+  widgets/            крупные блоки: карта этапов, лента, чат конструктора, живая карточка, рейтинг
+  features/           действия пользователя: подтвердить прогресс, проверить, собрать карточку, откликнуться…
+  entities/           запросы и мелкий UI сущностей: проект, задача, черновик, заявка…
+  shared/             клиент API и ошибки, подписи на русском, UI-кит
 apps/api/drizzle/     миграции (RLS включён, права Data API сняты — данные только через API)
 data/                 синтетические данные: навыки, роли, шаблоны, 30 задач, 20 команд, 15 описаний
 ```
