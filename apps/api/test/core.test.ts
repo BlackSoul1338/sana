@@ -76,4 +76,17 @@ describe('ядро: профиль, команды, права', () => {
     expect(events.body).toHaveLength(2);
     expect(events.body.every((e: any) => e.explanation.startsWith('Корректировка куратора'))).toBe(true);
   });
+
+  it('поиск студентов по имени: только студенты, бизнесу недоступно', async () => {
+    const alice = await createUser('student', 'Алиса Смирнова');
+    await createUser('student', 'Борис');
+    await createUser('mentor', 'Алина Куратор');
+    const biz = await createUser('business', 'Компания');
+
+    const found = await api.get(`/api/students?q=${encodeURIComponent('али')}`, alice);
+    expect(found.status).toBe(200);
+    expect(found.body).toEqual([{ id: alice.id, displayName: 'Алиса Смирнова' }]);
+    expect((await api.get('/api/students?q=%25', alice)).body).toEqual([]);
+    expect((await api.get('/api/students', biz)).status).toBe(403);
+  });
 });

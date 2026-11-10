@@ -73,6 +73,9 @@ export const AddMemberInput = z.object({ profileId: Id, roleSlug: z.string().nul
 export const AssignRoleInput = z.object({ roleSlug: z.string().nullable() }).meta({ id: 'AssignRoleInput' });
 export const SetTeamSkillsInput = z.object({ skills: z.array(TeamSkill).max(25) }).meta({ id: 'SetTeamSkillsInput' });
 
+export const StudentSearchQuery = z.object({ q: z.string().trim().max(80).default('') });
+export const StudentSearchItem = z.object({ id: Id, displayName: z.string() }).meta({ id: 'StudentSearchItem' });
+
 export const Me = z
   .object({
     userId: Id,

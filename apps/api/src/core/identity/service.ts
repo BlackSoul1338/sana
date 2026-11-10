@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray } from 'drizzle-orm';
+import { and, asc, eq, ilike, inArray } from 'drizzle-orm';
 import type { z } from 'zod';
 import type { AddMemberInput, CreateProfileInput, CreateTeamInput, Me, Profile, Skill, Team, UpdateTeamInput } from '@sana/contracts';
 import { inTx, requireProfile, requireRole, type ActorProfile, type Ctx } from '../../platform/context.js';
@@ -54,6 +54,18 @@ export async function createProfile(ctx: Ctx, input: z.infer<typeof CreateProfil
 export async function listSkills(ctx: Ctx): Promise<Skill[]> {
   const rows = await ctx.db.select().from(refSkills).orderBy(asc(refSkills.category), asc(refSkills.title));
   return rows.map((r) => ({ slug: r.slug, title: r.title, category: r.category, difficulty: r.difficulty }));
+}
+
+/** Students to invite into a team: name search only, minimal fields. */
+export async function searchStudents(ctx: Ctx, q: string): Promise<{ id: string; displayName: string }[]> {
+  requireRole(ctx, 'student', 'mentor');
+  const pattern = `%${q.replace(/[\\%_]/g, (ch) => `\\${ch}`)}%`;
+  return ctx.db
+    .select({ id: profiles.id, displayName: profiles.displayName })
+    .from(profiles)
+    .where(and(eq(profiles.role, 'student'), q ? ilike(profiles.displayName, pattern) : undefined))
+    .orderBy(asc(profiles.displayName))
+    .limit(20);
 }
 
 export async function listRoles(ctx: Ctx) {

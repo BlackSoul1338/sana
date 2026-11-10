@@ -9,6 +9,8 @@ import {
   Profile,
   SetTeamSkillsInput,
   Skill,
+  StudentSearchItem,
+  StudentSearchQuery,
   Team,
   TeamRole,
   UpdateTeamInput,
@@ -40,6 +42,19 @@ identityRoutes.openapi(
 identityRoutes.openapi(
   createRoute({ method: 'get', path: '/skills', tags: ['Справочники'], security: secured, summary: 'Справочник навыков и технологий', responses: { 200: jsonRes(z.array(Skill)), ...errorResponses } }),
   async (c) => c.json(await svc.listSkills(c.get('ctx')), 200),
+);
+
+identityRoutes.openapi(
+  createRoute({
+    method: 'get',
+    path: '/students',
+    tags,
+    security: secured,
+    summary: 'Поиск студентов по имени (для приглашения в команду)',
+    request: { query: StudentSearchQuery },
+    responses: { 200: jsonRes(z.array(StudentSearchItem)), ...errorResponses },
+  }),
+  async (c) => c.json(await svc.searchStudents(c.get('ctx'), c.req.valid('query').q), 200),
 );
 
 identityRoutes.openapi(
