@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@fontsource-variable/onest';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Sana palette: warm paper + ink, one tomato accent for actions and "now",
+ * mint for confirmed progress, amber for waiting. Everything else stays neutral.
+ */
+:root {
+  --radius: 0.875rem;
+  --background: oklch(0.985 0.006 80);
+  --foreground: oklch(0.22 0.012 60);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.64 0.2 35);
+  --primary-foreground: oklch(0.99 0.005 80);
+  --secondary: oklch(0.95 0.01 75);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.955 0.008 75);
+  --muted-foreground: oklch(0.5 0.012 60);
+  --accent: oklch(0.95 0.035 45);
+  --accent-foreground: oklch(0.42 0.13 35);
+  --destructive: oklch(0.56 0.2 25);
+  --success: oklch(0.6 0.12 165);
+  --success-soft: oklch(0.95 0.04 165);
+  --warning: oklch(0.72 0.14 75);
+  --warning-soft: oklch(0.96 0.05 85);
+  --border: oklch(0.91 0.01 75);
+  --input: oklch(0.88 0.012 75);
+  --ring: oklch(0.64 0.2 35);
+}
+
+.dark {
+  --background: oklch(0.18 0.008 60);
+  --foreground: oklch(0.94 0.008 80);
+  --card: oklch(0.215 0.009 60);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.235 0.009 60);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.71 0.18 38);
+  --primary-foreground: oklch(0.18 0.008 60);
+  --secondary: oklch(0.27 0.01 60);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.25 0.009 60);
+  --muted-foreground: oklch(0.7 0.01 70);
+  --accent: oklch(0.3 0.06 40);
+  --accent-foreground: oklch(0.85 0.1 45);
+  --destructive: oklch(0.66 0.19 25);
+  --success: oklch(0.72 0.12 165);
+  --success-soft: oklch(0.3 0.05 165);
+  --warning: oklch(0.8 0.13 80);
+  --warning-soft: oklch(0.32 0.05 80);
+  --border: oklch(0.3 0.01 60);
+  --input: oklch(0.34 0.01 60);
+  --ring: oklch(0.71 0.18 38);
+}
+
+@theme inline {
+  --font-sans: 'Onest Variable', ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'tnum' 1;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply tracking-tight;
+  }
+}
