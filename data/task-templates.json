@@ -1,0 +1,177 @@
+[
+  {
+    "slug": "idea-canvas",
+    "title": "Заполнить Lean Canvas",
+    "stageKey": "idea",
+    "defaultSkillSlug": "product-management",
+    "description": "Сегменты, проблема, ценность, каналы, метрики"
+  },
+  {
+    "slug": "idea-market",
+    "title": "Оценить размер рынка",
+    "stageKey": "idea",
+    "defaultSkillSlug": "marketing",
+    "description": "TAM/SAM/SOM с источниками"
+  },
+  {
+    "slug": "idea-roles",
+    "title": "Распределить роли в команде",
+    "stageKey": "idea",
+    "defaultSkillSlug": null,
+    "description": "Кто за что отвечает и сколько часов в неделю"
+  },
+  {
+    "slug": "idea-pitch",
+    "title": "Подготовить питч идеи на 1 минуту",
+    "stageKey": "idea",
+    "defaultSkillSlug": null,
+    "description": "Проблема, решение, почему мы"
+  },
+  {
+    "slug": "idea-competitors",
+    "title": "Разобрать 5 конкурентов",
+    "stageKey": "idea",
+    "defaultSkillSlug": "marketing",
+    "description": "Таблица сравнения и отличия"
+  },
+  {
+    "slug": "problem-hypotheses",
+    "title": "Сформулировать гипотезы проблемы",
+    "stageKey": "problem",
+    "defaultSkillSlug": "product-management",
+    "description": "3–5 проверяемых гипотез"
+  },
+  {
+    "slug": "problem-survey",
+    "title": "Провести онлайн-опрос",
+    "stageKey": "problem",
+    "defaultSkillSlug": "ux-research",
+    "description": "Не меньше 30 ответов"
+  },
+  {
+    "slug": "problem-data",
+    "title": "Проанализировать открытые данные",
+    "stageKey": "problem",
+    "defaultSkillSlug": "pandas",
+    "description": "Подтверждение проблемы цифрами"
+  },
+  {
+    "slug": "problem-persona",
+    "title": "Описать персоны",
+    "stageKey": "problem",
+    "defaultSkillSlug": "ux-research",
+    "description": "2–3 персоны с болями"
+  },
+  {
+    "slug": "problem-cjm",
+    "title": "Построить карту пути клиента",
+    "stageKey": "problem",
+    "defaultSkillSlug": "ux-research",
+    "description": "Где возникает проблема"
+  },
+  {
+    "slug": "int-script",
+    "title": "Написать сценарий интервью",
+    "stageKey": "interviews",
+    "defaultSkillSlug": "customer-interviews",
+    "description": "Открытые вопросы без подсказок"
+  },
+  {
+    "slug": "int-recruit",
+    "title": "Найти респондентов",
+    "stageKey": "interviews",
+    "defaultSkillSlug": "customer-interviews",
+    "description": "Не меньше 5 человек из целевого сегмента"
+  },
+  {
+    "slug": "int-conduct",
+    "title": "Провести интервью",
+    "stageKey": "interviews",
+    "defaultSkillSlug": "customer-interviews",
+    "description": "Запись или конспект каждого интервью"
+  },
+  {
+    "slug": "int-synthesis",
+    "title": "Синтезировать инсайты",
+    "stageKey": "interviews",
+    "defaultSkillSlug": "ux-research",
+    "description": "Кластеры болей и цитаты"
+  },
+  {
+    "slug": "int-decision",
+    "title": "Решить: продолжать или менять идею",
+    "stageKey": "interviews",
+    "defaultSkillSlug": "product-management",
+    "description": "Решение с аргументами из интервью"
+  },
+  {
+    "slug": "proto-wireframes",
+    "title": "Нарисовать вайрфреймы",
+    "stageKey": "prototype",
+    "defaultSkillSlug": "ui-design",
+    "description": "Ключевые экраны сценария"
+  },
+  {
+    "slug": "proto-frontend",
+    "title": "Сделать фронтенд прототипа",
+    "stageKey": "prototype",
+    "defaultSkillSlug": "react",
+    "description": "Кликабельный интерфейс основного сценария"
+  },
+  {
+    "slug": "proto-backend",
+    "title": "Сделать API прототипа",
+    "stageKey": "prototype",
+    "defaultSkillSlug": "nodejs",
+    "description": "Минимальный бэкенд с данными"
+  },
+  {
+    "slug": "proto-ml",
+    "title": "Обучить модель для прототипа",
+    "stageKey": "prototype",
+    "defaultSkillSlug": "ml-classic",
+    "description": "Метрика качества на отложенной выборке"
+  },
+  {
+    "slug": "proto-deploy",
+    "title": "Развернуть прототип",
+    "stageKey": "prototype",
+    "defaultSkillSlug": "docker",
+    "description": "Публичная ссылка на работающий прототип"
+  },
+  {
+    "slug": "test-usability",
+    "title": "Провести юзабилити-тест",
+    "stageKey": "testing",
+    "defaultSkillSlug": "ux-research",
+    "description": "5 пользователей, список проблем"
+  },
+  {
+    "slug": "test-metrics",
+    "title": "Настроить метрики",
+    "stageKey": "testing",
+    "defaultSkillSlug": "data-viz",
+    "description": "Дашборд ключевой метрики"
+  },
+  {
+    "slug": "test-ab",
+    "title": "Проверить гипотезу A/B-тестом",
+    "stageKey": "testing",
+    "defaultSkillSlug": "sql-analytics",
+    "description": "Результат и статистическая значимость"
+  },
+  {
+    "slug": "test-feedback",
+    "title": "Собрать обратную связь",
+    "stageKey": "testing",
+    "defaultSkillSlug": "customer-interviews",
+    "description": "Что улучшить в следующей версии"
+  },
+  {
+    "slug": "test-demo",
+    "title": "Подготовить демо",
+    "stageKey": "testing",
+    "defaultSkillSlug": null,
+    "description": "Сценарий показа и запасная запись"
+  }
+]

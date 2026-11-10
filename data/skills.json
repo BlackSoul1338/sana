@@ -1,0 +1,152 @@
+[
+  {
+    "slug": "python",
+    "title": "Python",
+    "category": "Языки",
+    "difficulty": 1
+  },
+  {
+    "slug": "typescript",
+    "title": "TypeScript",
+    "category": "Языки",
+    "difficulty": 1
+  },
+  {
+    "slug": "react",
+    "title": "React",
+    "category": "Фронтенд",
+    "difficulty": 2
+  },
+  {
+    "slug": "nextjs",
+    "title": "Next.js",
+    "category": "Фронтенд",
+    "difficulty": 2
+  },
+  {
+    "slug": "flutter",
+    "title": "Flutter",
+    "category": "Мобильная разработка",
+    "difficulty": 2
+  },
+  {
+    "slug": "nodejs",
+    "title": "Node.js",
+    "category": "Бэкенд",
+    "difficulty": 2
+  },
+  {
+    "slug": "fastapi",
+    "title": "FastAPI",
+    "category": "Бэкенд",
+    "difficulty": 2
+  },
+  {
+    "slug": "postgres",
+    "title": "PostgreSQL",
+    "category": "Данные",
+    "difficulty": 2
+  },
+  {
+    "slug": "sql-analytics",
+    "title": "SQL-аналитика",
+    "category": "Данные",
+    "difficulty": 1
+  },
+  {
+    "slug": "pandas",
+    "title": "Pandas",
+    "category": "Данные",
+    "difficulty": 1
+  },
+  {
+    "slug": "data-viz",
+    "title": "Визуализация данных",
+    "category": "Данные",
+    "difficulty": 1
+  },
+  {
+    "slug": "ml-classic",
+    "title": "Классическое ML (scikit-learn)",
+    "category": "ML",
+    "difficulty": 2
+  },
+  {
+    "slug": "deep-learning",
+    "title": "Глубокое обучение (PyTorch)",
+    "category": "ML",
+    "difficulty": 3
+  },
+  {
+    "slug": "nlp",
+    "title": "NLP и языковые модели",
+    "category": "ML",
+    "difficulty": 3
+  },
+  {
+    "slug": "computer-vision",
+    "title": "Компьютерное зрение",
+    "category": "ML",
+    "difficulty": 3
+  },
+  {
+    "slug": "llm-apps",
+    "title": "LLM-приложения и RAG",
+    "category": "ML",
+    "difficulty": 2
+  },
+  {
+    "slug": "docker",
+    "title": "Docker",
+    "category": "DevOps",
+    "difficulty": 2
+  },
+  {
+    "slug": "cloud",
+    "title": "Облачная инфраструктура",
+    "category": "DevOps",
+    "difficulty": 3
+  },
+  {
+    "slug": "iot",
+    "title": "IoT и микроконтроллеры",
+    "category": "Железо",
+    "difficulty": 3
+  },
+  {
+    "slug": "ux-research",
+    "title": "UX-исследования",
+    "category": "Продукт",
+    "difficulty": 1
+  },
+  {
+    "slug": "ui-design",
+    "title": "UI-дизайн (Figma)",
+    "category": "Продукт",
+    "difficulty": 1
+  },
+  {
+    "slug": "product-management",
+    "title": "Продуктовый менеджмент",
+    "category": "Продукт",
+    "difficulty": 1
+  },
+  {
+    "slug": "customer-interviews",
+    "title": "Интервью с клиентами",
+    "category": "Продукт",
+    "difficulty": 1
+  },
+  {
+    "slug": "marketing",
+    "title": "Маркетинг и рост",
+    "category": "Бизнес",
+    "difficulty": 1
+  },
+  {
+    "slug": "finance-modeling",
+    "title": "Финансовая модель",
+    "category": "Бизнес",
+    "difficulty": 2
+  }
+]

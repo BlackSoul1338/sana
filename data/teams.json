@@ -1,0 +1,692 @@
+[
+  {
+    "name": "Альфа",
+    "weeklyHours": 15,
+    "interests": [
+      "ритейл",
+      "финтех"
+    ],
+    "skills": [
+      {
+        "slug": "python",
+        "level": 2
+      },
+      {
+        "slug": "pandas",
+        "level": 2
+      },
+      {
+        "slug": "ml-classic",
+        "level": 2
+      },
+      {
+        "slug": "data-viz",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Алиса Нурланова",
+        "role": "captain"
+      },
+      {
+        "name": "Даурен Сейтов",
+        "role": "developer"
+      },
+      {
+        "name": "Мария Ким",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Бета",
+    "weeklyHours": 10,
+    "interests": [
+      "образование"
+    ],
+    "skills": [
+      {
+        "slug": "react",
+        "level": 2
+      },
+      {
+        "slug": "typescript",
+        "level": 2
+      },
+      {
+        "slug": "ui-design",
+        "level": 1
+      },
+      {
+        "slug": "ux-research",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Ерлан Абенов",
+        "role": "captain"
+      },
+      {
+        "name": "Анна Ли",
+        "role": "developer"
+      },
+      {
+        "name": "Тимур Жаксылыков",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Гамма",
+    "weeklyHours": 12,
+    "interests": [
+      "медицина"
+    ],
+    "skills": [
+      {
+        "slug": "python",
+        "level": 3
+      },
+      {
+        "slug": "deep-learning",
+        "level": 2
+      },
+      {
+        "slug": "computer-vision",
+        "level": 2
+      }
+    ],
+    "members": [
+      {
+        "name": "Айгерим Касымова",
+        "role": "captain"
+      },
+      {
+        "name": "Олег Петров",
+        "role": "developer"
+      },
+      {
+        "name": "Сауле Омарова",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Дельта",
+    "weeklyHours": 8,
+    "interests": [
+      "логистика"
+    ],
+    "skills": [
+      {
+        "slug": "nodejs",
+        "level": 2
+      },
+      {
+        "slug": "postgres",
+        "level": 2
+      },
+      {
+        "slug": "react",
+        "level": 1
+      },
+      {
+        "slug": "docker",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Руслан Ахметов",
+        "role": "captain"
+      },
+      {
+        "name": "Дана Сулейменова",
+        "role": "developer"
+      },
+      {
+        "name": "Игорь Ким",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Эпсилон",
+    "weeklyHours": 10,
+    "interests": [
+      "агро"
+    ],
+    "skills": [
+      {
+        "slug": "iot",
+        "level": 2
+      },
+      {
+        "slug": "python",
+        "level": 1
+      },
+      {
+        "slug": "data-viz",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Нурсултан Беков",
+        "role": "captain"
+      },
+      {
+        "name": "Карина Ибраева",
+        "role": "developer"
+      },
+      {
+        "name": "Артём Волков",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Зета",
+    "weeklyHours": 14,
+    "interests": [
+      "финтех"
+    ],
+    "skills": [
+      {
+        "slug": "python",
+        "level": 2
+      },
+      {
+        "slug": "ml-classic",
+        "level": 3
+      },
+      {
+        "slug": "finance-modeling",
+        "level": 2
+      },
+      {
+        "slug": "postgres",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Мадина Утебаева",
+        "role": "captain"
+      },
+      {
+        "name": "Алихан Нуртаев",
+        "role": "developer"
+      },
+      {
+        "name": "Ксения Орлова",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Эта",
+    "weeklyHours": 6,
+    "interests": [
+      "госуслуги"
+    ],
+    "skills": [
+      {
+        "slug": "ux-research",
+        "level": 2
+      },
+      {
+        "slug": "ui-design",
+        "level": 2
+      },
+      {
+        "slug": "product-management",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Жанна Мусина",
+        "role": "captain"
+      },
+      {
+        "name": "Бауыржан Оспанов",
+        "role": "developer"
+      },
+      {
+        "name": "Виктория Соколова",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Тета",
+    "weeklyHours": 10,
+    "interests": [
+      "ритейл"
+    ],
+    "skills": [
+      {
+        "slug": "flutter",
+        "level": 2
+      },
+      {
+        "slug": "ui-design",
+        "level": 1
+      },
+      {
+        "slug": "customer-interviews",
+        "level": 2
+      }
+    ],
+    "members": [
+      {
+        "name": "Асель Тлеубаева",
+        "role": "captain"
+      },
+      {
+        "name": "Максим Иванов",
+        "role": "developer"
+      },
+      {
+        "name": "Диас Кенжебаев",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Йота",
+    "weeklyHours": 12,
+    "interests": [
+      "образование",
+      "госуслуги"
+    ],
+    "skills": [
+      {
+        "slug": "nlp",
+        "level": 2
+      },
+      {
+        "slug": "llm-apps",
+        "level": 2
+      },
+      {
+        "slug": "python",
+        "level": 2
+      }
+    ],
+    "members": [
+      {
+        "name": "Камила Ахмедова",
+        "role": "captain"
+      },
+      {
+        "name": "Санжар Ермеков",
+        "role": "developer"
+      },
+      {
+        "name": "Полина Белова",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Каппа",
+    "weeklyHours": 9,
+    "interests": [
+      "логистика",
+      "агро"
+    ],
+    "skills": [
+      {
+        "slug": "sql-analytics",
+        "level": 2
+      },
+      {
+        "slug": "data-viz",
+        "level": 2
+      },
+      {
+        "slug": "pandas",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Ильяс Габдуллин",
+        "role": "captain"
+      },
+      {
+        "name": "Софья Миронова",
+        "role": "developer"
+      },
+      {
+        "name": "Арман Тулегенов",
+        "role": "researcher"
+      }
+    ]
+  },
+  {
+    "name": "Лямбда",
+    "weeklyHours": 10,
+    "interests": [
+      "финтех"
+    ],
+    "skills": [
+      {
+        "slug": "llm-apps",
+        "level": 1
+      },
+      {
+        "slug": "nodejs",
+        "level": 2
+      },
+      {
+        "slug": "typescript",
+        "level": 2
+      }
+    ],
+    "members": [
+      {
+        "name": "Томирис Байжанова",
+        "role": "captain"
+      },
+      {
+        "name": "Денис Кузнецов",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Мю",
+    "weeklyHours": 8,
+    "interests": [
+      "медицина"
+    ],
+    "skills": [
+      {
+        "slug": "sql-analytics",
+        "level": 1
+      },
+      {
+        "slug": "data-viz",
+        "level": 1
+      },
+      {
+        "slug": "product-management",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Алия Смагулова",
+        "role": "captain"
+      },
+      {
+        "name": "Георгий Ли",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Ню",
+    "weeklyHours": 15,
+    "interests": [
+      "ритейл",
+      "логистика"
+    ],
+    "skills": [
+      {
+        "slug": "python",
+        "level": 2
+      },
+      {
+        "slug": "ml-classic",
+        "level": 2
+      },
+      {
+        "slug": "docker",
+        "level": 2
+      },
+      {
+        "slug": "cloud",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Ербол Жумабеков",
+        "role": "captain"
+      },
+      {
+        "name": "Елена Попова",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Кси",
+    "weeklyHours": 10,
+    "interests": [
+      "образование"
+    ],
+    "skills": [
+      {
+        "slug": "react",
+        "level": 2
+      },
+      {
+        "slug": "nodejs",
+        "level": 1
+      },
+      {
+        "slug": "ux-research",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Айдана Мухаметжанова",
+        "role": "captain"
+      },
+      {
+        "name": "Станислав Ким",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Омикрон",
+    "weeklyHours": 12,
+    "interests": [
+      "агро"
+    ],
+    "skills": [
+      {
+        "slug": "computer-vision",
+        "level": 2
+      },
+      {
+        "slug": "python",
+        "level": 2
+      },
+      {
+        "slug": "cloud",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Нурлан Есенов",
+        "role": "captain"
+      },
+      {
+        "name": "Дарья Федорова",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Пи",
+    "weeklyHours": 7,
+    "interests": [
+      "госуслуги"
+    ],
+    "skills": [
+      {
+        "slug": "react",
+        "level": 1
+      },
+      {
+        "slug": "nodejs",
+        "level": 1
+      },
+      {
+        "slug": "postgres",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Галия Рахимова",
+        "role": "captain"
+      },
+      {
+        "name": "Андрей Смирнов",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Ро",
+    "weeklyHours": 11,
+    "interests": [
+      "медицина",
+      "образование"
+    ],
+    "skills": [
+      {
+        "slug": "llm-apps",
+        "level": 2
+      },
+      {
+        "slug": "nodejs",
+        "level": 2
+      },
+      {
+        "slug": "ux-research",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Дильназ Аманова",
+        "role": "captain"
+      },
+      {
+        "name": "Владимир Ли",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Сигма",
+    "weeklyHours": 10,
+    "interests": [
+      "ритейл"
+    ],
+    "skills": [
+      {
+        "slug": "nlp",
+        "level": 1
+      },
+      {
+        "slug": "python",
+        "level": 2
+      },
+      {
+        "slug": "pandas",
+        "level": 2
+      }
+    ],
+    "members": [
+      {
+        "name": "Арсен Мукашев",
+        "role": "captain"
+      },
+      {
+        "name": "Юлия Новикова",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Тау",
+    "weeklyHours": 9,
+    "interests": [
+      "финтех",
+      "ритейл"
+    ],
+    "skills": [
+      {
+        "slug": "flutter",
+        "level": 2
+      },
+      {
+        "slug": "ux-research",
+        "level": 1
+      },
+      {
+        "slug": "finance-modeling",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Меруерт Сапарова",
+        "role": "captain"
+      },
+      {
+        "name": "Кирилл Морозов",
+        "role": "developer"
+      }
+    ]
+  },
+  {
+    "name": "Ипсилон",
+    "weeklyHours": 13,
+    "interests": [
+      "логистика"
+    ],
+    "skills": [
+      {
+        "slug": "python",
+        "level": 2
+      },
+      {
+        "slug": "ml-classic",
+        "level": 2
+      },
+      {
+        "slug": "postgres",
+        "level": 2
+      },
+      {
+        "slug": "data-viz",
+        "level": 1
+      }
+    ],
+    "members": [
+      {
+        "name": "Бекзат Иманов",
+        "role": "captain"
+      },
+      {
+        "name": "Ольга Васильева",
+        "role": "developer"
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "name": "@sana/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=../../.env src/index.ts",
+    "start": "node --env-file-if-exists=../../.env dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:db": "vitest run --project db",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --env-file-if-exists=../../.env scripts/migrate.ts",
+    "seed": "tsx --env-file-if-exists=../../.env scripts/seed.ts",
+    "ai:smoke": "tsx --env-file-if-exists=../../.env scripts/ai-smoke.ts",
+    "eval:bcb": "tsx --env-file-if-exists=../../.env scripts/eval-bcb.ts",
+    "demo:match": "tsx --env-file-if-exists=../../.env scripts/demo-match.ts",
+    "openapi": "tsx --env-file-if-exists=../../.env scripts/export-openapi.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "4.0.114",
+    "@hono/node-server": "2.1.6",
+    "@hono/zod-openapi": "1.6.3",
+    "@sana/contracts": "workspace:*",
+    "@scalar/hono-api-reference": "0.12.18",
+    "@supabase/supabase-js": "2.119.0",
+    "ai": "7.0.166",
+    "drizzle-orm": "0.45.4",
+    "hono": "4.13.17",
+    "postgres": "4.1.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "drizzle-kit": "0.31.11",
+    "tsx": "4.23.15",
+    "vitest": "5.1.0"
+  }
+}

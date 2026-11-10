@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "captain",
+    "title": "Капитан",
+    "description": "Отвечает за цели, сроки и коммуникацию с куратором"
+  },
+  {
+    "slug": "developer",
+    "title": "Разработчик",
+    "description": "Пишет код прототипа"
+  },
+  {
+    "slug": "designer",
+    "title": "Дизайнер",
+    "description": "Интерфейсы и пользовательский опыт"
+  },
+  {
+    "slug": "researcher",
+    "title": "Исследователь",
+    "description": "Интервью, опросы, синтез инсайтов"
+  },
+  {
+    "slug": "analyst",
+    "title": "Аналитик данных",
+    "description": "Данные, метрики, отчёты"
+  },
+  {
+    "slug": "ml-engineer",
+    "title": "ML-инженер",
+    "description": "Модели и их качество"
+  },
+  {
+    "slug": "pm",
+    "title": "Продакт-менеджер",
+    "description": "Гипотезы, приоритеты, roadmap"
+  },
+  {
+    "slug": "marketer",
+    "title": "Маркетолог",
+    "description": "Рынок, каналы, позиционирование"
+  }
+]

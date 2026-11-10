@@ -1,0 +1,929 @@
+{
+  "orgs": [
+    {
+      "key": "daily",
+      "name": "Сеть кофеен Daily",
+      "topic": "ритейл"
+    },
+    {
+      "key": "logkz",
+      "name": "Logistics KZ",
+      "topic": "логистика"
+    },
+    {
+      "key": "medline",
+      "name": "Клиника MedLine",
+      "topic": "медицина"
+    },
+    {
+      "key": "agro",
+      "name": "AgroTech Steppe",
+      "topic": "агро"
+    },
+    {
+      "key": "edusmart",
+      "name": "EduSmart",
+      "topic": "образование"
+    },
+    {
+      "key": "finpay",
+      "name": "FinPay",
+      "topic": "финтех"
+    },
+    {
+      "key": "city",
+      "name": "Город Онлайн",
+      "topic": "госуслуги"
+    }
+  ],
+  "tasks": [
+    {
+      "org": "daily",
+      "title": "Прогноз спроса на выпечку",
+      "topic": "ритейл",
+      "difficulty": 2,
+      "estHours": 60,
+      "readiness": 92,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "pandas",
+          "required": true
+        },
+        {
+          "slug": "ml-classic",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "12 кофеен заказывают выпечку у поставщика вручную каждый вечер по опыту управляющего.",
+        "goal": "Сократить списания выпечки без потери продаж.",
+        "users": "Управляющие кофеен и отдел закупок.",
+        "data": "Выгрузка чеков за 2 года в CSV (около 3 млн строк), даёт аналитик компании.",
+        "constraints": "Результат до конца семестра, данные обезличены, без облачных сервисов вне Казахстана.",
+        "criteria": "Списания ниже 5% при доле упущенных продаж не выше 2%."
+      }
+    },
+    {
+      "org": "daily",
+      "title": "Программа лояльности в мобильном приложении",
+      "topic": "ритейл",
+      "difficulty": 2,
+      "estHours": 90,
+      "readiness": 78,
+      "skills": [
+        {
+          "slug": "flutter",
+          "required": true
+        },
+        {
+          "slug": "ux-research",
+          "required": true
+        },
+        {
+          "slug": "ui-design",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Сейчас лояльность — бумажные карточки «шестой кофе бесплатно».",
+        "goal": "Увеличить частоту визитов постоянных гостей.",
+        "users": "Постоянные гости 18–35 лет.",
+        "data": "Статистика визитов по картам за год (Excel), макеты бренда.",
+        "constraints": "Интеграция с кассой r_keeper только через выгрузки.",
+        "criteria": "Частота визитов участников +15% за 2 месяца пилота."
+      }
+    },
+    {
+      "org": "daily",
+      "title": "Анализ отзывов гостей",
+      "topic": "ритейл",
+      "difficulty": 2,
+      "estHours": 50,
+      "readiness": 70,
+      "skills": [
+        {
+          "slug": "nlp",
+          "required": true
+        },
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Отзывы приходят в 2ГИС, Instagram и Google, их никто системно не читает.",
+        "goal": "Понять главные причины недовольства по точкам.",
+        "users": "Операционный директор и управляющие.",
+        "data": "Около 4000 отзывов, выгрузку соберёт маркетолог.",
+        "constraints": "Нельзя публиковать имена гостей.",
+        "criteria": "Классификация причин с точностью не ниже 80% на ручной разметке."
+      }
+    },
+    {
+      "org": "daily",
+      "title": "Дашборд выручки по точкам",
+      "topic": "ритейл",
+      "difficulty": 1,
+      "estHours": 30,
+      "readiness": 85,
+      "skills": [
+        {
+          "slug": "sql-analytics",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": true
+        }
+      ],
+      "card": {
+        "context": "Выручку смотрят в разных Excel-файлах раз в неделю.",
+        "goal": "Ежедневно видеть выручку и средний чек по точкам.",
+        "users": "Собственник и управляющие.",
+        "data": "Доступ на чтение к базе кассы (PostgreSQL копия).",
+        "constraints": "Только внутренняя сеть, без внешних BI-сервисов.",
+        "criteria": "Дашборд обновляется ежедневно, расхождение с кассой меньше 1%."
+      }
+    },
+    {
+      "org": "daily",
+      "title": "Оптимизация смен бариста",
+      "topic": "ритейл",
+      "difficulty": 3,
+      "estHours": 120,
+      "readiness": 64,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "ml-classic",
+          "required": true
+        },
+        {
+          "slug": "pandas",
+          "required": true
+        },
+        {
+          "slug": "product-management",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Графики смен составляют вручную, в часы пик не хватает людей.",
+        "goal": "Сократить очереди в пиковые часы.",
+        "users": "Управляющие кофеен и бариста.",
+        "data": "Почасовые продажи и графики смен за год.",
+        "constraints": "Соблюдение трудового кодекса РК.",
+        "criteria": "Среднее время ожидания в пик ниже 4 минут."
+      }
+    },
+    {
+      "org": "logkz",
+      "title": "Оптимизация маршрутов курьеров",
+      "topic": "логистика",
+      "difficulty": 3,
+      "estHours": 140,
+      "readiness": 88,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "ml-classic",
+          "required": true
+        },
+        {
+          "slug": "postgres",
+          "required": false
+        },
+        {
+          "slug": "data-viz",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "40 курьеров развозят посылки по Алматы, маршруты строит диспетчер.",
+        "goal": "Сократить пробег и опоздания.",
+        "users": "Диспетчеры и курьеры.",
+        "data": "Треки GPS и заказы за 6 месяцев (Parquet), выдаёт ИТ-отдел.",
+        "constraints": "Решение работает на собственном сервере компании.",
+        "criteria": "Пробег −10% при доле опозданий не выше 3%."
+      }
+    },
+    {
+      "org": "logkz",
+      "title": "Прогноз загрузки склада",
+      "topic": "логистика",
+      "difficulty": 2,
+      "estHours": 70,
+      "readiness": 80,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "pandas",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Склад не успевает принимать поставки в начале месяца.",
+        "goal": "Планировать персонал склада на неделю вперёд.",
+        "users": "Начальник склада.",
+        "data": "Журнал приёмки за 3 года.",
+        "constraints": "Без персональных данных сотрудников.",
+        "criteria": "Ошибка прогноза объёма приёмки (MAPE) не выше 15%."
+      }
+    },
+    {
+      "org": "logkz",
+      "title": "Трекинг посылок для клиентов",
+      "topic": "логистика",
+      "difficulty": 2,
+      "estHours": 80,
+      "readiness": 75,
+      "skills": [
+        {
+          "slug": "react",
+          "required": true
+        },
+        {
+          "slug": "nodejs",
+          "required": true
+        },
+        {
+          "slug": "postgres",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Клиенты звонят в колл-центр, чтобы узнать статус посылки.",
+        "goal": "Снизить нагрузку на колл-центр.",
+        "users": "Получатели посылок.",
+        "data": "API статусов во внутренней системе (тестовый стенд).",
+        "constraints": "Нельзя показывать адреса других клиентов.",
+        "criteria": "Звонки о статусе −30% за месяц после запуска."
+      }
+    },
+    {
+      "org": "logkz",
+      "title": "Дашборд KPI водителей",
+      "topic": "логистика",
+      "difficulty": 1,
+      "estHours": 35,
+      "readiness": 72,
+      "skills": [
+        {
+          "slug": "sql-analytics",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": true
+        }
+      ],
+      "card": {
+        "context": "Показатели водителей считаются вручную раз в месяц.",
+        "goal": "Еженедельный прозрачный рейтинг водителей.",
+        "users": "Руководитель автопарка.",
+        "data": "Выгрузка рейсов из 1С.",
+        "constraints": "Данные обезличиваются для студентов.",
+        "criteria": "Отчёт формируется автоматически за 1 минуту."
+      }
+    },
+    {
+      "org": "logkz",
+      "title": "Распознавание накладных",
+      "topic": "логистика",
+      "difficulty": 3,
+      "estHours": 130,
+      "readiness": 60,
+      "skills": [
+        {
+          "slug": "computer-vision",
+          "required": true
+        },
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "docker",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Бумажные накладные вводятся операторами вручную.",
+        "goal": "Автоматизировать ввод накладных.",
+        "users": "Операторы склада.",
+        "data": "500 сканов накладных с разметкой.",
+        "constraints": "Сканы содержат реквизиты контрагентов — только на стенде компании.",
+        "criteria": "Точность извлечения ключевых полей не ниже 95%."
+      }
+    },
+    {
+      "org": "medline",
+      "title": "Запись к врачу через чат-бот",
+      "topic": "медицина",
+      "difficulty": 2,
+      "estHours": 90,
+      "readiness": 82,
+      "skills": [
+        {
+          "slug": "llm-apps",
+          "required": true
+        },
+        {
+          "slug": "nodejs",
+          "required": true
+        },
+        {
+          "slug": "ux-research",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Пациенты записываются по телефону, линия перегружена утром.",
+        "goal": "Перевести 40% записей в онлайн.",
+        "users": "Пациенты клиники.",
+        "data": "API расписания врачей (тестовый стенд), сценарии записи.",
+        "constraints": "Медицинские данные не передаются в сторонние сервисы.",
+        "criteria": "Доля онлайн-записей не ниже 40% через 2 месяца."
+      }
+    },
+    {
+      "org": "medline",
+      "title": "Прогноз неявок пациентов",
+      "topic": "медицина",
+      "difficulty": 2,
+      "estHours": 70,
+      "readiness": 77,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "ml-classic",
+          "required": true
+        },
+        {
+          "slug": "pandas",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "15% пациентов не приходят на приём, врачи простаивают.",
+        "goal": "Снизить долю неявок.",
+        "users": "Администраторы регистратуры.",
+        "data": "Обезличенная история записей за 2 года.",
+        "constraints": "Только обезличенные данные, обработка на стенде клиники.",
+        "criteria": "ROC-AUC модели не ниже 0.75."
+      }
+    },
+    {
+      "org": "medline",
+      "title": "Анализ загрузки кабинетов",
+      "topic": "медицина",
+      "difficulty": 1,
+      "estHours": 30,
+      "readiness": 68,
+      "skills": [
+        {
+          "slug": "sql-analytics",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": true
+        }
+      ],
+      "card": {
+        "context": "Кабинеты УЗИ загружены неравномерно.",
+        "goal": "Выровнять загрузку оборудования.",
+        "users": "Главный врач.",
+        "data": "Журнал исследований за год.",
+        "constraints": "Без данных пациентов.",
+        "criteria": "Отчёт о загрузке по часам и рекомендации по расписанию."
+      }
+    },
+    {
+      "org": "medline",
+      "title": "Распознавание рентгеновских снимков",
+      "topic": "медицина",
+      "difficulty": 3,
+      "estHours": 200,
+      "readiness": 55,
+      "skills": [
+        {
+          "slug": "deep-learning",
+          "required": true
+        },
+        {
+          "slug": "computer-vision",
+          "required": true
+        },
+        {
+          "slug": "python",
+          "required": true
+        }
+      ],
+      "card": {
+        "context": "Рентгенологи перегружены описанием снимков.",
+        "goal": "Подсказка врачу о возможной патологии.",
+        "users": "Врачи-рентгенологи.",
+        "data": "Открытый датасет снимков, собственные данные — после этической комиссии.",
+        "constraints": "Решение — только вспомогательное, финальный диагноз ставит врач.",
+        "criteria": "Чувствительность не ниже 90% на открытом датасете."
+      }
+    },
+    {
+      "org": "agro",
+      "title": "Мониторинг посевов по спутниковым снимкам",
+      "topic": "агро",
+      "difficulty": 3,
+      "estHours": 150,
+      "readiness": 83,
+      "skills": [
+        {
+          "slug": "computer-vision",
+          "required": true
+        },
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "cloud",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Агрономы объезжают 20 тыс. га раз в неделю.",
+        "goal": "Раньше замечать проблемные участки поля.",
+        "users": "Агрономы хозяйства.",
+        "data": "Снимки Sentinel-2 и контуры полей (GeoJSON).",
+        "constraints": "Бесплатные источники снимков.",
+        "criteria": "Карта индекса NDVI и оповещение о падении индекса за 24 часа."
+      }
+    },
+    {
+      "org": "agro",
+      "title": "Датчики влажности почвы",
+      "topic": "агро",
+      "difficulty": 3,
+      "estHours": 160,
+      "readiness": 71,
+      "skills": [
+        {
+          "slug": "iot",
+          "required": true
+        },
+        {
+          "slug": "python",
+          "required": false
+        },
+        {
+          "slug": "data-viz",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Полив включается по расписанию, а не по фактической влажности.",
+        "goal": "Экономить воду при поливе.",
+        "users": "Агрономы и механизаторы.",
+        "data": "5 датчиков для прототипа, данные метеостанции.",
+        "constraints": "Работа без постоянного интернета в поле.",
+        "criteria": "Экономия воды не меньше 15% на пилотном участке."
+      }
+    },
+    {
+      "org": "agro",
+      "title": "Прогноз урожайности пшеницы",
+      "topic": "агро",
+      "difficulty": 2,
+      "estHours": 80,
+      "readiness": 74,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "ml-classic",
+          "required": true
+        },
+        {
+          "slug": "pandas",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Урожайность оценивают на глаз перед уборкой.",
+        "goal": "Планировать логистику уборки заранее.",
+        "users": "Руководство хозяйства.",
+        "data": "Урожайность по полям за 10 лет и погода.",
+        "constraints": "Данные хозяйства не публикуются.",
+        "criteria": "Ошибка прогноза не больше 10%."
+      }
+    },
+    {
+      "org": "agro",
+      "title": "Учёт техники и топлива",
+      "topic": "агро",
+      "difficulty": 1,
+      "estHours": 40,
+      "readiness": 66,
+      "skills": [
+        {
+          "slug": "react",
+          "required": true
+        },
+        {
+          "slug": "postgres",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Расход топлива записывают в тетради.",
+        "goal": "Сократить перерасход топлива.",
+        "users": "Механизаторы и бухгалтерия.",
+        "data": "Журналы заправок за сезон (фото и Excel).",
+        "constraints": "Работа с телефона в поле.",
+        "criteria": "Учёт ведётся ежедневно, расхождения выявляются за день."
+      }
+    },
+    {
+      "org": "edusmart",
+      "title": "Рекомендации курсов студентам",
+      "topic": "образование",
+      "difficulty": 2,
+      "estHours": 80,
+      "readiness": 86,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "ml-classic",
+          "required": true
+        },
+        {
+          "slug": "product-management",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Студенты выбирают электив по совету друзей.",
+        "goal": "Помочь выбрать курс под цели студента.",
+        "users": "Студенты 2–4 курса.",
+        "data": "Обезличенные оценки и выборы курсов за 3 года.",
+        "constraints": "Не использовать пол, возраст и национальность.",
+        "criteria": "Принятие рекомендаций не ниже 30% в пилоте."
+      }
+    },
+    {
+      "org": "edusmart",
+      "title": "Проверка эссе с помощью LLM",
+      "topic": "образование",
+      "difficulty": 3,
+      "estHours": 120,
+      "readiness": 79,
+      "skills": [
+        {
+          "slug": "llm-apps",
+          "required": true
+        },
+        {
+          "slug": "nlp",
+          "required": true
+        },
+        {
+          "slug": "python",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Преподаватели тратят по 20 минут на проверку одного эссе.",
+        "goal": "Ускорить проверку без потери качества.",
+        "users": "Преподаватели английского языка.",
+        "data": "200 эссе с оценками по рубрике.",
+        "constraints": "Итоговую оценку ставит преподаватель.",
+        "criteria": "Совпадение с оценкой преподавателя ±1 балл в 85% случаев."
+      }
+    },
+    {
+      "org": "edusmart",
+      "title": "Геймификация домашних заданий",
+      "topic": "образование",
+      "difficulty": 1,
+      "estHours": 50,
+      "readiness": 73,
+      "skills": [
+        {
+          "slug": "react",
+          "required": true
+        },
+        {
+          "slug": "ui-design",
+          "required": true
+        },
+        {
+          "slug": "ux-research",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Школьники сдают домашние задания с опозданием.",
+        "goal": "Повысить вовремя сданные задания.",
+        "users": "Школьники 7–9 классов.",
+        "data": "Статистика сдачи заданий за четверть.",
+        "constraints": "Без рекламы и платных механик.",
+        "criteria": "Доля сданных вовремя +20%."
+      }
+    },
+    {
+      "org": "edusmart",
+      "title": "Аналитика посещаемости",
+      "topic": "образование",
+      "difficulty": 1,
+      "estHours": 30,
+      "readiness": 69,
+      "skills": [
+        {
+          "slug": "sql-analytics",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": true
+        }
+      ],
+      "card": {
+        "context": "Посещаемость отмечается в бумажных журналах.",
+        "goal": "Видеть риск отчисления заранее.",
+        "users": "Кураторы групп.",
+        "data": "Электронный журнал за 2 года.",
+        "constraints": "Данные обезличены.",
+        "criteria": "Список студентов в зоне риска обновляется еженедельно."
+      }
+    },
+    {
+      "org": "finpay",
+      "title": "Антифрод для переводов",
+      "topic": "финтех",
+      "difficulty": 3,
+      "estHours": 150,
+      "readiness": 84,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "ml-classic",
+          "required": true
+        },
+        {
+          "slug": "postgres",
+          "required": false
+        },
+        {
+          "slug": "docker",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Мошеннические переводы выявляются вручную после жалобы клиента.",
+        "goal": "Блокировать подозрительные переводы в реальном времени.",
+        "users": "Служба безопасности.",
+        "data": "Синтетический датасет транзакций от компании.",
+        "constraints": "Только синтетические данные, работа на стенде.",
+        "criteria": "Полнота выявления не ниже 80% при ложных срабатываниях до 2%."
+      }
+    },
+    {
+      "org": "finpay",
+      "title": "Финансовый помощник для студентов",
+      "topic": "финтех",
+      "difficulty": 2,
+      "estHours": 90,
+      "readiness": 76,
+      "skills": [
+        {
+          "slug": "flutter",
+          "required": true
+        },
+        {
+          "slug": "ux-research",
+          "required": true
+        },
+        {
+          "slug": "finance-modeling",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Студенты не ведут учёт расходов.",
+        "goal": "Помочь студентам планировать бюджет.",
+        "users": "Студенты вузов.",
+        "data": "Категории расходов и обезличенная статистика.",
+        "constraints": "Без доступа к реальным счетам.",
+        "criteria": "Удержание пользователей на 4-й неделе не ниже 25%."
+      }
+    },
+    {
+      "org": "finpay",
+      "title": "Скоринг малого бизнеса",
+      "topic": "финтех",
+      "difficulty": 3,
+      "estHours": 140,
+      "readiness": 62,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "ml-classic",
+          "required": true
+        },
+        {
+          "slug": "finance-modeling",
+          "required": true
+        }
+      ],
+      "card": {
+        "context": "Заявки ИП на кредит рассматриваются 5 дней.",
+        "goal": "Ускорить решение по заявкам.",
+        "users": "Кредитные аналитики.",
+        "data": "Анонимизированная история заявок.",
+        "constraints": "Решение остаётся за аналитиком.",
+        "criteria": "Gini модели не ниже 0.5."
+      }
+    },
+    {
+      "org": "finpay",
+      "title": "Чат-бот поддержки по картам",
+      "topic": "финтех",
+      "difficulty": 2,
+      "estHours": 80,
+      "readiness": 58,
+      "skills": [
+        {
+          "slug": "llm-apps",
+          "required": true
+        },
+        {
+          "slug": "nodejs",
+          "required": true
+        }
+      ],
+      "card": {
+        "context": "Поддержка отвечает на одинаковые вопросы о картах.",
+        "goal": "Закрывать типовые вопросы ботом.",
+        "users": "Клиенты приложения.",
+        "data": "База знаний (120 статей).",
+        "constraints": "Бот не запрашивает номера карт и пароли.",
+        "criteria": "Бот закрывает 50% типовых обращений."
+      }
+    },
+    {
+      "org": "city",
+      "title": "Карта проблем благоустройства",
+      "topic": "госуслуги",
+      "difficulty": 2,
+      "estHours": 80,
+      "readiness": 81,
+      "skills": [
+        {
+          "slug": "react",
+          "required": true
+        },
+        {
+          "slug": "nodejs",
+          "required": true
+        },
+        {
+          "slug": "postgres",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Жалобы на ямы и освещение приходят звонками и в соцсетях.",
+        "goal": "Собрать обращения на одной карте.",
+        "users": "Жители и акимат района.",
+        "data": "Выгрузка обращений за год, карта района.",
+        "constraints": "Без публикации контактов заявителей.",
+        "criteria": "Время реакции на обращение сокращено вдвое."
+      }
+    },
+    {
+      "org": "city",
+      "title": "Классификация обращений граждан",
+      "topic": "госуслуги",
+      "difficulty": 2,
+      "estHours": 70,
+      "readiness": 77,
+      "skills": [
+        {
+          "slug": "nlp",
+          "required": true
+        },
+        {
+          "slug": "python",
+          "required": true
+        }
+      ],
+      "card": {
+        "context": "Обращения вручную распределяются по отделам.",
+        "goal": "Автоматически направлять обращение в нужный отдел.",
+        "users": "Сотрудники приёмной.",
+        "data": "5000 обезличенных обращений с отделами.",
+        "constraints": "Только обезличенные тексты.",
+        "criteria": "Точность маршрутизации не ниже 85%."
+      }
+    },
+    {
+      "org": "city",
+      "title": "Прогноз загрузки ЦОНов",
+      "topic": "госуслуги",
+      "difficulty": 1,
+      "estHours": 40,
+      "readiness": 67,
+      "skills": [
+        {
+          "slug": "python",
+          "required": true
+        },
+        {
+          "slug": "pandas",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "В ЦОНах очереди в начале недели.",
+        "goal": "Подсказывать жителям, когда прийти.",
+        "users": "Жители города.",
+        "data": "Посещаемость ЦОНов по часам за год.",
+        "constraints": "Открытые данные портала.",
+        "criteria": "Ошибка прогноза числа посетителей не выше 20%."
+      }
+    },
+    {
+      "org": "city",
+      "title": "Доступность остановок для маломобильных",
+      "topic": "госуслуги",
+      "difficulty": 1,
+      "estHours": 50,
+      "readiness": 71,
+      "skills": [
+        {
+          "slug": "ux-research",
+          "required": true
+        },
+        {
+          "slug": "data-viz",
+          "required": false
+        },
+        {
+          "slug": "react",
+          "required": false
+        }
+      ],
+      "card": {
+        "context": "Нет данных, какие остановки доступны для колясок.",
+        "goal": "Составить карту доступности остановок.",
+        "users": "Маломобильные жители.",
+        "data": "Список остановок и фото части из них.",
+        "constraints": "Полевые обследования силами команды.",
+        "criteria": "Обследовано не меньше 100 остановок."
+      }
+    }
+  ]
+}
