@@ -13,6 +13,11 @@ const EnvSchema = z.object({
   AI_THINKING_STRONG: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   PORT: z.coerce.number().int().default(8787),
   EVIDENCE_BUCKET: z.string().default('evidence'),
+  /** Comma-separated origins allowed by CORS, e.g. the deployed web app. */
+  CORS_ORIGINS: z
+    .string()
+    .default('http://localhost:5173,http://localhost:3000')
+    .transform((v) => v.split(',').map((o) => o.trim()).filter(Boolean)),
 });
 
 export type Env = z.infer<typeof EnvSchema>;
