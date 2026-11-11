@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { assignmentsQuery, modulesQuery, recommendationQuery } from '@/entities/practice';
 import { DIFFICULTY } from '@/shared/config';
+import { plural } from '@/shared/lib/format';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { SectionTitle, Status } from '@/shared/ui/status';
 
@@ -52,7 +53,7 @@ export function PracticePage() {
               <p className="text-muted-foreground -mt-1 mb-3 text-sm">{m.description}</p>
               {!m.quiz ? (
                 <p className="text-muted-foreground rounded-lg border border-dashed px-4 py-3 text-sm">
-                  {items.length} {items.length === 1 ? 'задание' : 'заданий'} откроются после теста — пять вопросов, около пяти минут.
+                  {items.length} {plural(items.length, ['задание', 'задания', 'заданий'])} {items.length === 1 ? 'откроется' : 'откроются'} после теста — пять вопросов, около пяти минут.
                 </p>
               ) : (
                 <ul className="bg-card divide-y rounded-lg border">
@@ -61,7 +62,7 @@ export function PracticePage() {
                       <Link to="/practice/assignments/$assignmentId" params={{ assignmentId: a.id }} className="hover:bg-muted/50 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3 transition-colors">
                         <span className="min-w-0">
                           <span className="block font-medium">{a.title}</span>
-                          <span className="text-muted-foreground text-sm">{DIFFICULTY[a.difficulty as 1 | 2 | 3]} уровень</span>
+                          <span className="text-muted-foreground text-sm">Сложность: {DIFFICULTY[a.difficulty as 1 | 2 | 3].toLowerCase()}</span>
                         </span>
                         {a.myStatus && <Status tone={STATUS[a.myStatus].tone}>{STATUS[a.myStatus].label}</Status>}
                       </Link>

@@ -26,7 +26,7 @@ pointsRoutes.openapi(
     path: '/points',
     tags,
     security: secured,
-    summary: 'Журнал начислений субъекта с объяснениями',
+    summary: 'Журнал начислений с объяснениями: свой, своей команды или организации; проверяющему — любой',
     request: { query: PointsQuery },
     responses: { 200: jsonRes(z.array(PointEvent)), ...errorResponses },
   }),

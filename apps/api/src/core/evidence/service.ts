@@ -129,7 +129,8 @@ export async function listEvidence(ctx: Ctx, q: z.infer<typeof EvidenceQueueQuer
     .from(evidence)
     .where(
       and(
-        eq(evidence.status, q.status),
+        // «Approved» means accepted, with or without an adjustment.
+        q.status === 'approved' ? inArray(evidence.status, ['approved', 'adjusted']) : eq(evidence.status, q.status),
         p.role === 'student' ? undefined : eq(evidence.reviewerRole, p.role),
         q.module ? eq(evidence.module, q.module) : undefined,
         teamFilter ? inArray(evidence.teamId, teamFilter) : q.teamId ? eq(evidence.teamId, q.teamId) : undefined,

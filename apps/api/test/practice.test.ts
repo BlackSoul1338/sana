@@ -112,6 +112,23 @@ describe('Practice Lab', () => {
     expect(review.body.awarded.map((e: any) => e.ruleId)).toEqual(['practice_completion']);
   });
 
+  it('возврат после последней попытки оставляет ещё одну: студент не застревает', async () => {
+    const { student, teacher, mod, assignment } = await setup(noAi);
+    await passQuiz(noAi, student, mod.id);
+    const a = `/api/practice/assignments/${assignment.id}/attempts`;
+    let last: any;
+    for (let i = 1; i <= 5; i++) last = (await noAi.post(a, student, { answer: `Попытка номер ${i}: пропуски заполнил медианой.` })).body;
+    expect((await noAi.post(a, student, { answer: 'Шестая попытка до отправки преподавателю.' })).status).toBe(409);
+
+    const sent = (await noAi.post(`/api/practice/attempts/${last.id}/send`, student)).body;
+    await noAi.post(`/api/evidence/${sent.evidenceId}/review`, teacher, { decision: 'reject', comment: 'Нет обработки выбросов' });
+    const extra = await noAi.post(a, student, { answer: 'Пропуски — медианой, выбросы — по правилу IQR.' });
+    expect(extra.status).toBe(201);
+    expect(extra.body.attemptNo).toBe(6);
+    expect((await noAi.post(a, student, { answer: 'Ещё одна попытка сверх лимита после возврата.' })).status).toBe(409);
+    expect((await noAi.post(`/api/practice/attempts/${extra.body.id}/send`, student)).body.status).toBe('sent');
+  });
+
   it('рекомендация ведёт к теме с пробелом; задания создаёт только преподаватель с темами модуля', async () => {
     const { student, teacher, mod, assignment } = await setup();
     const draft = {

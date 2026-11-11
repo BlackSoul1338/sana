@@ -37,7 +37,7 @@ export const ReviewInput = z
       .min(-200)
       .max(200)
       .optional()
-      .meta({ description: 'Только для adjust: поправка к баллам команды с обязательным комментарием' }),
+      .meta({ description: 'Только для adjust: поправка с обязательным комментарием — команде, а работе без команды — её автору' }),
   })
   .refine((v) => v.decision !== 'adjust' || (v.adjustPoints !== undefined && v.comment.length >= 5), {
     path: ['comment'],
@@ -61,7 +61,7 @@ export const UploadUrl = z
   .meta({ id: 'UploadUrl' });
 
 export const EvidenceQueueQuery = z.object({
-  status: EvidenceStatus.default('pending'),
+  status: EvidenceStatus.default('pending').meta({ description: 'approved includes adjusted (accepted with an adjustment)' }),
   module: z.string().optional(),
   teamId: Id.optional(),
 });

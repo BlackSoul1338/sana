@@ -5,6 +5,8 @@ import type { AdjustmentInput, LeaderboardEntry, PointEvent, SubjectType } from 
 import { requireProfile, requireRole, type Ctx } from '../../platform/context.js';
 import type { DbLike } from '../../platform/db/client.js';
 import { iso } from '../../platform/db/columns.js';
+import { forbidden } from '../../platform/errors.js';
+import { isTeamMember } from '../identity/service.js';
 import { pointEvents } from './schema.js';
 
 export type Award = {
@@ -64,6 +66,8 @@ export async function award(db: DbLike, awards: Award[]): Promise<Row[]> {
 /** Корректировка куратором: новое событие с комментарием, старые не меняются. */
 export async function adjust(ctx: Ctx, input: z.infer<typeof AdjustmentInput>): Promise<PointEvent> {
   const mentor = requireRole(ctx, 'mentor');
+  // Learning-track points belong to the teacher, who adjusts them at review time.
+  if (input.module !== 'sprint') throw forbidden('Куратор корректирует только баллы Startup Sprint');
   const [row] = await award(ctx.db, [
     {
       subjectType: input.subjectType,
@@ -79,8 +83,18 @@ export async function adjust(ctx: Ctx, input: z.infer<typeof AdjustmentInput>): 
   return toPointEvent(row!);
 }
 
+/** Reviewers read any ledger; a student reads their own and their teams', a company its own. */
 export async function listEvents(ctx: Ctx, q: { subjectType: SubjectType; subjectId: string }): Promise<PointEvent[]> {
-  requireProfile(ctx);
+  const p = requireProfile(ctx);
+  if (p.role === 'student' || p.role === 'business') {
+    const own =
+      q.subjectType === 'profile'
+        ? q.subjectId === p.id
+        : q.subjectType === 'team'
+          ? p.role === 'student' && (await isTeamMember(ctx.db, q.subjectId, p.id))
+          : p.orgId === q.subjectId;
+    if (!own) throw forbidden();
+  }
   const rows = await ctx.db
     .select()
     .from(pointEvents)

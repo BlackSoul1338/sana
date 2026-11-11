@@ -1101,7 +1101,7 @@
             "type": "integer",
             "minimum": -200,
             "maximum": 200,
-            "description": "Только для adjust: поправка к баллам команды с обязательным комментарием"
+            "description": "Только для adjust: поправка с обязательным комментарием — команде, а работе без команды — её автору"
           }
         },
         "required": [
@@ -5796,9 +5796,11 @@
                 "rejected",
                 "adjusted"
               ],
-              "default": "pending"
+              "default": "pending",
+              "description": "approved includes adjusted (accepted with an adjustment)"
             },
             "required": false,
+            "description": "approved includes adjusted (accepted with an adjustment)",
             "name": "status",
             "in": "query"
           },
@@ -6192,7 +6194,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Журнал начислений субъекта с объяснениями",
+        "summary": "Журнал начислений с объяснениями: свой, своей команды или организации; проверяющему — любой",
         "parameters": [
           {
             "schema": {
@@ -10536,7 +10538,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Сводка обсуждения моделью: недостающие аргументы и вопросы",
+        "summary": "Сводка обсуждения моделью: недостающие аргументы и вопросы (участник команды)",
         "parameters": [
           {
             "schema": {

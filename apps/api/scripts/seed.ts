@@ -294,7 +294,7 @@ async function main() {
     note: 'Локальные тестовые аккаунты (создаются pnpm seed, пароль меняется при каждом запуске)',
     mentor: mentor.email,
     mentor2: mentor2.email,
-    teacher: `${teacher.email} (Practice Lab: задания, панель, проверка работ)`,
+    teacher: `${teacher.email} (Practice Lab и исследования: задания, задачи, проверка работ)`,
     teacher2: teacher2.email,
     student: 'alice@sana.local (команда «Альфа», проект по задаче «Прогноз спроса на выпечку»)',
     business: [...orgByKey.values()].map((o) => `${o.user.email} — ${o.name}`),

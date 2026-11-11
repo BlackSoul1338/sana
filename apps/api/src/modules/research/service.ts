@@ -277,7 +277,8 @@ export async function addItem(ctx: Ctx, id: string, input: z.infer<typeof resear
 
 /** AI summary; regenerated only when the discussion or the board changed since the last one. */
 export async function refreshSummary(ctx: Ctx, id: string) {
-  const { ws } = await access(ctx, id);
+  // The summary is the team's tool and is stored on its workspace, so only members request it.
+  const { ws } = await access(ctx, id, true);
   const [[lastMsg], [lastItem]] = await Promise.all([
     ctx.db.select({ at: max(raMessages.createdAt) }).from(raMessages).where(eq(raMessages.workspaceId, ws.id)),
     ctx.db.select({ at: max(raItems.createdAt) }).from(raItems).where(eq(raItems.workspaceId, ws.id)),

@@ -71,7 +71,7 @@ researchRoutes.openapi(
 );
 
 researchRoutes.openapi(
-  createRoute({ method: 'post', path: '/research/workspaces/{id}/summary', tags, security: secured, summary: 'Сводка обсуждения моделью: недостающие аргументы и вопросы', request: { params: IdParam }, responses: { 200: jsonRes(research.Workspace), ...aiErrorResponses } }),
+  createRoute({ method: 'post', path: '/research/workspaces/{id}/summary', tags, security: secured, summary: 'Сводка обсуждения моделью: недостающие аргументы и вопросы (участник команды)', request: { params: IdParam }, responses: { 200: jsonRes(research.Workspace), ...aiErrorResponses } }),
   async (c) => c.json(await svc.refreshSummary(c.get('ctx'), c.req.valid('param').id), 200),
 );
 
