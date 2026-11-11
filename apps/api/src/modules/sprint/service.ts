@@ -9,7 +9,7 @@ import { generateStructured } from '../../platform/ai/index.js';
 import { isTeamMember, requireTeamAccess, skillMap, teamIdsOf, teamMemberIds, teamNames } from '../../core/identity/service.js';
 import { findAssignment, findTask } from '../../core/catalog/service.js';
 import { createEvidence, evidenceForTeam, isApprovedStatus, toEvidence } from '../../core/evidence/service.js';
-import { eventsForSubjects, existsKey, totalFor } from '../../core/points/ledger.js';
+import { eventsForSubjects, existsKey, totalFor, totalsFor } from '../../core/points/ledger.js';
 import { evidence } from '../../core/evidence/schema.js';
 import { assignments } from '../../core/catalog/schema.js';
 import { ACHIEVEMENTS, earnedAchievements, type AchievementCode } from './achievements.js';
@@ -104,8 +104,7 @@ export async function getProject(ctx: Ctx, projectId: string): Promise<sprint.Pr
   const allEvidence = (await evidenceForTeam(ctx.db, project.teamId, MODULE)).filter((e) => subjectIds.has(e.subjectId));
   const visible = level === 'business' ? allEvidence.filter((e) => isApprovedStatus(e.status)) : allEvidence;
   const members = await teamMemberIds(ctx.db, project.teamId);
-  const byMember: Record<string, number> = {};
-  for (const m of members) byMember[m] = await totalFor(ctx.db, 'profile', m, MODULE);
+  const byMember = Object.fromEntries(await totalsFor(ctx.db, 'profile', members, MODULE));
   return {
     id: project.id,
     teamId: project.teamId,

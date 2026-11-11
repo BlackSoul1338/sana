@@ -1,9 +1,9 @@
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, FileText } from 'lucide-react';
 import { useState } from 'react';
 import { ReviewForm } from '@/features/review-evidence';
 import { evidenceDetailQuery, evidenceListQuery, EvidenceStatus, type Evidence } from '@/entities/evidence';
-import { teamQuery } from '@/entities/team';
+import { teamsQuery } from '@/entities/team';
 import { EVIDENCE_KIND, EVIDENCE_SUBJECT } from '@/shared/config';
 import { formatDateTime, formatRelative } from '@/shared/lib/format';
 import { Segmented } from '@/shared/ui/segmented';
@@ -72,13 +72,9 @@ export function ReviewQueuePage() {
   const [status, setStatus] = useState<Status>('pending');
   const [openId, setOpenId] = useState<string | null>(null);
   const list = useQuery(evidenceListQuery({ status }));
-  // Only the teams present in the queue: the full team list is expensive.
-  const teamIds = [...new Set((list.data ?? []).flatMap((e) => (e.teamId ? [e.teamId] : [])))];
-  const names = useQueries({
-    queries: teamIds.map((id) => teamQuery(id)),
-    combine: (rs) => Object.fromEntries(rs.flatMap((r) => (r.data ? [[r.data.id, r.data.name]] : []))) as Record<string, string>,
-  });
-  const teamName = (e: Evidence) => (e.teamId && names[e.teamId]) || 'Команда';
+  const teams = useQuery(teamsQuery);
+  const names = new Map((teams.data ?? []).map((t) => [t.id, t.name]));
+  const teamName = (e: Evidence) => (e.teamId && names.get(e.teamId)) || 'Команда';
   const opened = list.data?.find((e) => e.id === openId);
 
   return (
