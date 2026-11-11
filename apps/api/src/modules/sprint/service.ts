@@ -11,6 +11,7 @@ import { findAssignment, findTask } from '../../core/catalog/service.js';
 import { createEvidence, evidenceForTeam, isApprovedStatus, toEvidence } from '../../core/evidence/service.js';
 import { eventsForSubjects, existsKey, totalFor } from '../../core/points/ledger.js';
 import { evidence } from '../../core/evidence/schema.js';
+import { assignments } from '../../core/catalog/schema.js';
 import { ACHIEVEMENTS, earnedAchievements, type AchievementCode } from './achievements.js';
 import { chooseNextStep, currentStage, templateText } from './next-step.js';
 import { STAGE_PLAN_OFFSET_DAYS } from './points.config.js';
@@ -142,23 +143,28 @@ export async function listProjects(ctx: Ctx, q: { teamId?: string | undefined })
     const ids = [...res].map((r) => r.id);
     rows = ids.length ? await ctx.db.select().from(sprintProjects).where(inArray(sprintProjects.id, ids)) : [];
   }
-  const names = await teamNames(ctx.db, [...new Set(rows.map((r) => r.teamId))]);
-  return Promise.all(
-    rows.map(async (r) => {
-      const stages = await loadStages(ctx.db, r.id);
-      const cur = currentStage(stages.map((s) => ({ key: s.stageKey, status: s.status, plannedAt: s.plannedAt })));
-      const a = r.assignmentId ? await findAssignment(ctx.db, r.assignmentId) : undefined;
-      return {
-        id: r.id,
-        teamId: r.teamId,
-        teamName: names.get(r.teamId) ?? '—',
-        title: r.title,
-        currentStage: cur?.key ?? null,
-        approvedStages: stages.filter((s) => s.status === 'approved').length,
-        challengeTaskId: a?.taskId ?? null,
-      };
-    }),
-  );
+  if (rows.length === 0) return [];
+  // One query per table, not per project: the mentor list covers every project.
+  const assignmentIds = rows.flatMap((r) => (r.assignmentId ? [r.assignmentId] : []));
+  const [names, stageRows, assignmentRows] = await Promise.all([
+    teamNames(ctx.db, [...new Set(rows.map((r) => r.teamId))]),
+    ctx.db.select().from(sprintStages).where(inArray(sprintStages.projectId, rows.map((r) => r.id))).orderBy(asc(sprintStages.order)),
+    assignmentIds.length ? ctx.db.select({ id: assignments.id, taskId: assignments.taskId }).from(assignments).where(inArray(assignments.id, assignmentIds)) : [],
+  ]);
+  const taskByAssignment = new Map(assignmentRows.map((a) => [a.id, a.taskId]));
+  return rows.map((r) => {
+    const stages = stageRows.filter((s) => s.projectId === r.id);
+    const cur = currentStage(stages.map((s) => ({ key: s.stageKey, status: s.status, plannedAt: s.plannedAt })));
+    return {
+      id: r.id,
+      teamId: r.teamId,
+      teamName: names.get(r.teamId) ?? '—',
+      title: r.title,
+      currentStage: cur?.key ?? null,
+      approvedStages: stages.filter((s) => s.status === 'approved').length,
+      challengeTaskId: (r.assignmentId && taskByAssignment.get(r.assignmentId)) || null,
+    };
+  });
 }
 
 export async function listTemplates(ctx: Ctx): Promise<sprint.TaskTemplate[]> {

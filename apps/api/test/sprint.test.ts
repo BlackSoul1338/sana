@@ -96,6 +96,10 @@ describe('Startup Sprint: путь команды', () => {
     expect((await api.post(`/api/evidence/${proto.body.id}/review`, mentor, { decision: 'approve' })).status).toBe(409);
 
     const view = (await api.get(`/api/sprint/projects/${pid}`, alice)).body;
+
+    // The mentor list (all projects) reports each project's own stages.
+    const listed = (await api.get('/api/sprint/projects', mentor)).body.find((p: any) => p.id === pid);
+    expect(listed).toMatchObject({ teamId: team.id, approvedStages: 4, currentStage: 'testing', challengeTaskId: null });
     // идея 10+1, проблема 20 (поздно), интервью 30+3, три интервью 30, прототип 40, работающий прототип 30, React 10
     const expectedTeam = 11 + 20 + 33 + 30 + 40 + 30 + 10;
     expect(view.points.team).toBe(expectedTeam);
