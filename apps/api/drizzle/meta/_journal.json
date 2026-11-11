@@ -29,6 +29,13 @@
       "when": 1794391171073,
       "tag": "0003_practice_lab",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794391605862,
+      "tag": "0004_research_arena",
+      "breakpoints": true
     }
   ]
 }

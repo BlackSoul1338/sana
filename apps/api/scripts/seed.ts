@@ -10,7 +10,7 @@ import { randomBytes } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
-import { sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { env } from '../src/platform/env.js';
 import { closeAllDb, createDb } from '../src/platform/db/client.js';
 import { EventBus } from '../src/platform/events.js';
@@ -25,6 +25,9 @@ import * as match from '../src/modules/match/service.js';
 import * as practice from '../src/modules/practice/service.js';
 import { verifyCheck } from '../src/modules/practice/rules.js';
 import { plAttempts, plModules, plQuestions } from '../src/modules/practice/schema.js';
+import * as research from '../src/modules/research/service.js';
+import { raConclusions } from '../src/modules/research/schema.js';
+import { verifyGrowth } from '../src/modules/research/rules.js';
 import { decideApplication } from '../src/flows/accept-application.js';
 import { DATA_DIR, readData, seedReferenceData } from '../src/seed/refs.js';
 import { STAGE_ORDER, type StageKey } from '../src/modules/sprint/types.js';
@@ -282,6 +285,8 @@ async function main() {
 
   console.log('Practice Lab…');
   await seedPractice({ teachers: [teacher, teacher2], students: teamInfo.flatMap((t) => t.members) });
+  console.log('Team Research Arena…');
+  await seedResearch({ teacher, teams: teamInfo });
 
   const accounts = {
     password: PASSWORD,
@@ -372,5 +377,78 @@ async function seedPractice({ teachers, students }: { teachers: User[]; students
     const med = await attempt(waiting, 'medium', 1, at(today, -2, ti));
     await practice.sendAttempt(ctxFor(waiting, at(today, -2, ti + 1)), med.id);
     await attempt(drafting, 'weak', 1, at(today, -1, ti));
+  }
+}
+
+type ResearchTaskJson = { title: string; question: string; context: string; rubric: Record<'argumentation' | 'completeness' | 'understanding' | 'originality', number> };
+type Level = 'strong' | 'adequate' | 'weak';
+type DiscussionJson = {
+  task: string;
+  team: number;
+  initialPosition: string;
+  roles: ('coordinator' | 'researcher' | 'critic' | 'editor')[];
+  threads: { title: string; messages: [number, string][] }[];
+  items: { ref: string; kind: 'argument' | 'source' | 'question'; by: number; text: string; url?: string; thread?: number; stance?: 'for' | 'against'; links?: string[] }[];
+  conclusion?: {
+    decision: 'approve' | 'pending';
+    finalPosition: string;
+    statements: { text: string; refs: string[] }[];
+    assessment: { rubric: Record<string, Level>; growth: { initialQuote: string; finalQuote: string; explanation: string }; recommendations: string[] };
+  };
+};
+
+/** Research demo: tasks, team workspaces with discussions and boards; conclusion assessments come from fixtures (no model calls). */
+async function seedResearch({ teacher, teams }: { teacher: User; teams: { id: string; name: string; members: User[] }[] }) {
+  const taskIds = new Map<string, string>();
+  for (const [i, t] of readData<ResearchTaskJson[]>('research-tasks.json').entries()) {
+    const row = await research.createTask(ctxFor(teacher, at(today, -15 + i)), {
+      title: t.title,
+      question: t.question,
+      context: t.context,
+      rubric: Object.entries(t.rubric).map(([key, maxPoints]) => ({ key: key as keyof ResearchTaskJson['rubric'], maxPoints, description: '' })),
+    });
+    taskIds.set(t.title, row.id);
+  }
+  for (const [di, d] of readData<DiscussionJson[]>('research-discussions.json').entries()) {
+    const team = teams[d.team]!;
+    const who = (i: number) => team.members[i % team.members.length]!;
+    let clock = at(today, -9 + di);
+    const tick = (m = 17) => (clock = new Date(clock.getTime() + m * 60_000));
+    const ws = await research.startWorkspace(ctxFor(who(0), clock), taskIds.get(d.task)!, { teamId: team.id, initialPosition: d.initialPosition });
+    await research.setRoles(ctxFor(who(0), tick()), ws.id, { roles: d.roles.slice(0, team.members.length).map((role, i) => ({ profileId: who(i).id, role })) });
+    const threadIds: string[] = [];
+    for (const t of d.threads) {
+      const th = await research.createThread(ctxFor(who(0), tick()), ws.id, { title: t.title });
+      threadIds.push(th.id);
+      for (const [by, text] of t.messages) await research.postMessage(ctxFor(who(by), tick(23)), th.id, { text });
+    }
+    const itemIds = new Map<string, string>();
+    for (const it of d.items) {
+      const row = await research.addItem(ctxFor(who(it.by), tick(9)), ws.id, {
+        kind: it.kind,
+        text: it.text,
+        ...(it.url ? { url: it.url } : {}),
+        ...(it.thread !== undefined ? { threadId: threadIds[it.thread]! } : {}),
+        ...(it.stance ? { stance: it.stance } : {}),
+        linkIds: (it.links ?? []).map((r) => itemIds.get(r)!),
+      });
+      itemIds.set(it.ref, row.id);
+    }
+    if (!d.conclusion) continue;
+    const c = d.conclusion;
+    const statements = c.statements.map((s) => ({ text: s.text, itemIds: s.refs.map((r) => itemIds.get(r)!) }));
+    const sent = await research.submitConclusion(ctxFor(who(0), tick(60)), ws.id, { finalPosition: c.finalPosition, statements });
+    const finalTexts = [c.finalPosition, ...statements.map((s) => s.text)].join('\n');
+    await db
+      .update(raConclusions)
+      .set({
+        assessment: {
+          rubric: Object.entries(c.assessment.rubric).map(([key, level]) => ({ key: key as keyof ResearchTaskJson['rubric'], level, explanation: '', itemIds: [] })),
+          growth: verifyGrowth(c.assessment.growth, d.initialPosition, finalTexts),
+          recommendations: c.assessment.recommendations,
+        },
+      })
+      .where(eq(raConclusions.id, sent.conclusion!.id));
+    if (c.decision === 'approve') await reviewEvidence(ctxFor(teacher, tick(240)), sent.conclusion!.evidenceId!, { decision: 'approve', comment: 'Принято: вывод опирается на данные' });
   }
 }
