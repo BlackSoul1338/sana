@@ -77,7 +77,7 @@ export function ReviewForm({ evidenceId, subjectName, onDone }: { evidenceId: st
         </Field>
       )}
       <Field
-        label={decision === 'approve' ? 'Комментарий (по желанию)' : 'Комментарий для команды'}
+        label={decision === 'approve' ? 'Комментарий (по желанию)' : 'Комментарий'}
         htmlFor="rv-comment"
         error={errors.comment?.message}
       >
