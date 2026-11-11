@@ -3,10 +3,12 @@ import { Trophy } from 'lucide-react';
 import { feedQuery } from '@/entities/project';
 import { RULE_TITLES } from '@/shared/config';
 import { formatRelative } from '@/shared/lib/format';
+import { cn } from '@/shared/lib/utils';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { EmptyState, PointsChip } from '@/shared/ui/status';
 
-export function ProjectFeed({ projectId, members }: { projectId: string; members: Record<string, string> }) {
+/** `since`: the viewer's previous visit; events after it are briefly highlighted. */
+export function ProjectFeed({ projectId, members, since }: { projectId: string; members: Record<string, string>; since?: string }) {
   const feed = useQuery(feedQuery(projectId));
 
   if (feed.isPending) return <Skeleton className="h-40" />;
@@ -28,9 +30,9 @@ export function ProjectFeed({ projectId, members }: { projectId: string; members
       {items.length === 0 ? (
         <EmptyState title="Пока тихо" text="Баллы появятся, когда ментор подтвердит первый результат." />
       ) : (
-        <ol className="grid gap-4">
+        <ol className="grid gap-2">
           {items.map((item, i) => (
-            <li key={i} className="flex gap-3">
+            <li key={i} className={cn('-mx-2 flex gap-3 rounded-md px-2 py-1', since && item.at > since && 'animate-fresh')}>
               <div className="w-12 shrink-0 pt-0.5">
                 {item.type === 'points' && item.points !== null ? (
                   <PointsChip value={item.points} />

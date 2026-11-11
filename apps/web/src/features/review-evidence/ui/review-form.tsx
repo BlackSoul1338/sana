@@ -18,7 +18,8 @@ import { Textarea } from '@/shared/ui/textarea';
 type Input_ = z.input<typeof ReviewInput>;
 type Output = z.output<typeof ReviewInput>;
 
-export function ReviewForm({ evidenceId, onDone }: { evidenceId: string; onDone: () => void }) {
+/** `onDone` runs before the lists refetch, so the caller can let the decided row leave first. */
+export function ReviewForm({ evidenceId, subjectName, onDone }: { evidenceId: string; subjectName?: string; onDone: () => void | Promise<void> }) {
   const queryClient = useQueryClient();
   const form = useForm<Input_, unknown, Output>({
     resolver: zodResolver(ReviewInput),
@@ -33,14 +34,15 @@ export function ReviewForm({ evidenceId, onDone }: { evidenceId: string; onDone:
     onSuccess: async (result) => {
       const total = result.awarded.reduce((s, e) => s + e.points, 0);
       const lines = result.awarded.map((e) => `${RULE_TITLES[e.ruleId] ?? 'Начисление'}: ${signed(e.points)}`).join('\n');
-      if (result.evidence.status === 'rejected') toast('Отправлено на доработку');
-      else toast.success(total ? `Начислено ${signed(total)}` : 'Подтверждено', { description: lines || undefined });
+      const who = subjectName ? `${subjectName}: ` : '';
+      if (result.evidence.status === 'rejected') toast(`${who}на доработку`);
+      else toast.success(`${who}принято${total ? `, ${signed(total)}` : ''}`, { description: lines || undefined });
+      await onDone();
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: evidenceKeys.all }),
         queryClient.invalidateQueries({ queryKey: projectKeys.all }),
         queryClient.invalidateQueries({ queryKey: ['leaderboard'] }),
       ]);
-      onDone();
     },
     onError: (error) => {
       if (!applyProblemToForm(error, form.setError, ['comment', 'adjustPoints'])) form.setError('root', { message: problemMessage(error) });
