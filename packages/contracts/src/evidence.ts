@@ -66,6 +66,8 @@ export const EvidenceQueueQuery = z.object({
   teamId: Id.optional(),
 });
 
+export const EvidenceQueueItem = Evidence.extend({ submitterName: z.string() }).meta({ id: 'EvidenceQueueItem' });
+
 export const EvidenceDetail = Evidence.extend({
   downloadUrl: z.string().nullable().meta({ description: 'Временная ссылка на файл (если он загружен)' }),
 }).meta({ id: 'EvidenceDetail' });

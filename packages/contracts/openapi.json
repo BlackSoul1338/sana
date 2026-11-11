@@ -662,7 +662,7 @@
           "contentType"
         ]
       },
-      "Evidence": {
+      "EvidenceQueueItem": {
         "type": "object",
         "properties": {
           "id": {
@@ -749,6 +749,9 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "submitterName": {
+            "type": "string"
           }
         },
         "required": [
@@ -767,7 +770,8 @@
           "reviewedBy",
           "reviewComment",
           "reviewedAt",
-          "createdAt"
+          "createdAt",
+          "submitterName"
         ]
       },
       "EvidenceDetail": {
@@ -903,6 +907,114 @@
         "required": [
           "evidence",
           "awarded"
+        ]
+      },
+      "Evidence": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "module": {
+            "type": "string"
+          },
+          "subjectType": {
+            "type": "string"
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "submittedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "link",
+              "screenshot",
+              "interview",
+              "report"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "storagePath": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "reviewerRole": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "approved",
+              "rejected",
+              "adjusted"
+            ]
+          },
+          "reviewedBy": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "reviewComment": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reviewedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "module",
+          "subjectType",
+          "subjectId",
+          "teamId",
+          "submittedBy",
+          "kind",
+          "url",
+          "storagePath",
+          "note",
+          "reviewerRole",
+          "status",
+          "reviewedBy",
+          "reviewComment",
+          "reviewedAt",
+          "createdAt"
         ]
       },
       "PointEvent": {
@@ -5660,7 +5772,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Очередь проверки (куратор) или подтверждения своих команд (студент)",
+        "summary": "Очередь проверки (куратор или преподаватель — по своей роли) или подтверждения своих команд (студент)",
         "parameters": [
           {
             "schema": {
@@ -5703,7 +5815,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Evidence"
+                    "$ref": "#/components/schemas/EvidenceQueueItem"
                   }
                 }
               }
