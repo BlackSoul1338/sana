@@ -12,11 +12,15 @@ const pools = new Map<string, { db: Db; sql: postgres.Sql }>();
 export function createDb(url: string): { db: Db; sql: postgres.Sql } {
   const existing = pools.get(url);
   if (existing) return existing;
-  const sql = postgres(url, { prepare: false, max: 10, onnotice: () => {} });
-  const db = drizzle(sql);
-  const entry = { db, sql };
+  const entry = openDb(url, 10);
   pools.set(url, entry);
   return entry;
+}
+
+/** Uncached client; the caller closes it. Workers need one per request: sockets cannot outlive it. */
+export function openDb(url: string, max: number): { db: Db; sql: postgres.Sql } {
+  const sql = postgres(url, { prepare: false, max, fetch_types: false, onnotice: () => {} });
+  return { db: drizzle(sql), sql };
 }
 
 export async function closeAllDb() {

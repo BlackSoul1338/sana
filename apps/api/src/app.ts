@@ -20,7 +20,8 @@ import { registerModules } from './modules/register.js';
 import { flowRoutes } from './flows/routes.js';
 
 export type AppDeps = {
-  db: Db;
+  /** A function is resolved per request (Workers open a connection per request). */
+  db: Db | (() => Db);
   verifier: TokenVerifier;
   ai: AiModels | null;
   storage: StoragePort;
@@ -89,9 +90,10 @@ export function createApp(deps: AppDeps) {
     if (!token) throw unauthorized();
     const verified = await deps.verifier(token);
     if (!verified) throw unauthorized('Токен недействителен или истёк');
-    const profile = await loadActorProfile(deps.db, verified.userId);
+    const db = typeof deps.db === 'function' ? deps.db() : deps.db;
+    const profile = await loadActorProfile(db, verified.userId);
     const actor = { userId: verified.userId, email: verified.email, profile };
-    const ctx: Ctx = { db: deps.db, actor, now: clock(), ai: deps.ai, bus, storage: deps.storage };
+    const ctx: Ctx = { db, actor, now: clock(), ai: deps.ai, bus, storage: deps.storage };
     c.set('actor', actor);
     c.set('ctx', ctx);
     await next();

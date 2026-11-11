@@ -27,12 +27,17 @@ let cached: Env | undefined;
 /** Читает и проверяет переменные окружения один раз. */
 export function env(): Env {
   if (!cached) {
-    const parsed = EnvSchema.safeParse(process.env);
-    if (!parsed.success) {
-      const issues = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('\n');
-      throw new Error(`Некорректные переменные окружения:\n${issues}`);
-    }
-    cached = parsed.data;
+    cached = parseEnv(process.env);
   }
   return cached;
+}
+
+/** Validates an arbitrary variable source, e.g. Worker bindings. */
+export function parseEnv(source: Record<string, unknown>): Env {
+  const parsed = EnvSchema.safeParse(source);
+  if (!parsed.success) {
+    const issues = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('\n');
+    throw new Error(`Некорректные переменные окружения:\n${issues}`);
+  }
+  return parsed.data;
 }
