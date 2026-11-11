@@ -3,12 +3,11 @@ dist/
 coverage/
 .env
 .env.*
-!.env.example
 *.log
 .DS_Store
 supabase/.branches
 supabase/.temp
-docs/*
+docs_dev/*
 
 # Генерируется pnpm seed: локальные тестовые аккаунты
 data/demo-accounts.json
@@ -20,3 +19,4 @@ data/demo-accounts.json
 .wrangler/
 .cloudflare/
 .env*
+!.env.example
