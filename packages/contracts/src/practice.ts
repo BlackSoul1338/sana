@@ -1,10 +1,11 @@
 import { z } from 'zod';
 import { Difficulty, Id, Timestamp } from './common.js';
 
-export const Verdict = z.enum(['met', 'partial', 'missed']).meta({ id: 'PracticeVerdict' });
+// Enums used with .nullable() stay inline: a component id would make the shared component itself nullable in OpenAPI.
+export const Verdict = z.enum(['met', 'partial', 'missed']);
 export type Verdict = z.infer<typeof Verdict>;
 
-export const AttemptStatus = z.enum(['checked', 'sent', 'approved', 'rejected']).meta({ id: 'PracticeAttemptStatus' });
+export const AttemptStatus = z.enum(['checked', 'sent', 'approved', 'rejected']);
 
 export const Module = z
   .object({
