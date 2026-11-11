@@ -122,11 +122,17 @@ API при старте проверяет переменные и заверш�
 
 Точка входа — `apps/api/src/worker.ts`, настройки — `apps/api/cloudflare.config.ts` (формат CLI `cf`, пока в бете). Postgres подключается через Hyperdrive; на каждый запрос открывается своё соединение. Бакет `evidence` Worker не создаёт: он должен уже существовать (его создают `pnpm dev` и `pnpm seed`). Миграции применяются отдельно: `pnpm db:migrate` с `DATABASE_URL` облачной базы.
 
-1. Войдите: `cf auth login`.
+1. Войдите (`cf auth login`) и один раз зарегистрируйте поддомен `workers.dev` в панели Cloudflare (Workers → Onboarding).
 2. Создайте Hyperdrive для базы Supabase (параметры — в Supabase → Connect, например session pooler на порту 5432) и запомните его id:
 
    ```bash
    cf hyperdrive create --name sana-db --origin-scheme postgresql --origin-host <host> --origin-port 5432 --origin-database postgres --origin-user <user> --origin-password <password>
+   ```
+
+   Отключите кэш запросов Hyperdrive, иначе после записи чтение может вернуть устаревшие данные:
+
+   ```bash
+   cf hyperdrive update <id> --caching-disabled
    ```
 
 3. Положите секреты в `apps/api/.dev.vars.production` (файл в `.gitignore`): `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `GOOGLE_API_KEY`.
