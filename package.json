@@ -18,7 +18,8 @@
     "db:status": "DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock supabase status",
     "db:generate": "pnpm --filter @sana/api db:generate",
     "db:migrate": "pnpm --filter @sana/api db:migrate",
-    "seed": "pnpm --filter @sana/api seed"
+    "seed": "pnpm --filter @sana/api seed",
+    "seed:content": "pnpm --filter @sana/api seed:content"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",

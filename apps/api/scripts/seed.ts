@@ -24,12 +24,13 @@ import * as sprint from '../src/modules/sprint/service.js';
 import * as match from '../src/modules/match/service.js';
 import * as practice from '../src/modules/practice/service.js';
 import { verifyCheck } from '../src/modules/practice/rules.js';
-import { plAttempts, plModules, plQuestions } from '../src/modules/practice/schema.js';
+import { plAttempts, plQuestions } from '../src/modules/practice/schema.js';
 import * as research from '../src/modules/research/service.js';
 import { raConclusions } from '../src/modules/research/schema.js';
 import { verifyGrowth } from '../src/modules/research/rules.js';
 import { decideApplication } from '../src/flows/accept-application.js';
 import { DATA_DIR, readData, seedReferenceData } from '../src/seed/refs.js';
+import { seedPracticeAssignments, seedResearchTasks } from '../src/seed/content.js';
 import { STAGE_ORDER, type StageKey } from '../src/modules/sprint/types.js';
 import { STAGE_PLAN_OFFSET_DAYS } from '../src/modules/sprint/points.config.js';
 
@@ -316,7 +317,6 @@ try {
   await closeAllDb();
 }
 
-type PracticeAssignmentJson = { module: string; title: string; difficulty: number; condition: string; materials: string; criteria: { title: string; description: string; topic: string; maxPoints: number }[] };
 type PracticeAnswerJson = {
   assignment: string;
   quality: 'weak' | 'medium' | 'strong';
@@ -329,21 +329,8 @@ type PracticeAnswerJson = {
  * Per answered assignment: one student fixes a weak attempt and gets approved, one waits for review, one has only a draft check.
  */
 async function seedPractice({ teachers, students }: { teachers: User[]; students: User[] }) {
-  const mods = await db.select().from(plModules);
-  const modBySlug = new Map(mods.map((m) => [m.slug, m]));
   const questions = await db.select().from(plQuestions);
-  const assignments = new Map<string, Awaited<ReturnType<typeof practice.createAssignment>>>();
-  for (const [i, a] of readData<PracticeAssignmentJson[]>('practice-assignments.json').entries()) {
-    const row = await practice.createAssignment(ctxFor(teachers[i % teachers.length]!, at(today, -20 + i)), {
-      moduleId: modBySlug.get(a.module)!.id,
-      title: a.title,
-      condition: a.condition,
-      materials: a.materials,
-      difficulty: a.difficulty,
-      criteria: a.criteria,
-    });
-    assignments.set(a.title, row);
-  }
+  const assignments = await seedPracticeAssignments(db, (i) => ctxFor(teachers[i % teachers.length]!, at(today, -20 + i)));
 
   const answers = readData<PracticeAnswerJson[]>('practice-answers.json');
   const pick = (title: string, quality: PracticeAnswerJson['quality']) => answers.find((x) => x.assignment === title && x.quality === quality)!;
@@ -380,8 +367,8 @@ async function seedPractice({ teachers, students }: { teachers: User[]; students
   }
 }
 
-type ResearchTaskJson = { title: string; question: string; context: string; rubric: Record<'argumentation' | 'completeness' | 'understanding' | 'originality', number> };
 type Level = 'strong' | 'adequate' | 'weak';
+type RubricKey = 'argumentation' | 'completeness' | 'understanding' | 'originality';
 type DiscussionJson = {
   task: string;
   team: number;
@@ -399,16 +386,7 @@ type DiscussionJson = {
 
 /** Research demo: tasks, team workspaces with discussions and boards; conclusion assessments come from fixtures (no model calls). */
 async function seedResearch({ teacher, teams }: { teacher: User; teams: { id: string; name: string; members: User[] }[] }) {
-  const taskIds = new Map<string, string>();
-  for (const [i, t] of readData<ResearchTaskJson[]>('research-tasks.json').entries()) {
-    const row = await research.createTask(ctxFor(teacher, at(today, -15 + i)), {
-      title: t.title,
-      question: t.question,
-      context: t.context,
-      rubric: Object.entries(t.rubric).map(([key, maxPoints]) => ({ key: key as keyof ResearchTaskJson['rubric'], maxPoints, description: '' })),
-    });
-    taskIds.set(t.title, row.id);
-  }
+  const taskIds = await seedResearchTasks(db, (i) => ctxFor(teacher, at(today, -15 + i)));
   for (const [di, d] of readData<DiscussionJson[]>('research-discussions.json').entries()) {
     const team = teams[d.team]!;
     const who = (i: number) => team.members[i % team.members.length]!;
@@ -443,7 +421,7 @@ async function seedResearch({ teacher, teams }: { teacher: User; teams: { id: st
       .update(raConclusions)
       .set({
         assessment: {
-          rubric: Object.entries(c.assessment.rubric).map(([key, level]) => ({ key: key as keyof ResearchTaskJson['rubric'], level, explanation: '', itemIds: [] })),
+          rubric: Object.entries(c.assessment.rubric).map(([key, level]) => ({ key: key as RubricKey, level, explanation: '', itemIds: [] })),
           growth: verifyGrowth(c.assessment.growth, d.initialPosition, finalTexts),
           recommendations: c.assessment.recommendations,
         },
