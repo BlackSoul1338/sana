@@ -17,6 +17,7 @@
     "db:migrate": "tsx --env-file-if-exists=../../.env scripts/migrate.ts",
     "seed": "tsx --env-file-if-exists=../../.env scripts/seed.ts",
     "ai:smoke": "tsx --env-file-if-exists=../../.env scripts/ai-smoke.ts",
+    "eval:practice": "tsx --env-file-if-exists=../../.env scripts/eval-practice.ts",
     "eval:bcb": "tsx --env-file-if-exists=../../.env scripts/eval-bcb.ts",
     "demo:match": "tsx --env-file-if-exists=../../.env scripts/demo-match.ts",
     "openapi": "tsx --env-file-if-exists=../../.env scripts/export-openapi.ts"

@@ -2526,6 +2526,814 @@
           "verdict"
         ]
       },
+      "PracticeModule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "quiz": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "correct": {
+                "type": "integer"
+              },
+              "total": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "correct",
+              "total"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "title",
+          "description",
+          "topics",
+          "quiz"
+        ]
+      },
+      "PracticeQuiz": {
+        "type": "object",
+        "properties": {
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PracticeQuestion"
+            }
+          },
+          "result": {
+            "$ref": "#/components/schemas/PracticeQuizResult"
+          }
+        },
+        "required": [
+          "moduleId",
+          "questions",
+          "result"
+        ]
+      },
+      "PracticeQuestion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "topic",
+          "text",
+          "options"
+        ]
+      },
+      "PracticeQuizResult": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "correct": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "points": {
+            "type": "integer",
+            "description": "Начислено за этот тест (только за первую попытку)"
+          },
+          "perQuestion": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "option": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "correct": {
+                  "type": "integer"
+                },
+                "ok": {
+                  "type": "boolean"
+                },
+                "explanation": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "questionId",
+                "option",
+                "correct",
+                "ok",
+                "explanation"
+              ]
+            }
+          }
+        },
+        "required": [
+          "correct",
+          "total",
+          "points",
+          "perQuestion"
+        ]
+      },
+      "PracticeQuizInput": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "option": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "questionId",
+                "option"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "answers"
+        ]
+      },
+      "PracticeAssignment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "materials": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3,
+            "description": "Сложность от 1 до 3"
+          },
+          "criteria": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PracticeCriterion"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "myStatus": {
+            "$ref": "#/components/schemas/PracticeAttemptStatus"
+          }
+        },
+        "required": [
+          "id",
+          "moduleId",
+          "title",
+          "condition",
+          "materials",
+          "difficulty",
+          "criteria",
+          "createdAt",
+          "myStatus"
+        ]
+      },
+      "PracticeCriterion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "maxPoints": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "topic",
+          "maxPoints"
+        ]
+      },
+      "PracticeAttemptStatus": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "checked",
+          "sent",
+          "approved",
+          "rejected",
+          null
+        ]
+      },
+      "PracticeNewAssignment": {
+        "type": "object",
+        "properties": {
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 160
+          },
+          "condition": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 4000
+          },
+          "materials": {
+            "type": "string",
+            "maxLength": 4000,
+            "default": ""
+          },
+          "difficulty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3,
+            "description": "Сложность от 1 до 3"
+          },
+          "criteria": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 120
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 600
+                },
+                "topic": {
+                  "type": "string"
+                },
+                "maxPoints": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 50
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "topic",
+                "maxPoints"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 8
+          }
+        },
+        "required": [
+          "moduleId",
+          "title",
+          "condition",
+          "difficulty",
+          "criteria"
+        ]
+      },
+      "PracticeAttempt": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assignmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "attemptNo": {
+            "type": "integer"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "check": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "criteria": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PracticeCheckedCriterion"
+                }
+              },
+              "droppedQuotes": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "criteria",
+              "droppedQuotes"
+            ],
+            "description": "null — модель была недоступна, работу проверит преподаватель"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PracticeAttemptStatus"
+          },
+          "evidenceId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "preview": {
+            "type": "object",
+            "properties": {
+              "correctness": {
+                "type": "integer"
+              },
+              "completeness": {
+                "type": "integer"
+              },
+              "selfCorrection": {
+                "type": "integer"
+              },
+              "completion": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "correctness",
+              "completeness",
+              "selfCorrection",
+              "completion"
+            ]
+          },
+          "corrected": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "assignmentId",
+          "profileId",
+          "attemptNo",
+          "answer",
+          "check",
+          "status",
+          "evidenceId",
+          "preview",
+          "corrected",
+          "createdAt"
+        ]
+      },
+      "PracticeCheckedCriterion": {
+        "type": "object",
+        "properties": {
+          "criterionId": {
+            "type": "string"
+          },
+          "verdict": {
+            "$ref": "#/components/schemas/PracticeVerdict"
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string"
+                },
+                "issue": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "quote",
+                "issue"
+              ]
+            }
+          },
+          "recommendation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "criterionId",
+          "verdict",
+          "explanation",
+          "errors",
+          "recommendation"
+        ]
+      },
+      "PracticeVerdict": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "met",
+          "partial",
+          "missed",
+          null
+        ]
+      },
+      "PracticeAttemptInput": {
+        "type": "object",
+        "properties": {
+          "answer": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 8000
+          }
+        },
+        "required": [
+          "answer"
+        ]
+      },
+      "PracticeAttemptDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assignmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "attemptNo": {
+            "type": "integer"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "check": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "criteria": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PracticeCheckedCriterion"
+                }
+              },
+              "droppedQuotes": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "criteria",
+              "droppedQuotes"
+            ],
+            "description": "null — модель была недоступна, работу проверит преподаватель"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PracticeAttemptStatus"
+          },
+          "evidenceId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "preview": {
+            "type": "object",
+            "properties": {
+              "correctness": {
+                "type": "integer"
+              },
+              "completeness": {
+                "type": "integer"
+              },
+              "selfCorrection": {
+                "type": "integer"
+              },
+              "completion": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "correctness",
+              "completeness",
+              "selfCorrection",
+              "completion"
+            ]
+          },
+          "corrected": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "assignment": {
+            "$ref": "#/components/schemas/PracticeAssignment"
+          },
+          "studentName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "assignmentId",
+          "profileId",
+          "attemptNo",
+          "answer",
+          "check",
+          "status",
+          "evidenceId",
+          "preview",
+          "corrected",
+          "createdAt",
+          "assignment",
+          "studentName"
+        ]
+      },
+      "PracticeDashboard": {
+        "type": "object",
+        "properties": {
+          "assignments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "students": {
+                  "type": "integer"
+                },
+                "approved": {
+                  "type": "integer"
+                },
+                "avgAttempts": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "students",
+                "approved",
+                "avgAttempts"
+              ]
+            }
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "profileId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "quiz": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "correct": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "correct",
+                    "total"
+                  ]
+                },
+                "points": {
+                  "type": "integer"
+                },
+                "cells": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "assignmentId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "attempts": {
+                        "type": "integer"
+                      },
+                      "status": {
+                        "$ref": "#/components/schemas/PracticeAttemptStatus"
+                      },
+                      "evidenceId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "format": "uuid"
+                      },
+                      "minutesToSend": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "description": "Только как дополнительный показатель, баллов не даёт"
+                      }
+                    },
+                    "required": [
+                      "assignmentId",
+                      "attempts",
+                      "status",
+                      "evidenceId",
+                      "minutesToSend"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "profileId",
+                "name",
+                "quiz",
+                "points",
+                "cells"
+              ]
+            }
+          },
+          "problemTopics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "topic": {
+                  "type": "string"
+                },
+                "quizWrong": {
+                  "type": "integer"
+                },
+                "criteriaMissed": {
+                  "type": "integer"
+                },
+                "share": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "topic",
+                "quizWrong",
+                "criteriaMissed",
+                "share"
+              ]
+            }
+          }
+        },
+        "required": [
+          "assignments",
+          "students",
+          "problemTopics"
+        ]
+      },
+      "PracticeRecommendation": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "assignmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "topic": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "assignmentId",
+          "title",
+          "topic",
+          "reason"
+        ]
+      },
       "DecisionResult": {
         "type": "object",
         "properties": {
@@ -6702,6 +7510,952 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FeedbackResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/practice/modules": {
+      "get": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Учебные модули; для студента — результат теста",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PracticeModule"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/practice/modules/{id}/quiz": {
+      "get": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Вопросы теста без ключа; последний результат студента",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeQuiz"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Сдать тест: разбор по вопросам; баллы только за первую попытку",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PracticeQuizInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeQuizResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/practice/assignments": {
+      "get": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Практические задания модуля",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": false,
+            "name": "moduleId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PracticeAssignment"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Новое задание с критериями (преподаватель)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PracticeNewAssignment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeAssignment"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/practice/assignments/{id}/attempts": {
+      "get": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Мои попытки по заданию",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PracticeAttempt"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Новая попытка: проверка моделью по критериям задания (без оценки)",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PracticeAttemptInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeAttempt"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/practice/attempts/{id}/send": {
+      "post": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Отправить последнюю попытку преподавателю",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeAttempt"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/practice/attempts/{id}": {
+      "get": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Попытка с заданием и проверкой (владелец или преподаватель)",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeAttemptDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/practice/dashboard": {
+      "get": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Панель преподавателя: студенты × задания, проблемные темы",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "moduleId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeDashboard"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/practice/recommendation": {
+      "get": {
+        "tags": [
+          "Practice Lab"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Следующее задание по найденным пробелам",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeRecommendation"
                 }
               }
             }

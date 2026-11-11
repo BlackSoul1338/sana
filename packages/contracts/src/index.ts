@@ -7,3 +7,4 @@ export * from './points.js';
 export * as sprint from './sprint.js';
 export * as bcb from './bcb.js';
 export * as match from './match.js';
+export * as practice from './practice.js';

@@ -5,6 +5,7 @@ import { sql } from 'drizzle-orm';
 import type { DbLike } from '../platform/db/client.js';
 import { refRoles, refSkills } from '../core/identity/schema.js';
 import { refTaskTemplates } from '../modules/sprint/schema.js';
+import { plModules, plQuestions } from '../modules/practice/schema.js';
 
 export const DATA_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../../data');
 
@@ -36,5 +37,34 @@ export async function seedReferenceData(db: DbLike) {
       target: refTaskTemplates.slug,
       set: { title: sql`excluded.title`, stageKey: sql`excluded.stage_key`, defaultSkillSlug: sql`excluded.default_skill_slug`, description: sql`excluded.description` },
     });
-  return { skills: skills.length, roles: roles.length, templates: templates.length };
+  const practice = await seedPracticeModules(db);
+  return { skills: skills.length, roles: roles.length, templates: templates.length, practiceModules: practice };
+}
+
+type PracticeModuleJson = {
+  slug: string;
+  title: string;
+  description: string;
+  topics: string[];
+  questions: { slug: string; topic: string; text: string; options: string[]; correct: number; explanation: string }[];
+};
+
+/** Practice Lab course modules and test questions (reference data, upsert by slug). */
+async function seedPracticeModules(db: DbLike) {
+  const mods = readData<PracticeModuleJson[]>('practice-modules.json');
+  for (const [position, m] of mods.entries()) {
+    const [row] = await db
+      .insert(plModules)
+      .values({ slug: m.slug, title: m.title, description: m.description, topics: m.topics, position })
+      .onConflictDoUpdate({ target: plModules.slug, set: { title: m.title, description: m.description, topics: m.topics, position } })
+      .returning({ id: plModules.id });
+    await db
+      .insert(plQuestions)
+      .values(m.questions.map((q) => ({ ...q, moduleId: row!.id })))
+      .onConflictDoUpdate({
+        target: plQuestions.slug,
+        set: { topic: sql`excluded.topic`, text: sql`excluded.text`, options: sql`excluded.options`, correct: sql`excluded.correct`, explanation: sql`excluded.explanation` },
+      });
+  }
+  return mods.length;
 }

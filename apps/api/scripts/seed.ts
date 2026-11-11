@@ -22,6 +22,9 @@ import { reviewEvidence } from '../src/core/evidence/service.js';
 import { registerModules } from '../src/modules/register.js';
 import * as sprint from '../src/modules/sprint/service.js';
 import * as match from '../src/modules/match/service.js';
+import * as practice from '../src/modules/practice/service.js';
+import { verifyCheck } from '../src/modules/practice/rules.js';
+import { plAttempts, plModules, plQuestions } from '../src/modules/practice/schema.js';
 import { decideApplication } from '../src/flows/accept-application.js';
 import { DATA_DIR, readData, seedReferenceData } from '../src/seed/refs.js';
 import { STAGE_ORDER, type StageKey } from '../src/modules/sprint/types.js';
@@ -277,12 +280,15 @@ async function main() {
     await match.apply(ctxFor(team.members[0]!, at(today, -1)), { teamId: team.id, taskId, message: 'Наши навыки хорошо подходят под задачу' });
   }
 
+  console.log('Practice Lab…');
+  await seedPractice({ teachers: [teacher, teacher2], students: teamInfo.flatMap((t) => t.members) });
+
   const accounts = {
     password: PASSWORD,
     note: 'Локальные тестовые аккаунты (создаются pnpm seed, пароль меняется при каждом запуске)',
     mentor: mentor.email,
     mentor2: mentor2.email,
-    teacher: teacher.email,
+    teacher: `${teacher.email} (Practice Lab: задания, панель, проверка работ)`,
     teacher2: teacher2.email,
     student: 'alice@sana.local (команда «Альфа», проект по задаче «Прогноз спроса на выпечку»)',
     business: [...orgByKey.values()].map((o) => `${o.user.email} — ${o.name}`),
@@ -303,4 +309,68 @@ try {
   await main();
 } finally {
   await closeAllDb();
+}
+
+type PracticeAssignmentJson = { module: string; title: string; difficulty: number; condition: string; materials: string; criteria: { title: string; description: string; topic: string; maxPoints: number }[] };
+type PracticeAnswerJson = {
+  assignment: string;
+  quality: 'weak' | 'medium' | 'strong';
+  answer: string;
+  check: { verdict: 'met' | 'partial' | 'missed'; explanation: string; errors: { quote: string; issue: string }[]; recommendation: string }[];
+};
+
+/**
+ * Practice Lab demo: 10 assignments, module tests, and attempts with stored check fixtures (no model calls).
+ * Per answered assignment: one student fixes a weak attempt and gets approved, one waits for review, one has only a draft check.
+ */
+async function seedPractice({ teachers, students }: { teachers: User[]; students: User[] }) {
+  const mods = await db.select().from(plModules);
+  const modBySlug = new Map(mods.map((m) => [m.slug, m]));
+  const questions = await db.select().from(plQuestions);
+  const assignments = new Map<string, Awaited<ReturnType<typeof practice.createAssignment>>>();
+  for (const [i, a] of readData<PracticeAssignmentJson[]>('practice-assignments.json').entries()) {
+    const row = await practice.createAssignment(ctxFor(teachers[i % teachers.length]!, at(today, -20 + i)), {
+      moduleId: modBySlug.get(a.module)!.id,
+      title: a.title,
+      condition: a.condition,
+      materials: a.materials,
+      difficulty: a.difficulty,
+      criteria: a.criteria,
+    });
+    assignments.set(a.title, row);
+  }
+
+  const answers = readData<PracticeAnswerJson[]>('practice-answers.json');
+  const pick = (title: string, quality: PracticeAnswerJson['quality']) => answers.find((x) => x.assignment === title && x.quality === quality)!;
+  const titles = [...new Set(answers.map((x) => x.assignment))];
+  let si = 0;
+  for (const [ti, title] of titles.entries()) {
+    const a = assignments.get(title)!;
+    const qs = questions.filter((q) => q.moduleId === a.moduleId);
+    const trio = [students[si++]!, students[si++]!, students[si++]!];
+    for (const [k, st] of trio.entries()) {
+      // One wrong answer per student, on a different topic each time, so the dashboard shows problem topics.
+      const wrong = qs[(ti + k) % qs.length]!;
+      await practice.submitQuiz(ctxFor(st, at(today, -10 + ti, k)), a.moduleId, {
+        answers: qs.map((q) => ({ questionId: q.id, option: q.id === wrong.id ? (q.correct + 1) % q.options.length : q.correct })),
+      });
+    }
+    const attempt = async (st: User, quality: PracticeAnswerJson['quality'], no: number, when: Date) => {
+      const fx = pick(title, quality);
+      const raw = { criteria: fx.check.map((c, i) => ({ criterionId: `k${i + 1}`, ...c })) };
+      const [row] = await db
+        .insert(plAttempts)
+        .values({ assignmentId: a.id, profileId: st.id, attemptNo: no, answer: fx.answer, aiCheck: verifyCheck(raw, a.criteria, fx.answer), createdAt: when })
+        .returning();
+      return row!;
+    };
+    const [fixer, waiting, drafting] = trio as [User, User, User];
+    await attempt(fixer, 'weak', 1, at(today, -6 + ti));
+    const fixed = await attempt(fixer, 'strong', 2, at(today, -5 + ti));
+    const sent = await practice.sendAttempt(ctxFor(fixer, at(today, -5 + ti, 1)), fixed.id);
+    await reviewEvidence(ctxFor(teachers[ti % teachers.length]!, at(today, -4 + ti)), sent.evidenceId!, { decision: 'approve', comment: 'Принято' });
+    const med = await attempt(waiting, 'medium', 1, at(today, -2, ti));
+    await practice.sendAttempt(ctxFor(waiting, at(today, -2, ti + 1)), med.id);
+    await attempt(drafting, 'weak', 1, at(today, -1, ti));
+  }
 }
