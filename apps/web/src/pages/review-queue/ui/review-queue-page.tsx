@@ -22,10 +22,10 @@ function EvidenceSheet({ id, teamName, onClose }: { id: string | null; teamName:
     <Sheet open={!!id} onOpenChange={(o) => !o && onClose()}>
       <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
         <SheetHeader>
-          <SheetTitle>{e ? `${EVIDENCE_SUBJECT[e.subjectType] ?? 'Подтверждение'} · ${teamName}` : 'Загрузка…'}</SheetTitle>
+          <SheetTitle>{e ? `${teamName}: ${(EVIDENCE_SUBJECT[e.subjectType] ?? 'подтверждение').toLowerCase()}` : 'Загрузка…'}</SheetTitle>
           {e && (
             <SheetDescription>
-              {EVIDENCE_KIND[e.kind]} · {formatDateTime(e.createdAt)}
+              {EVIDENCE_KIND[e.kind]}, {formatDateTime(e.createdAt)}
             </SheetDescription>
           )}
         </SheetHeader>
@@ -81,7 +81,7 @@ export function ReviewQueuePage() {
     <div className="grid gap-8">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">Проверка</h1>
+          <h1 className="text-2xl font-semibold sm:text-3xl">Проверка</h1>
           <p className="text-muted-foreground mt-1">Баллы команды получают только после вашего решения.</p>
         </div>
         <Segmented
@@ -106,9 +106,8 @@ export function ReviewQueuePage() {
               <button type="button" onClick={() => setOpenId(e.id)} className="hover:bg-muted/50 grid w-full gap-1 px-4 py-3 text-left transition-colors">
                 <div className="flex items-center gap-3 text-sm">
                   <span className="font-medium">{teamName(e)}</span>
-                  <span className="text-muted-foreground">
-                    {EVIDENCE_SUBJECT[e.subjectType] ?? 'Подтверждение'} · {EVIDENCE_KIND[e.kind]}
-                  </span>
+                  <span className="text-muted-foreground">{EVIDENCE_SUBJECT[e.subjectType] ?? 'Подтверждение'}</span>
+                  <span className="text-muted-foreground">{EVIDENCE_KIND[e.kind].toLowerCase()}</span>
                   <span className="text-muted-foreground ml-auto text-xs">{formatRelative(e.createdAt)}</span>
                 </div>
                 {e.note && <p className="text-muted-foreground line-clamp-1 text-sm">{e.note}</p>}

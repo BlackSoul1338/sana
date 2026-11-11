@@ -17,6 +17,30 @@ import { ProjectFeed } from '@/widgets/project-feed';
 import { TaskBoard } from '@/widgets/task-board';
 import { EvidenceList } from './evidence-list';
 
+/** The business task behind the project: a link where the viewer has a page for it. */
+function ChallengeLink({ taskId, role }: { taskId: string; role: string }) {
+  const label = (
+    <>
+      <Briefcase className="size-3.5" />
+      Задача бизнеса
+    </>
+  );
+  const cls = 'inline-flex items-center gap-1.5';
+  if (role === 'student')
+    return (
+      <Link to="/challenges/$taskId" params={{ taskId }} className={`${cls} hover:text-foreground underline-offset-4 hover:underline`}>
+        {label}
+      </Link>
+    );
+  if (role === 'business')
+    return (
+      <Link to="/tasks/$taskId" params={{ taskId }} className={`${cls} hover:text-foreground underline-offset-4 hover:underline`}>
+        {label}
+      </Link>
+    );
+  return <span className={cls}>{label}</span>;
+}
+
 export function SprintProjectPage({ projectId, backTo }: { projectId: string; backTo: { to: string; label: string } }) {
   const me = useMe();
   const { data: project } = useSuspenseQuery(projectQuery(projectId));
@@ -35,19 +59,15 @@ export function SprintProjectPage({ projectId, backTo }: { projectId: string; ba
         </Link>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-2xl">
-            <p className="text-muted-foreground flex items-center gap-2 text-sm">
-              {project.teamName}
-              {project.challengeTaskId && (
-                <span className="text-accent-foreground inline-flex items-center gap-1">
-                  · <Briefcase className="size-3.5" /> задача бизнеса
-                </span>
-              )}
-            </p>
-            <h1 className="mt-1 text-3xl font-semibold">{project.title}</h1>
+            <h1 className="text-2xl font-semibold sm:text-3xl">{project.title}</h1>
             <p className="text-muted-foreground mt-2">{project.idea}</p>
+            <p className="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
+              <span>Команда {project.teamName}</span>
+              {project.challengeTaskId && <ChallengeLink taskId={project.challengeTaskId} role={role} />}
+            </p>
           </div>
           <div className="text-right">
-            <div className="text-4xl font-semibold tabular-nums">{project.points.team}</div>
+            <div className="text-4xl font-semibold tabular-nums sm:text-5xl">{project.points.team}</div>
             <div className="text-muted-foreground text-sm">{plural(project.points.team, ['балл', 'балла', 'баллов'])} команды</div>
           </div>
         </div>

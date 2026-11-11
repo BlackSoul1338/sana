@@ -8,7 +8,13 @@ import { useActiveTeam } from '@/entities/viewer';
 import { formatRelative } from '@/shared/lib/format';
 import { Button } from '@/shared/ui/button';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { SubNav } from '@/shared/ui/sub-nav';
 import { EmptyState } from '@/shared/ui/status';
+
+const CHALLENGES_NAV = [
+  { to: '/challenges', label: 'Каталог' },
+  { to: '/applications', label: 'Мои заявки' },
+] as const;
 
 export function ApplicationsPage() {
   const { team } = useActiveTeam();
@@ -19,8 +25,11 @@ export function ApplicationsPage() {
   return (
     <div className="grid gap-8">
       <header>
-        <h1 className="text-3xl font-semibold">Заявки</h1>
+        <h1 className="text-2xl font-semibold sm:text-3xl">Задачи бизнеса</h1>
         <p className="text-muted-foreground mt-1">Принятая задача появится в трекере спринта.</p>
+        <div className="mt-5">
+          <SubNav items={CHALLENGES_NAV} label="Задачи бизнеса" />
+        </div>
       </header>
       {!team ? (
         <EmptyState title="Нет команды" />
@@ -46,10 +55,8 @@ export function ApplicationsPage() {
                   <Link to="/challenges/$taskId" params={{ taskId: a.taskId }} className="font-medium hover:underline">
                     {a.taskTitle}
                   </Link>
-                  <div className="text-muted-foreground text-xs">
-                    {formatRelative(a.createdAt)}
-                    {a.decisionComment && ` · «${a.decisionComment}»`}
-                  </div>
+                  <div className="text-muted-foreground text-xs">{formatRelative(a.createdAt)}</div>
+                  {a.decisionComment && <p className="mt-1 text-sm">«{a.decisionComment}»</p>}
                 </div>
                 <ApplicationStatus status={a.status} />
                 {a.status === 'pending' && <WithdrawButton applicationId={a.id} />}

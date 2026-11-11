@@ -26,7 +26,7 @@ export function BusinessTaskPage({ taskId }: { taskId: string }) {
         Мои задачи
       </Link>
       <header>
-        <h1 className="text-3xl font-semibold">{task.title}</h1>
+        <h1 className="text-2xl font-semibold sm:text-3xl">{task.title}</h1>
         <div className="mt-2">
           <TaskMeta topic={task.topic} difficulty={task.difficulty} estHours={task.estHours} />
         </div>
@@ -35,13 +35,13 @@ export function BusinessTaskPage({ taskId }: { taskId: string }) {
       {working.length > 0 && (
         <section>
           <SectionTitle>В работе</SectionTitle>
-          <ul className="grid gap-2">
+          <ul className="bg-card divide-y rounded-lg border">
             {working.map((p) => (
               <li key={p.id}>
-                <Link to="/projects/$projectId" params={{ projectId: p.id }} className="bg-accent text-accent-foreground flex items-center justify-between rounded-lg px-4 py-3 text-sm">
+                <Link to="/projects/$projectId" params={{ projectId: p.id }} className="hover:bg-muted/50 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3 text-sm transition-colors">
                   <span className="font-medium">{p.teamName}</span>
-                  <span>
-                    {p.approvedStages}/5 этапов · {p.currentStage ? STAGE_TITLES[p.currentStage] : 'завершён'} →
+                  <span className="text-muted-foreground">
+                    {p.currentStage ? `${STAGE_TITLES[p.currentStage]}, пройдено ${p.approvedStages} из 5` : 'Все этапы пройдены'}
                   </span>
                 </Link>
               </li>
@@ -75,7 +75,7 @@ export function BusinessTaskPage({ taskId }: { taskId: string }) {
                   </div>
                 </div>
                 {a.status === 'pending' && (
-                  <div className="pl-16">
+                  <div className="sm:pl-16">
                     <DecideControls applicationId={a.id} teamName={a.teamName} />
                   </div>
                 )}

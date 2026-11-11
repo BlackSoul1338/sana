@@ -64,12 +64,12 @@ export function BuilderDraftPage({ draftId }: { draftId: string }) {
 
   const published = draft.status === 'published';
   return (
-    <div className="mx-auto grid max-w-3xl gap-8">
+    <div className="grid max-w-3xl gap-8">
       <Back />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-muted-foreground text-sm">Готовность {draft.readiness}%</p>
           <h1 className="text-2xl font-semibold">{draft.card?.title.text}</h1>
+          <p className="text-muted-foreground mt-1 text-sm">Готовность {draft.readiness}%</p>
         </div>
         {published ? (
           <span className="text-success inline-flex items-center gap-1.5 text-sm font-medium">
@@ -77,7 +77,7 @@ export function BuilderDraftPage({ draftId }: { draftId: string }) {
             Опубликована
             {draft.taskId && (
               <Link to="/tasks/$taskId" params={{ taskId: draft.taskId }} className="text-primary ml-2 font-normal">
-                Отклики →
+                Смотреть отклики
               </Link>
             )}
           </span>

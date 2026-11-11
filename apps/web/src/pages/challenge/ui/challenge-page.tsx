@@ -76,7 +76,7 @@ export function ChallengePage({ taskId }: { taskId: string }) {
       <div className="grid gap-10 lg:grid-cols-[1fr_340px]">
         <article className="grid content-start gap-8">
           <header>
-            <h1 className="text-3xl font-semibold">{task.title}</h1>
+            <h1 className="text-2xl font-semibold sm:text-3xl">{task.title}</h1>
             <div className="mt-2">
               <TaskMeta orgName={task.ownerOrgName} topic={task.topic} difficulty={task.difficulty} estHours={task.estHours} />
             </div>

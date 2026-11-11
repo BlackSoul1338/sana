@@ -69,7 +69,7 @@ export function BcbChat({ draft, readonly }: { draft: Draft; readonly?: boolean 
                     <span className="text-primary font-medium tabular-nums">{i + 1}.</span>
                     <span>
                       {q.text}
-                      <span className="text-muted-foreground"> · {CARD_FIELDS[q.field].label.toLowerCase()}</span>
+                      <span className="text-muted-foreground block text-xs">{CARD_FIELDS[q.field].label}</span>
                     </span>
                   </li>
                 ))}

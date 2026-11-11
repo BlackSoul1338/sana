@@ -11,7 +11,7 @@ export function SignUpPage() {
     return (
       <AuthLayout title="Проверьте почту" subtitle="Мы отправили ссылку для подтверждения. После неё можно войти.">
         <Link to="/sign-in" className="text-primary font-medium">
-          Перейти ко входу →
+          Перейти ко входу
         </Link>
       </AuthLayout>
     );
