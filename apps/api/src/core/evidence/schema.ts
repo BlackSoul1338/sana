@@ -1,11 +1,11 @@
 import { index, pgEnum, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { createdAt, id, ts } from '../../platform/db/columns.js';
-import { profiles, teams } from '../identity/schema.js';
+import { profiles, roleEnum, teams } from '../identity/schema.js';
 
 export const evidenceKindEnum = pgEnum('evidence_kind', ['link', 'screenshot', 'interview', 'report']);
 export const evidenceStatusEnum = pgEnum('evidence_status', ['pending', 'approved', 'rejected', 'adjusted']);
 
-/** Подтверждения результата и решение проверяющего. Модуль-владелец различается полем module. */
+/** Подтверждения результата и решение проверяющего. Модуль-владелец различается полем module, проверяющая роль — reviewer_role. */
 export const evidence = pgTable(
   'evidence',
   {
@@ -21,6 +21,8 @@ export const evidence = pgTable(
     url: text('url'),
     storagePath: text('storage_path'),
     note: text('note').notNull().default(''),
+    /** Who may review: each module routes its evidence to mentors (startup track) or teachers (learning track). */
+    reviewerRole: roleEnum('reviewer_role').notNull().default('mentor'),
     status: evidenceStatusEnum('status').notNull().default('pending'),
     reviewedBy: uuid('reviewed_by').references(() => profiles.id),
     reviewComment: text('review_comment'),

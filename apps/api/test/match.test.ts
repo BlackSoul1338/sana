@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { randomUUID } from 'node:crypto';
 import { tasks, taskSkills } from '../src/core/catalog/schema.js';
+import { evidence } from '../src/core/evidence/schema.js';
 import { createUser, http, makeApp, resetDb, testDb, type TestUser } from './helpers/env.js';
 
 const api = http(makeApp());
@@ -110,6 +112,13 @@ describe('Challenge Match: подбор → отклик → трекер → о
     expect(events.filter((e: any) => e.ruleId === 'real_task_bonus')).toHaveLength(1);
     const feed = (await api.get(`/api/sprint/projects/${projectId}/feed`, alice)).body;
     expect(feed.achievements.map((a: any) => a.code)).toContain('real_task');
+
+    // The bonus covers sprint progress only: approved learning-track evidence of the same team is out of reach.
+    const [learning] = await testDb()
+      .insert(evidence)
+      .values({ module: 'research', subjectType: 'research_conclusion', subjectId: randomUUID(), teamId: team.id, submittedBy: alice.id, kind: 'report', reviewerRole: 'teacher', status: 'approved' })
+      .returning();
+    expect((await api.post('/api/match/feedback', biz, { evidenceId: learning!.id, verdict: 'positive' })).status).toBe(404);
   });
 
   it('принятие привязывает задачу к уже активному проекту команды; отказ ничего не создаёт', async () => {

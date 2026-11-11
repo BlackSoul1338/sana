@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createUser, http, makeApp, resetDb } from './helpers/env.js';
+import { randomUUID } from 'node:crypto';
+import { evidence } from '../src/core/evidence/schema.js';
+import { createUser, http, makeApp, resetDb, testDb } from './helpers/env.js';
 
 describe('ядро: профиль, команды, права', () => {
   beforeEach(resetDb);
@@ -28,6 +30,7 @@ describe('ядро: профиль, команды, права', () => {
 
     const asMentor = await api.post('/api/me/profile', user, { displayName: 'Хитрый', role: 'mentor' });
     expect(asMentor.status).toBe(422);
+    expect((await api.post('/api/me/profile', user, { displayName: 'Хитрый', role: 'teacher' })).status).toBe(422);
     const noOrg = await api.post('/api/me/profile', user, { displayName: 'Бизнес', role: 'business' });
     expect(noOrg.status).toBe(422);
     expect(noOrg.body.errors[0].path).toBe('orgName');
@@ -35,6 +38,33 @@ describe('ядро: профиль, команды, права', () => {
     expect(ok.status).toBe(201);
     expect(ok.body.orgId).toBeTruthy();
     expect((await api.post('/api/me/profile', user, { displayName: 'Ещё', role: 'student' })).status).toBe(409);
+  });
+
+  it('подтверждение проверяет роль из reviewer_role: куратор — стартап-контур, преподаватель — учебный', async () => {
+    const [student, mentor, teacher] = await Promise.all([createUser('student'), createUser('mentor'), createUser('teacher')]);
+    const base = { subjectId: randomUUID(), teamId: null, submittedBy: student.id, kind: 'report' as const };
+    const [sprintEv, practiceEv] = await testDb()
+      .insert(evidence)
+      .values([
+        { ...base, module: 'sprint', subjectType: 'sprint_stage' },
+        { ...base, module: 'practice', subjectType: 'practice_attempt', reviewerRole: 'teacher' },
+      ])
+      .returning();
+
+    const queue = async (u: typeof mentor) => (await api.get('/api/evidence?status=pending', u)).body.map((e: any) => e.id);
+    expect(await queue(mentor)).toEqual([sprintEv!.id]);
+    expect(await queue(teacher)).toEqual([practiceEv!.id]);
+    expect((await api.get(`/api/evidence/${practiceEv!.id}`, mentor)).status).toBe(403);
+    expect((await api.get(`/api/evidence/${practiceEv!.id}`, student)).status).toBe(200);
+
+    expect((await api.post(`/api/evidence/${practiceEv!.id}/review`, mentor, { decision: 'approve' })).status).toBe(403);
+    expect((await api.post(`/api/evidence/${sprintEv!.id}/review`, teacher, { decision: 'approve' })).status).toBe(403);
+
+    // Without a team the adjustment goes to the submitter and carries the reviewer's role.
+    const res = await api.post(`/api/evidence/${practiceEv!.id}/review`, teacher, { decision: 'adjust', adjustPoints: 7, comment: 'Хорошо разобран кейс' });
+    expect(res.status).toBe(200);
+    expect(res.body.evidence).toMatchObject({ status: 'adjusted', reviewerRole: 'teacher', reviewedBy: teacher.id });
+    expect(res.body.awarded).toEqual([expect.objectContaining({ ruleId: 'teacher_adjustment', subjectType: 'profile', subjectId: student.id, points: 7 })]);
   });
 
   it('команда: создатель — участник, чужой студент не может менять, куратор может', async () => {

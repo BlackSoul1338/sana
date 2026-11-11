@@ -27,7 +27,7 @@ import { DATA_DIR, readData, seedReferenceData } from '../src/seed/refs.js';
 import { STAGE_ORDER, type StageKey } from '../src/modules/sprint/types.js';
 import { STAGE_PLAN_OFFSET_DAYS } from '../src/modules/sprint/points.config.js';
 
-type Role = 'student' | 'mentor' | 'business';
+type Role = 'student' | 'mentor' | 'business' | 'teacher';
 type User = { id: string; email: string; name: string; role: Role; orgId: string | null };
 
 type TasksJson = {
@@ -124,6 +124,8 @@ async function main() {
   console.log('Пользователи и организации…');
   const mentor = await createUser('mentor@sana.local', 'Гульнара Ержанова (куратор)', 'mentor', null);
   const mentor2 = await createUser('mentor2@sana.local', 'Сергей Ли (куратор)', 'mentor', null);
+  const teacher = await createUser('teacher@sana.local', 'Айгерим Касымова (преподаватель)', 'teacher', null);
+  const teacher2 = await createUser('teacher2@sana.local', 'Дмитрий Орлов (преподаватель)', 'teacher', null);
   const orgByKey = new Map<string, { id: string; user: User; name: string }>();
   for (const o of tasksJson.orgs) {
     const [row] = await db.insert(orgs).values({ name: o.name, kind: 'company' }).returning();
@@ -280,6 +282,8 @@ async function main() {
     note: 'Локальные тестовые аккаунты (создаются pnpm seed, пароль меняется при каждом запуске)',
     mentor: mentor.email,
     mentor2: mentor2.email,
+    teacher: teacher.email,
+    teacher2: teacher2.email,
     student: 'alice@sana.local (команда «Альфа», проект по задаче «Прогноз спроса на выпечку»)',
     business: [...orgByKey.values()].map((o) => `${o.user.email} — ${o.name}`),
     otherStudents: 'student02@sana.local … student50@sana.local',

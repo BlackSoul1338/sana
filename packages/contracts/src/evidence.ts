@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Id, Timestamp } from './common.js';
+import { Id, Role, Timestamp } from './common.js';
 import { PointEvent } from './points.js';
 
 export const EvidenceKind = z.enum(['link', 'screenshot', 'interview', 'report']);
@@ -17,6 +17,7 @@ export const Evidence = z
     url: z.string().nullable(),
     storagePath: z.string().nullable(),
     note: z.string(),
+    reviewerRole: Role,
     status: EvidenceStatus,
     reviewedBy: Id.nullable(),
     reviewComment: z.string().nullable(),

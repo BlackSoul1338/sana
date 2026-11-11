@@ -106,7 +106,8 @@
         "enum": [
           "student",
           "mentor",
-          "business"
+          "business",
+          "teacher"
         ],
         "description": "Роль пользователя на платформе"
       },
@@ -713,6 +714,9 @@
           "note": {
             "type": "string"
           },
+          "reviewerRole": {
+            "$ref": "#/components/schemas/Role"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -758,6 +762,7 @@
           "url",
           "storagePath",
           "note",
+          "reviewerRole",
           "status",
           "reviewedBy",
           "reviewComment",
@@ -817,6 +822,9 @@
           "note": {
             "type": "string"
           },
+          "reviewerRole": {
+            "$ref": "#/components/schemas/Role"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -869,6 +877,7 @@
           "url",
           "storagePath",
           "note",
+          "reviewerRole",
           "status",
           "reviewedBy",
           "reviewComment",

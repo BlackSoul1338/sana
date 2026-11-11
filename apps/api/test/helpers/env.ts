@@ -35,7 +35,7 @@ export async function resetDb() {
   await seedReferenceData(db);
 }
 
-export type TestUser = { id: string; token: string; role: 'student' | 'mentor' | 'business'; orgId: string | null; name: string };
+export type TestUser = { id: string; token: string; role: 'student' | 'mentor' | 'business' | 'teacher'; orgId: string | null; name: string };
 
 export async function createUser(role: TestUser['role'], name = `${role}-${randomUUID().slice(0, 4)}`, orgId?: string): Promise<TestUser> {
   const db = testDb();

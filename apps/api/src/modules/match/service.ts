@@ -160,7 +160,8 @@ export async function decide(ctx: Ctx, id: string, input: z.infer<typeof match.D
 export async function feedback(ctx: Ctx, input: z.infer<typeof match.FeedbackInput>): Promise<match.FeedbackResult> {
   const p = requireRole(ctx, 'business');
   const ev = await findEvidence(ctx.db, input.evidenceId);
-  if (!ev || !ev.teamId) throw notFound('Подтверждение');
+  // The real-task bonus applies to startup-sprint progress only, not to learning-track evidence of the same team.
+  if (!ev || !ev.teamId || ev.module !== 'sprint') throw notFound('Подтверждение');
   const assignments = await activeAssignments(ctx.db, { teamId: ev.teamId });
   const tasks = await tasksByIds(ctx.db, assignments.map((a) => a.taskId));
   const ownTask = tasks.find((t) => t.ownerOrgId === p.orgId);

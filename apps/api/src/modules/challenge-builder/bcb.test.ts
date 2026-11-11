@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { bcb } from '@sana/contracts';
 import { scoreFields, FIELD_ORDER, type RawField } from './readiness.js';
-import { normalize, quoteFound, verifyAnalysis } from './quotes.js';
+import { normalize, quoteFound } from '../../platform/ai/quotes.js';
+import { verifyAnalysis } from './quotes.js';
 import { selectQuestions } from './questions.js';
 import { findSensitive, isValidIin, luhn } from './sensitive.js';
 import { buildDiff, fieldChanges } from './diff.js';

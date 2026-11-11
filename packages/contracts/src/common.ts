@@ -14,7 +14,7 @@ export function looseEnum<const T extends readonly [string, ...string[]]>(values
     .meta({ type: 'string', enum: [...values], ...(description ? { description } : {}) });
 }
 
-export const Role = z.enum(['student', 'mentor', 'business']).meta({ id: 'Role', description: 'Роль пользователя на платформе' });
+export const Role = z.enum(['student', 'mentor', 'business', 'teacher']).meta({ id: 'Role', description: 'Роль пользователя на платформе' });
 export type Role = z.infer<typeof Role>;
 
 export const Difficulty = z.number().int().min(1).max(3).meta({ description: 'Сложность от 1 до 3' });
