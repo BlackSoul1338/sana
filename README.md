@@ -112,9 +112,33 @@ API и веб читают один файл `.env` в корне репозит
 
 API при старте проверяет переменные и завершается со списком ошибок, если обязательные не заданы.
 
-## Развёртывание веба
+## Развёртывание
+
+### Веб на Vercel
 
 `apps/web` собирается в статические файлы (`dist`). В `apps/web/vercel.json` все пути переписываются на `index.html`, чтобы прямые ссылки на экраны открывались. На Vercel укажите корневую папку `apps/web` и задайте `VITE_API_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` — Vite подставляет их при сборке, поэтому после изменения нужна новая сборка. Адрес развёрнутого веба добавьте в `CORS_ORIGINS` API.
+
+### API на Cloudflare Workers
+
+Точка входа — `apps/api/src/worker.ts`, настройки — `apps/api/cloudflare.config.ts` (формат CLI `cf`, пока в бете). Postgres подключается через Hyperdrive; на каждый запрос открывается своё соединение. Бакет `evidence` Worker не создаёт: он должен уже существовать (его создают `pnpm dev` и `pnpm seed`). Миграции применяются отдельно: `pnpm db:migrate` с `DATABASE_URL` облачной базы.
+
+1. Войдите: `cf auth login`.
+2. Создайте Hyperdrive для базы Supabase (параметры — в Supabase → Connect, например session pooler на порту 5432) и запомните его id:
+
+   ```bash
+   cf hyperdrive create --name sana-db --origin-scheme postgresql --origin-host <host> --origin-port 5432 --origin-database postgres --origin-user <user> --origin-password <password>
+   ```
+
+3. Положите секреты в `apps/api/.dev.vars.production` (файл в `.gitignore`): `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `GOOGLE_API_KEY`.
+4. Разверните из `apps/api`. Обычные настройки (`AI_*`, `EVIDENCE_BUCKET`, `CORS_ORIGINS`) берутся из окружения оболочки при развёртывании; незаданные получают значения по умолчанию из таблицы выше.
+
+   ```bash
+   HYPERDRIVE_ID=<id> AI_PROVIDER=google AI_MODEL_FAST=<model> CORS_ORIGINS=https://<web-domain> pnpm deploy:worker --secrets-file .dev.vars.production
+   ```
+
+Локально Worker запускается командой `pnpm --filter @sana/api dev:worker` на http://localhost:8787 (не одновременно с `pnpm dev`) и подключается к локальному Postgres. Секреты для него — в `apps/api/.dev.vars` в формате `.env`.
+
+На бесплатном плане Workers даёт 10 мс процессорного времени на запрос (ожидание базы и модели не считается) и 100 000 запросов в день; Hyperdrive — 100 000 запросов к базе в день.
 
 ## Проверки
 

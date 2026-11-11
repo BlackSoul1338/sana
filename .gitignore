@@ -16,3 +16,8 @@ data/demo-accounts.json
 
 # Local Claude Code / app config
 .claude/
+.vercel
+.dev.vars*
+.wrangler/
+.cloudflare/
+.env*

@@ -23,7 +23,7 @@ const moduleBoundaries = MODULES.map((name) => ({
 }));
 
 export default tseslint.config(
-  { ignores: ['**/dist/**', '**/node_modules/**', 'apps/api/drizzle/**', 'supabase/**', 'apps/web/src/app/routeTree.gen.ts', 'apps/web/src/shared/api/schema.d.ts'] },
+  { ignores: ['**/dist/**', '**/node_modules/**', 'apps/api/drizzle/**', 'supabase/**', '**/.cloudflare/**', '**/.wrangler/**', 'apps/web/src/app/routeTree.gen.ts', 'apps/web/src/shared/api/schema.d.ts'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
