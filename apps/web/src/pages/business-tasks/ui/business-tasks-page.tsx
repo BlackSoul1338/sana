@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
 import { projectsQuery } from '@/entities/project';
 import { tasksInfiniteQuery, TaskMeta } from '@/entities/task';
-import { STAGE_TITLES } from '@/shared/config';
+import { CATALOG_STATUS, STAGE_TITLES } from '@/shared/config';
 import { Button } from '@/shared/ui/button';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { EmptyState, SectionTitle, Status } from '@/shared/ui/status';
@@ -43,7 +43,7 @@ export function BusinessTasksPage() {
                     <div className="font-medium">{t.title}</div>
                     <TaskMeta topic={t.topic} difficulty={t.difficulty} estHours={t.estHours} />
                   </div>
-                  <Status tone={t.status === 'published' ? 'success' : 'neutral'}>{t.status === 'published' ? 'в каталоге' : t.status}</Status>
+                  <Status tone={t.status === 'published' ? 'success' : 'neutral'}>{CATALOG_STATUS[t.status]}</Status>
                   <span className="text-muted-foreground w-24 text-right text-sm tabular-nums">готовность {t.readiness}%</span>
                 </Link>
               </li>

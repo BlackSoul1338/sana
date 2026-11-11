@@ -32,7 +32,7 @@ export function ReviewForm({ evidenceId, onDone }: { evidenceId: string; onDone:
       unwrap(await api.POST('/api/evidence/{id}/review', { params: { path: { id: evidenceId } }, body })),
     onSuccess: async (result) => {
       const total = result.awarded.reduce((s, e) => s + e.points, 0);
-      const lines = result.awarded.map((e) => `${signed(e.points)} · ${RULE_TITLES[e.ruleId] ?? e.ruleId}`).join('\n');
+      const lines = result.awarded.map((e) => `${signed(e.points)} · ${RULE_TITLES[e.ruleId] ?? 'Начисление'}`).join('\n');
       if (result.evidence.status === 'rejected') toast('Отправлено на доработку');
       else toast.success(total ? `Начислено ${signed(total)}` : 'Подтверждено', { description: lines || undefined });
       await Promise.all([
