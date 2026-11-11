@@ -24,6 +24,12 @@ export const TASK_STATUS = {
   done: 'Готово',
 } as const;
 
+export const CATALOG_STATUS = {
+  draft: 'черновик',
+  published: 'в каталоге',
+  archived: 'в архиве',
+} as const;
+
 export const EVIDENCE_KIND = {
   link: 'Ссылка',
   screenshot: 'Скриншот',

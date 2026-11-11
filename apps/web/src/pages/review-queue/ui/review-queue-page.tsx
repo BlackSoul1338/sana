@@ -107,7 +107,7 @@ export function ReviewQueuePage() {
                 <div className="flex items-center gap-3 text-sm">
                   <span className="font-medium">{teamName(e)}</span>
                   <span className="text-muted-foreground">
-                    {EVIDENCE_SUBJECT[e.subjectType] ?? e.subjectType} · {EVIDENCE_KIND[e.kind]}
+                    {EVIDENCE_SUBJECT[e.subjectType] ?? 'Подтверждение'} · {EVIDENCE_KIND[e.kind]}
                   </span>
                   <span className="text-muted-foreground ml-auto text-xs">{formatRelative(e.createdAt)}</span>
                 </div>

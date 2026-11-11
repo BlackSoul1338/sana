@@ -9,6 +9,7 @@
  * mint for confirmed progress, amber for waiting. Everything else stays neutral.
  */
 :root {
+  color-scheme: light;
   --radius: 0.875rem;
   --background: oklch(0.985 0.006 80);
   --foreground: oklch(0.22 0.012 60);
@@ -35,6 +36,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: oklch(0.18 0.008 60);
   --foreground: oklch(0.94 0.008 80);
   --card: oklch(0.215 0.009 60);

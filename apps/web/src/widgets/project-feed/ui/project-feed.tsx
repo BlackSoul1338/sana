@@ -40,7 +40,7 @@ export function ProjectFeed({ projectId, members }: { projectId: string; members
               </div>
               <div className="min-w-0">
                 <div className="text-sm font-medium">
-                  {item.type === 'points' ? (RULE_TITLES[item.title] ?? item.title) : item.title}
+                  {item.type === 'points' ? (RULE_TITLES[item.title] ?? 'Начисление') : item.title}
                   {item.subjectType === 'profile' && members[item.subjectId] && (
                     <span className="text-muted-foreground font-normal"> · {members[item.subjectId]}</span>
                   )}
