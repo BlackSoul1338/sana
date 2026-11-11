@@ -85,7 +85,12 @@ describe('Team Research Arena', () => {
     expect(final).toMatchObject({ status: 'approved', points: 58 });
     expect(final.contribution.find((c: any) => c.profileId === bob.id)).toMatchObject({ role: 'critic', sourcesAdded: 1, citedInConclusion: 1 });
     expect((await api.post(`${w}/items`, ann, { kind: 'question', text: 'Ещё вопрос?' })).status).toBe(409);
-    expect((await api.get('/api/research/workspaces', teacher)).body).toEqual([expect.objectContaining({ id: ws.body.id, teamName: 'Гамма', status: 'approved', items: 3 })]);
+    expect((await api.get('/api/research/workspaces', teacher)).body).toEqual([expect.objectContaining({ id: ws.body.id, teamName: 'Гамма', status: 'approved', items: 3, points: 58 })]);
+
+    // Points belong to the workspace that earned them, not to every workspace of the team.
+    const task2 = (await api.post('/api/research/tasks', teacher, { title: 'Энергия кампуса', question: 'Как снизить счёт за электричество?', rubric: task.rubric })).body;
+    const ws2 = (await api.post(`/api/research/tasks/${task2.id}/workspaces`, ann, { teamId: team.id, initialPosition: 'Думаем, что тратит общежитие.' })).body;
+    expect(ws2.points).toBe(0);
   });
 
   it('отклонение возвращает исследование команде; без модели вывод уходит без оценки', async () => {
