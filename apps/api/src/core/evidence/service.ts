@@ -24,6 +24,7 @@ export const toEvidence = (r: Row): Evidence => ({
   url: r.url,
   storagePath: r.storagePath,
   note: r.note,
+  reviewerRole: r.reviewerRole,
   status: r.status,
   reviewedBy: r.reviewedBy,
   reviewComment: r.reviewComment,
@@ -66,6 +67,8 @@ export type NewEvidence = {
   url?: string | undefined;
   storagePath?: string | undefined;
   note: string;
+  /** Learning-track modules route their evidence to teachers; default is the startup-track mentor. */
+  reviewerRole?: 'mentor' | 'teacher';
 };
 
 /** Создание подтверждения. Модуль заранее проверил, что субъект существует и принадлежит команде. */
@@ -86,6 +89,7 @@ export async function createEvidence(ctx: Ctx, input: NewEvidence): Promise<Row>
       url: input.url ?? null,
       storagePath: input.storagePath ?? null,
       note: input.note,
+      reviewerRole: input.reviewerRole ?? 'mentor',
       createdAt: ctx.now,
     })
     .returning();
@@ -110,9 +114,9 @@ export async function evidenceForTeam(db: DbLike, teamId: string, module?: strin
     .orderBy(desc(evidence.createdAt));
 }
 
-/** Очередь проверки: куратор видит всё, студент — подтверждения своих команд. */
+/** Очередь проверки: проверяющий видит подтверждения своей роли, студент — подтверждения своих команд. */
 export async function listEvidence(ctx: Ctx, q: z.infer<typeof EvidenceQueueQuery>): Promise<Evidence[]> {
-  const p = requireRole(ctx, 'mentor', 'student');
+  const p = requireRole(ctx, 'mentor', 'teacher', 'student');
   let teamFilter: string[] | undefined;
   if (p.role === 'student') {
     teamFilter = await teamIdsOf(ctx.db, p.id);
@@ -125,6 +129,7 @@ export async function listEvidence(ctx: Ctx, q: z.infer<typeof EvidenceQueueQuer
     .where(
       and(
         eq(evidence.status, q.status),
+        p.role === 'student' ? undefined : eq(evidence.reviewerRole, p.role),
         q.module ? eq(evidence.module, q.module) : undefined,
         teamFilter ? inArray(evidence.teamId, teamFilter) : q.teamId ? eq(evidence.teamId, q.teamId) : undefined,
       ),
@@ -138,28 +143,32 @@ export async function getEvidence(ctx: Ctx, id: string) {
   const row = await findEvidence(ctx.db, id);
   if (!row) throw notFound('Подтверждение');
   const allowed =
-    p.role === 'mentor' || row.submittedBy === p.id || (p.role === 'student' && !!row.teamId && (await isTeamMember(ctx.db, row.teamId, p.id)));
+    p.role === row.reviewerRole || row.submittedBy === p.id || (p.role === 'student' && !!row.teamId && (await isTeamMember(ctx.db, row.teamId, p.id)));
   if (!allowed) throw forbidden();
   const downloadUrl = row.storagePath ? await ctx.storage.createDownloadUrl(row.storagePath) : null;
   return { ...toEvidence(row), downloadUrl };
 }
 
+const ADJUSTMENT_BY: Record<'mentor' | 'teacher', string> = { mentor: 'куратора', teacher: 'преподавателя' };
+
 /**
- * Решение куратора. В одной транзакции: статус → событие evidence.reviewed (модуль начисляет баллы по своим правилам)
+ * Решение проверяющего (куратор или преподаватель — по reviewer_role подтверждения). В одной транзакции: статус → событие evidence.reviewed (модуль начисляет баллы по своим правилам)
  * → для adjust — отдельное событие-поправка с комментарием.
  */
 export async function reviewEvidence(ctx: Ctx, id: string, input: z.infer<typeof ReviewInput>): Promise<z.infer<typeof ReviewResult>> {
-  const mentor = requireRole(ctx, 'mentor');
+  const reviewer = requireRole(ctx, 'mentor', 'teacher');
+  const role = reviewer.role as 'mentor' | 'teacher';
   return inTx(ctx, async (t) => {
     const [locked] = await t.db.select().from(evidence).where(eq(evidence.id, id)).for('update').limit(1);
     if (!locked) throw notFound('Подтверждение');
-    if (locked.submittedBy === mentor.id) throw forbidden('Нельзя проверять собственное подтверждение');
+    if (locked.reviewerRole !== role) throw forbidden('Это подтверждение проверяет другая роль');
+    if (locked.submittedBy === reviewer.id) throw forbidden('Нельзя проверять собственное подтверждение');
     if (locked.status !== 'pending') throw conflict(`Подтверждение уже рассмотрено (статус ${locked.status})`);
 
     const status = input.decision === 'approve' ? 'approved' : input.decision === 'reject' ? 'rejected' : 'adjusted';
     const [updated] = await t.db
       .update(evidence)
-      .set({ status, reviewedBy: mentor.id, reviewComment: input.comment || null, reviewedAt: t.now })
+      .set({ status, reviewedBy: reviewer.id, reviewComment: input.comment || null, reviewedAt: t.now })
       .where(eq(evidence.id, id))
       .returning();
 
@@ -167,7 +176,7 @@ export async function reviewEvidence(ctx: Ctx, id: string, input: z.infer<typeof
       evidence: snapshot(updated!),
       decision: input.decision,
       comment: input.comment,
-      reviewerId: mentor.id,
+      reviewerId: reviewer.id,
     });
 
     if (input.decision === 'adjust' && input.adjustPoints) {
@@ -176,12 +185,12 @@ export async function reviewEvidence(ctx: Ctx, id: string, input: z.infer<typeof
           subjectType: updated!.teamId ? 'team' : 'profile',
           subjectId: updated!.teamId ?? updated!.submittedBy,
           module: updated!.module,
-          ruleId: 'mentor_adjustment',
+          ruleId: `${role}_adjustment`,
           points: input.adjustPoints,
-          explanation: `Корректировка куратора: ${input.comment}`,
+          explanation: `Корректировка ${ADJUSTMENT_BY[role]}: ${input.comment}`,
           evidenceId: id,
-          actorId: mentor.id,
-          idempotencyKey: `mentor_adjustment:evidence:${id}`,
+          actorId: reviewer.id,
+          idempotencyKey: `${role}_adjustment:evidence:${id}`,
         },
       ]);
     }

@@ -1,34 +1,6 @@
 import type { bcb } from '@sana/contracts';
+import { quoteFound } from '../../platform/ai/quotes.js';
 import { FIELD_ORDER, type RawField } from './readiness.js';
-
-/** Нормализация для сверки цитат: регистр, ё/е, кавычки, тире, пробелы, пунктуация по краям. */
-export function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ё/g, 'е')
-    .replace(/[«»"“”„'‘’`]/g, '')
-    .replace(/[‐-―−]/g, '-')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/^[\s.,;:!?…-]+|[\s.,;:!?…-]+$/g, '');
-}
-
-const MIN_QUOTE = 3;
-
-/**
- * Защита от домысливания: цитата должна дословно (после нормализации) встречаться в репликах бизнеса.
- * Реплики ассистента в корпус не входят — иначе модель могла бы «процитировать» собственный вопрос.
- * Цитату из нескольких фрагментов, склеенных многоточием, проверяем по частям.
- */
-export function quoteFound(quote: string, businessCorpus: string): boolean {
-  const corpus = normalize(businessCorpus);
-  const parts = quote
-    .split(/\s*(?:\.{3}|…)\s*/)
-    .map(normalize)
-    .filter((p) => p.length > 0);
-  if (!parts.length || parts.join('').length < MIN_QUOTE) return false;
-  return parts.every((p) => corpus.includes(p));
-}
 
 /**
  * Применяет проверку цитат к ответу модели. Поле со статусом ok/weak без подтверждённой цитаты

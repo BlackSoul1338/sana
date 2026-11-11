@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm';
 import { authUsers } from '../../platform/db/auth-users.js';
 import { createdAt, id, ts } from '../../platform/db/columns.js';
 
-export const roleEnum = pgEnum('role', ['student', 'mentor', 'business']);
+export const roleEnum = pgEnum('role', ['student', 'mentor', 'business', 'teacher']);
 export const orgKindEnum = pgEnum('org_kind', ['company', 'group']);
 
 export const orgs = pgTable('orgs', {

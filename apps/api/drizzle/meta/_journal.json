@@ -15,6 +15,13 @@
       "when": 1794293280882,
       "tag": "0001_revoke_data_api",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794390801538,
+      "tag": "0002_teacher_role",
+      "breakpoints": true
     }
   ]
 }
