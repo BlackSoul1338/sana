@@ -6,12 +6,20 @@ export type NavItem = { to: string; label: string; also?: string[] };
 export const NAV: Record<Role, NavItem[]> = {
   student: [
     { to: '/sprint', label: 'Спринт' },
+    { to: '/practice', label: 'Практика' },
+    { to: '/research', label: 'Исследования' },
     { to: '/challenges', label: 'Задачи бизнеса', also: ['/applications'] },
     { to: '/leaderboard', label: 'Рейтинг' },
   ],
   mentor: [
     { to: '/review', label: 'Проверка' },
     { to: '/projects', label: 'Проекты' },
+    { to: '/leaderboard', label: 'Рейтинг' },
+  ],
+  teacher: [
+    { to: '/review', label: 'Проверка' },
+    { to: '/practice', label: 'Практика' },
+    { to: '/research', label: 'Исследования' },
     { to: '/leaderboard', label: 'Рейтинг' },
   ],
   business: [

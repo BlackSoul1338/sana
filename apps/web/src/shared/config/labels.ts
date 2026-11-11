@@ -55,6 +55,18 @@ export const RULE_TITLES: Record<string, string> = {
   mentor_adjustment: 'Поправка ментора',
   challenge_readiness: 'Готовность задачи',
   real_task_bonus: 'Бонус за реальную задачу',
+  teacher_adjustment: 'Поправка преподавателя',
+  practice_quiz: 'Тест модуля',
+  practice_correctness: 'Правильность по критериям',
+  practice_completeness: 'Полнота решения',
+  practice_self_correction: 'Самостоятельное исправление',
+  practice_completion: 'Задание принято',
+  research_argumentation: 'Обоснованность аргументов',
+  research_completeness: 'Полнота исследования',
+  research_understanding: 'Понимание проблемы',
+  research_originality: 'Оригинальность',
+  research_completion: 'Исследование принято',
+  research_cited: 'Вклад в вывод',
 };
 
 export const MODULE_TITLES: Record<string, string> = {
@@ -89,4 +101,27 @@ export const EVIDENCE_SUBJECT: Record<string, string> = {
   sprint_stage: 'Закрытие этапа',
   sprint_task: 'Задача',
   sprint_interview: 'Интервью',
+  practice_attempt: 'Практическая работа',
+  research_conclusion: 'Вывод исследования',
 };
+
+export const VERDICT = {
+  met: { label: 'выполнено', tone: 'success' },
+  partial: { label: 'частично', tone: 'warning' },
+  missed: { label: 'не выполнено', tone: 'danger' },
+} as const;
+
+export const RESEARCH_ROLE = { coordinator: 'Координатор', researcher: 'Исследователь', critic: 'Критик', editor: 'Редактор' } as const;
+export const RESEARCH_LEVEL = { strong: 'сильно', adequate: 'достаточно', weak: 'слабо' } as const;
+export const RUBRIC_TITLE = {
+  argumentation: 'Обоснованность аргументов',
+  completeness: 'Полнота исследования',
+  understanding: 'Понимание проблемы',
+  originality: 'Оригинальность',
+} as const;
+
+export const WS_STATUS = {
+  active: { label: 'идёт работа', tone: 'primary' },
+  submitted: { label: 'вывод у преподавателя', tone: 'warning' },
+  approved: { label: 'принято', tone: 'success' },
+} as const;

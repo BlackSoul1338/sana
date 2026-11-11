@@ -18,10 +18,15 @@ import { Route as AppBusinessRouteImport } from './routes/_app/_business'
 import { Route as AppMentorRouteImport } from './routes/_app/_mentor'
 import { Route as AppStudentRouteImport } from './routes/_app/_student'
 import { Route as AppLeaderboardRouteImport } from './routes/_app/leaderboard'
-import { Route as AppMentorReviewRouteImport } from './routes/_app/_mentor/review'
+import { Route as AppPracticeRouteImport } from './routes/_app/practice'
+import { Route as AppResearchRouteImport } from './routes/_app/research'
+import { Route as AppReviewRouteImport } from './routes/_app/review'
 import { Route as AppStudentApplicationsRouteImport } from './routes/_app/_student/applications'
 import { Route as AppStudentTeamRouteImport } from './routes/_app/_student/team'
+import { Route as AppPracticeIndexRouteImport } from './routes/_app/practice/index'
 import { Route as AppProjectsProjectIdRouteImport } from './routes/_app/projects/$projectId'
+import { Route as AppResearchIndexRouteImport } from './routes/_app/research/index'
+import { Route as AppResearchWorkspaceIdRouteImport } from './routes/_app/research/$workspaceId'
 import { Route as AppBusinessBuilderIndexRouteImport } from './routes/_app/_business/builder/index'
 import { Route as AppBusinessBuilderDraftIdRouteImport } from './routes/_app/_business/builder/$draftId'
 import { Route as AppBusinessBuilderNewRouteImport } from './routes/_app/_business/builder/new'
@@ -32,6 +37,8 @@ import { Route as AppStudentChallengesIndexRouteImport } from './routes/_app/_st
 import { Route as AppStudentChallengesTaskIdRouteImport } from './routes/_app/_student/challenges/$taskId'
 import { Route as AppStudentSprintIndexRouteImport } from './routes/_app/_student/sprint/index'
 import { Route as AppStudentSprintProjectIdRouteImport } from './routes/_app/_student/sprint/$projectId'
+import { Route as AppPracticeAssignmentsAssignmentIdRouteImport } from './routes/_app/practice/assignments.$assignmentId'
+import { Route as AppPracticeModulesModuleIdQuizRouteImport } from './routes/_app/practice/modules.$moduleId.quiz'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -74,10 +81,20 @@ const AppLeaderboardRoute = AppLeaderboardRouteImport.update({
   path: '/leaderboard',
   getParentRoute: () => AppRoute,
 } as any)
-const AppMentorReviewRoute = AppMentorReviewRouteImport.update({
+const AppPracticeRoute = AppPracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppResearchRoute = AppResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReviewRoute = AppReviewRouteImport.update({
   id: '/review',
   path: '/review',
-  getParentRoute: () => AppMentorRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppStudentApplicationsRoute = AppStudentApplicationsRouteImport.update({
   id: '/applications',
@@ -89,10 +106,25 @@ const AppStudentTeamRoute = AppStudentTeamRouteImport.update({
   path: '/team',
   getParentRoute: () => AppStudentRoute,
 } as any)
+const AppPracticeIndexRoute = AppPracticeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppPracticeRoute,
+} as any)
 const AppProjectsProjectIdRoute = AppProjectsProjectIdRouteImport.update({
   id: '/projects/$projectId',
   path: '/projects/$projectId',
   getParentRoute: () => AppRoute,
+} as any)
+const AppResearchIndexRoute = AppResearchIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppResearchRoute,
+} as any)
+const AppResearchWorkspaceIdRoute = AppResearchWorkspaceIdRouteImport.update({
+  id: '/$workspaceId',
+  path: '/$workspaceId',
+  getParentRoute: () => AppResearchRoute,
 } as any)
 const AppBusinessBuilderIndexRoute = AppBusinessBuilderIndexRouteImport.update({
   id: '/builder/',
@@ -148,6 +180,18 @@ const AppStudentSprintProjectIdRoute =
     path: '/sprint/$projectId',
     getParentRoute: () => AppStudentRoute,
   } as any)
+const AppPracticeAssignmentsAssignmentIdRoute =
+  AppPracticeAssignmentsAssignmentIdRouteImport.update({
+    id: '/assignments/$assignmentId',
+    path: '/assignments/$assignmentId',
+    getParentRoute: () => AppPracticeRoute,
+  } as any)
+const AppPracticeModulesModuleIdQuizRoute =
+  AppPracticeModulesModuleIdQuizRouteImport.update({
+    id: '/modules/$moduleId/quiz',
+    path: '/modules/$moduleId/quiz',
+    getParentRoute: () => AppPracticeRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -155,20 +199,27 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/leaderboard': typeof AppLeaderboardRoute
-  '/review': typeof AppMentorReviewRoute
+  '/practice': typeof AppPracticeRouteWithChildren
+  '/research': typeof AppResearchRouteWithChildren
+  '/review': typeof AppReviewRoute
   '/applications': typeof AppStudentApplicationsRoute
   '/team': typeof AppStudentTeamRoute
   '/projects/$projectId': typeof AppProjectsProjectIdRoute
+  '/research/$workspaceId': typeof AppResearchWorkspaceIdRoute
+  '/practice/': typeof AppPracticeIndexRoute
+  '/research/': typeof AppResearchIndexRoute
   '/builder/$draftId': typeof AppBusinessBuilderDraftIdRoute
   '/builder/new': typeof AppBusinessBuilderNewRoute
   '/tasks/$taskId': typeof AppBusinessTasksTaskIdRoute
   '/challenges/$taskId': typeof AppStudentChallengesTaskIdRoute
   '/sprint/$projectId': typeof AppStudentSprintProjectIdRoute
+  '/practice/assignments/$assignmentId': typeof AppPracticeAssignmentsAssignmentIdRoute
   '/builder/': typeof AppBusinessBuilderIndexRoute
   '/tasks/': typeof AppBusinessTasksIndexRoute
   '/projects/': typeof AppMentorProjectsIndexRoute
   '/challenges/': typeof AppStudentChallengesIndexRoute
   '/sprint/': typeof AppStudentSprintIndexRoute
+  '/practice/modules/$moduleId/quiz': typeof AppPracticeModulesModuleIdQuizRoute
 }
 export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
@@ -176,20 +227,25 @@ export interface FileRoutesByTo {
   '/sign-up': typeof SignUpRoute
   '/': typeof AppIndexRoute
   '/leaderboard': typeof AppLeaderboardRoute
-  '/review': typeof AppMentorReviewRoute
+  '/review': typeof AppReviewRoute
   '/applications': typeof AppStudentApplicationsRoute
   '/team': typeof AppStudentTeamRoute
   '/projects/$projectId': typeof AppProjectsProjectIdRoute
+  '/research/$workspaceId': typeof AppResearchWorkspaceIdRoute
+  '/practice': typeof AppPracticeIndexRoute
+  '/research': typeof AppResearchIndexRoute
   '/builder/$draftId': typeof AppBusinessBuilderDraftIdRoute
   '/builder/new': typeof AppBusinessBuilderNewRoute
   '/tasks/$taskId': typeof AppBusinessTasksTaskIdRoute
   '/challenges/$taskId': typeof AppStudentChallengesTaskIdRoute
   '/sprint/$projectId': typeof AppStudentSprintProjectIdRoute
+  '/practice/assignments/$assignmentId': typeof AppPracticeAssignmentsAssignmentIdRoute
   '/builder': typeof AppBusinessBuilderIndexRoute
   '/tasks': typeof AppBusinessTasksIndexRoute
   '/projects': typeof AppMentorProjectsIndexRoute
   '/challenges': typeof AppStudentChallengesIndexRoute
   '/sprint': typeof AppStudentSprintIndexRoute
+  '/practice/modules/$moduleId/quiz': typeof AppPracticeModulesModuleIdQuizRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -201,21 +257,28 @@ export interface FileRoutesById {
   '/_app/_mentor': typeof AppMentorRouteWithChildren
   '/_app/_student': typeof AppStudentRouteWithChildren
   '/_app/leaderboard': typeof AppLeaderboardRoute
+  '/_app/practice': typeof AppPracticeRouteWithChildren
+  '/_app/research': typeof AppResearchRouteWithChildren
+  '/_app/review': typeof AppReviewRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/_mentor/review': typeof AppMentorReviewRoute
   '/_app/_student/applications': typeof AppStudentApplicationsRoute
   '/_app/_student/team': typeof AppStudentTeamRoute
   '/_app/projects/$projectId': typeof AppProjectsProjectIdRoute
+  '/_app/research/$workspaceId': typeof AppResearchWorkspaceIdRoute
+  '/_app/practice/': typeof AppPracticeIndexRoute
+  '/_app/research/': typeof AppResearchIndexRoute
   '/_app/_business/builder/$draftId': typeof AppBusinessBuilderDraftIdRoute
   '/_app/_business/builder/new': typeof AppBusinessBuilderNewRoute
   '/_app/_business/tasks/$taskId': typeof AppBusinessTasksTaskIdRoute
   '/_app/_student/challenges/$taskId': typeof AppStudentChallengesTaskIdRoute
   '/_app/_student/sprint/$projectId': typeof AppStudentSprintProjectIdRoute
+  '/_app/practice/assignments/$assignmentId': typeof AppPracticeAssignmentsAssignmentIdRoute
   '/_app/_business/builder/': typeof AppBusinessBuilderIndexRoute
   '/_app/_business/tasks/': typeof AppBusinessTasksIndexRoute
   '/_app/_mentor/projects/': typeof AppMentorProjectsIndexRoute
   '/_app/_student/challenges/': typeof AppStudentChallengesIndexRoute
   '/_app/_student/sprint/': typeof AppStudentSprintIndexRoute
+  '/_app/practice/modules/$moduleId/quiz': typeof AppPracticeModulesModuleIdQuizRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -225,20 +288,27 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/leaderboard'
+    | '/practice'
+    | '/research'
     | '/review'
     | '/applications'
     | '/team'
     | '/projects/$projectId'
+    | '/research/$workspaceId'
+    | '/practice/'
+    | '/research/'
     | '/builder/$draftId'
     | '/builder/new'
     | '/tasks/$taskId'
     | '/challenges/$taskId'
     | '/sprint/$projectId'
+    | '/practice/assignments/$assignmentId'
     | '/builder/'
     | '/tasks/'
     | '/projects/'
     | '/challenges/'
     | '/sprint/'
+    | '/practice/modules/$moduleId/quiz'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/onboarding'
@@ -250,16 +320,21 @@ export interface FileRouteTypes {
     | '/applications'
     | '/team'
     | '/projects/$projectId'
+    | '/research/$workspaceId'
+    | '/practice'
+    | '/research'
     | '/builder/$draftId'
     | '/builder/new'
     | '/tasks/$taskId'
     | '/challenges/$taskId'
     | '/sprint/$projectId'
+    | '/practice/assignments/$assignmentId'
     | '/builder'
     | '/tasks'
     | '/projects'
     | '/challenges'
     | '/sprint'
+    | '/practice/modules/$moduleId/quiz'
   id:
     | '__root__'
     | '/_app'
@@ -270,21 +345,28 @@ export interface FileRouteTypes {
     | '/_app/_mentor'
     | '/_app/_student'
     | '/_app/leaderboard'
+    | '/_app/practice'
+    | '/_app/research'
+    | '/_app/review'
     | '/_app/'
-    | '/_app/_mentor/review'
     | '/_app/_student/applications'
     | '/_app/_student/team'
     | '/_app/projects/$projectId'
+    | '/_app/research/$workspaceId'
+    | '/_app/practice/'
+    | '/_app/research/'
     | '/_app/_business/builder/$draftId'
     | '/_app/_business/builder/new'
     | '/_app/_business/tasks/$taskId'
     | '/_app/_student/challenges/$taskId'
     | '/_app/_student/sprint/$projectId'
+    | '/_app/practice/assignments/$assignmentId'
     | '/_app/_business/builder/'
     | '/_app/_business/tasks/'
     | '/_app/_mentor/projects/'
     | '/_app/_student/challenges/'
     | '/_app/_student/sprint/'
+    | '/_app/practice/modules/$moduleId/quiz'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -359,12 +441,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeaderboardRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/_mentor/review': {
-      id: '/_app/_mentor/review'
+    '/_app/practice': {
+      id: '/_app/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof AppPracticeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/research': {
+      id: '/_app/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof AppResearchRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/review': {
+      id: '/_app/review'
       path: '/review'
       fullPath: '/review'
-      preLoaderRoute: typeof AppMentorReviewRouteImport
-      parentRoute: typeof AppMentorRoute
+      preLoaderRoute: typeof AppReviewRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/_student/applications': {
       id: '/_app/_student/applications'
@@ -380,12 +476,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppStudentTeamRouteImport
       parentRoute: typeof AppStudentRoute
     }
+    '/_app/practice/': {
+      id: '/_app/practice/'
+      path: '/'
+      fullPath: '/practice/'
+      preLoaderRoute: typeof AppPracticeIndexRouteImport
+      parentRoute: typeof AppPracticeRoute
+    }
     '/_app/projects/$projectId': {
       id: '/_app/projects/$projectId'
       path: '/projects/$projectId'
       fullPath: '/projects/$projectId'
       preLoaderRoute: typeof AppProjectsProjectIdRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/research/': {
+      id: '/_app/research/'
+      path: '/'
+      fullPath: '/research/'
+      preLoaderRoute: typeof AppResearchIndexRouteImport
+      parentRoute: typeof AppResearchRoute
+    }
+    '/_app/research/$workspaceId': {
+      id: '/_app/research/$workspaceId'
+      path: '/$workspaceId'
+      fullPath: '/research/$workspaceId'
+      preLoaderRoute: typeof AppResearchWorkspaceIdRouteImport
+      parentRoute: typeof AppResearchRoute
     }
     '/_app/_business/builder/': {
       id: '/_app/_business/builder/'
@@ -457,6 +574,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppStudentSprintProjectIdRouteImport
       parentRoute: typeof AppStudentRoute
     }
+    '/_app/practice/assignments/$assignmentId': {
+      id: '/_app/practice/assignments/$assignmentId'
+      path: '/assignments/$assignmentId'
+      fullPath: '/practice/assignments/$assignmentId'
+      preLoaderRoute: typeof AppPracticeAssignmentsAssignmentIdRouteImport
+      parentRoute: typeof AppPracticeRoute
+    }
+    '/_app/practice/modules/$moduleId/quiz': {
+      id: '/_app/practice/modules/$moduleId/quiz'
+      path: '/modules/$moduleId/quiz'
+      fullPath: '/practice/modules/$moduleId/quiz'
+      preLoaderRoute: typeof AppPracticeModulesModuleIdQuizRouteImport
+      parentRoute: typeof AppPracticeRoute
+    }
   }
 }
 
@@ -481,12 +612,10 @@ const AppBusinessRouteWithChildren = AppBusinessRoute._addFileChildren(
 )
 
 interface AppMentorRouteChildren {
-  AppMentorReviewRoute: typeof AppMentorReviewRoute
   AppMentorProjectsIndexRoute: typeof AppMentorProjectsIndexRoute
 }
 
 const AppMentorRouteChildren: AppMentorRouteChildren = {
-  AppMentorReviewRoute: AppMentorReviewRoute,
   AppMentorProjectsIndexRoute: AppMentorProjectsIndexRoute,
 }
 
@@ -516,11 +645,45 @@ const AppStudentRouteWithChildren = AppStudentRoute._addFileChildren(
   AppStudentRouteChildren,
 )
 
+interface AppPracticeRouteChildren {
+  AppPracticeIndexRoute: typeof AppPracticeIndexRoute
+  AppPracticeAssignmentsAssignmentIdRoute: typeof AppPracticeAssignmentsAssignmentIdRoute
+  AppPracticeModulesModuleIdQuizRoute: typeof AppPracticeModulesModuleIdQuizRoute
+}
+
+const AppPracticeRouteChildren: AppPracticeRouteChildren = {
+  AppPracticeIndexRoute: AppPracticeIndexRoute,
+  AppPracticeAssignmentsAssignmentIdRoute:
+    AppPracticeAssignmentsAssignmentIdRoute,
+  AppPracticeModulesModuleIdQuizRoute: AppPracticeModulesModuleIdQuizRoute,
+}
+
+const AppPracticeRouteWithChildren = AppPracticeRoute._addFileChildren(
+  AppPracticeRouteChildren,
+)
+
+interface AppResearchRouteChildren {
+  AppResearchWorkspaceIdRoute: typeof AppResearchWorkspaceIdRoute
+  AppResearchIndexRoute: typeof AppResearchIndexRoute
+}
+
+const AppResearchRouteChildren: AppResearchRouteChildren = {
+  AppResearchWorkspaceIdRoute: AppResearchWorkspaceIdRoute,
+  AppResearchIndexRoute: AppResearchIndexRoute,
+}
+
+const AppResearchRouteWithChildren = AppResearchRoute._addFileChildren(
+  AppResearchRouteChildren,
+)
+
 interface AppRouteChildren {
   AppBusinessRoute: typeof AppBusinessRouteWithChildren
   AppMentorRoute: typeof AppMentorRouteWithChildren
   AppStudentRoute: typeof AppStudentRouteWithChildren
   AppLeaderboardRoute: typeof AppLeaderboardRoute
+  AppPracticeRoute: typeof AppPracticeRouteWithChildren
+  AppResearchRoute: typeof AppResearchRouteWithChildren
+  AppReviewRoute: typeof AppReviewRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProjectsProjectIdRoute: typeof AppProjectsProjectIdRoute
 }
@@ -530,6 +693,9 @@ const AppRouteChildren: AppRouteChildren = {
   AppMentorRoute: AppMentorRouteWithChildren,
   AppStudentRoute: AppStudentRouteWithChildren,
   AppLeaderboardRoute: AppLeaderboardRoute,
+  AppPracticeRoute: AppPracticeRouteWithChildren,
+  AppResearchRoute: AppResearchRouteWithChildren,
+  AppReviewRoute: AppReviewRoute,
   AppIndexRoute: AppIndexRoute,
   AppProjectsProjectIdRoute: AppProjectsProjectIdRoute,
 }
