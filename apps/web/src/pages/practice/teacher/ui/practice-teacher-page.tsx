@@ -62,7 +62,9 @@ export function PracticeTeacherPage() {
                     <li key={a.id} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 py-3">
                       <span className="font-medium">{a.title}</span>
                       <span className="text-muted-foreground text-sm tabular-nums">
-                        {a.approved} из {a.students} принято, в среднем {a.avgAttempts} попытки
+                        {a.students === 0
+                          ? 'ещё никто не начал'
+                          : `принято ${a.approved} из ${a.students}, попыток в среднем ${a.avgAttempts.toLocaleString('ru-RU', { maximumFractionDigits: 1 })}`}
                       </span>
                     </li>
                   ))}

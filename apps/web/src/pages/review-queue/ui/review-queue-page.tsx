@@ -62,7 +62,7 @@ function EvidenceSheet({ id, teamName, onClose }: { id: string | null; teamName:
           <SheetTitle>{e ? `${teamName}: ${(EVIDENCE_SUBJECT[e.subjectType] ?? 'подтверждение').toLowerCase()}` : 'Загрузка…'}</SheetTitle>
           {e && (
             <SheetDescription>
-              {EVIDENCE_KIND[e.kind]}, {formatDateTime(e.createdAt)}
+              {e.module === 'sprint' ? `${EVIDENCE_KIND[e.kind]}, ${formatDateTime(e.createdAt)}` : formatDateTime(e.createdAt)}
             </SheetDescription>
           )}
         </SheetHeader>
@@ -150,7 +150,7 @@ export function ReviewQueuePage() {
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm">
                   <span className="font-medium">{who(e)}</span>
                   <span className="text-muted-foreground">{EVIDENCE_SUBJECT[e.subjectType] ?? 'Подтверждение'}</span>
-                  <span className="text-muted-foreground">{EVIDENCE_KIND[e.kind].toLowerCase()}</span>
+                  {e.module === 'sprint' && <span className="text-muted-foreground">{EVIDENCE_KIND[e.kind].toLowerCase()}</span>}
                   <span className="text-muted-foreground ml-auto text-xs">{formatRelative(e.createdAt)}</span>
                 </div>
                 {e.note && <p className="text-muted-foreground line-clamp-1 text-sm">{e.note}</p>}
