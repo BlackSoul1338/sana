@@ -4,7 +4,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-const MODULES = ['sprint', 'challenge-builder', 'match'];
+const MODULES = ['sprint', 'challenge-builder', 'match', 'practice'];
 
 // Модули не импортируют друг друга и flows; ядро не импортирует модули и flows.
 const moduleBoundaries = MODULES.map((name) => ({
