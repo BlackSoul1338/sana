@@ -1,13 +1,15 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeft, Briefcase, Upload } from 'lucide-react';
 import { AdjustPointsDialog } from '@/features/adjust-points';
 import { StagePlanEditor } from '@/features/plan-stage';
 import { SubmitEvidenceDialog } from '@/features/submit-evidence';
-import { projectQuery, StageTrack } from '@/entities/project';
+import { feedQuery, projectQuery, StageTrack } from '@/entities/project';
 import { teamQuery } from '@/entities/team';
 import { useMe } from '@/entities/viewer';
 import { plural } from '@/shared/lib/format';
+import { useCountUp, useLastSeen } from '@/shared/lib/motion';
 import { Button } from '@/shared/ui/button';
 import { SectionTitle } from '@/shared/ui/status';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -49,6 +51,11 @@ export function SprintProjectPage({ projectId, backTo }: { projectId: string; ba
   const team = useQuery({ ...teamQuery(project.teamId), enabled: role !== 'business' }).data;
   const members = Object.fromEntries((team?.members ?? []).map((m) => [m.profileId, m.displayName]));
   const canSubmit = role === 'student' && isMember && project.status === 'active';
+  // Since the last visit: confirmed points count up once and new feed events are marked.
+  const [visitAt] = useState(() => new Date().toISOString());
+  const seen = useLastSeen<{ points: number; at: string }>(`sana:seen:project:${project.id}`, { points: project.points.team, at: visitAt });
+  const teamPoints = useCountUp(project.points.team, seen?.points ?? project.points.team);
+  const fresh = (useQuery(feedQuery(project.id)).data?.items ?? []).filter((i) => seen && i.at > seen.at).length;
 
   return (
     <div className="grid gap-10">
@@ -67,7 +74,7 @@ export function SprintProjectPage({ projectId, backTo }: { projectId: string; ba
             </p>
           </div>
           <div className="text-right">
-            <div className="text-4xl font-semibold tabular-nums sm:text-5xl">{project.points.team}</div>
+            <div className="text-4xl font-semibold tabular-nums sm:text-5xl">{teamPoints}</div>
             <div className="text-muted-foreground text-sm">{plural(project.points.team, ['балл', 'балла', 'баллов'])} команды</div>
           </div>
         </div>
@@ -99,7 +106,14 @@ export function SprintProjectPage({ projectId, backTo }: { projectId: string; ba
             <TabsList>
               {role !== 'business' && <TabsTrigger value="tasks">Задачи</TabsTrigger>}
               <TabsTrigger value="evidence">Подтверждения</TabsTrigger>
-              <TabsTrigger value="feed">Лента</TabsTrigger>
+              <TabsTrigger value="feed">
+                Лента
+                {fresh > 0 && (
+                  <span className="bg-foreground text-background rounded-full px-1.5 text-xs tabular-nums" aria-label={`новых: ${fresh}`}>
+                    {fresh}
+                  </span>
+                )}
+              </TabsTrigger>
             </TabsList>
             {canSubmit && (
               <SubmitEvidenceDialog project={project} defaultTarget="interview">
@@ -118,7 +132,7 @@ export function SprintProjectPage({ projectId, backTo }: { projectId: string; ba
             <EvidenceList project={project} members={members} canFeedback={role === 'business' && !!project.challengeTaskId} />
           </TabsContent>
           <TabsContent value="feed" className="mt-4">
-            <ProjectFeed projectId={project.id} members={members} />
+            <ProjectFeed projectId={project.id} members={members} since={seen?.at} />
           </TabsContent>
         </Tabs>
 

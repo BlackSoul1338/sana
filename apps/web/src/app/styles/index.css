@@ -105,3 +105,19 @@
     @apply tracking-tight;
   }
 }
+
+/* "This changed": a soft tint that fades out once. */
+@keyframes fresh-fade {
+  from {
+    background-color: color-mix(in oklab, var(--primary) 14%, transparent);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+@utility animate-fresh {
+  animation: fresh-fade 2.4s ease-out both;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

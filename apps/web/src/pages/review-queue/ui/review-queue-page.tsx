@@ -10,6 +10,8 @@ import { EVIDENCE_KIND, EVIDENCE_SUBJECT } from '@/shared/config';
 import { formatDateTime, formatRelative } from '@/shared/lib/format';
 import { type Schemas } from '@/shared/api';
 import { points } from '@/shared/lib/format';
+import { prefersReducedMotion } from '@/shared/lib/motion';
+import { cn } from '@/shared/lib/utils';
 import { Segmented } from '@/shared/ui/segmented';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/shared/ui/sheet';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -50,7 +52,7 @@ function ResearchPanel({ evidenceId }: { evidenceId: string }) {
   );
 }
 
-function EvidenceSheet({ id, teamName, onClose }: { id: string | null; teamName: string; onClose: () => void }) {
+function EvidenceSheet({ id, teamName, onClose, onDecided }: { id: string | null; teamName: string; onClose: () => void; onDecided: () => Promise<void> }) {
   const detail = useQuery({ ...evidenceDetailQuery(id ?? ''), enabled: !!id });
   const e = detail.data;
   const isImage = e?.storagePath && /\.(png|jpe?g|webp)$/i.test(e.storagePath);
@@ -96,7 +98,7 @@ function EvidenceSheet({ id, teamName, onClose }: { id: string | null; teamName:
               ))}
             {e.status === 'pending' ? (
               <div className="border-t pt-6">
-                <ReviewForm evidenceId={e.id} onDone={onClose} />
+                <ReviewForm evidenceId={e.id} subjectName={teamName} onDone={onDecided} />
               </div>
             ) : (
               <div className="grid gap-1 border-t pt-4 text-sm">
@@ -114,6 +116,13 @@ function EvidenceSheet({ id, teamName, onClose }: { id: string | null; teamName:
 export function ReviewQueuePage() {
   const [status, setStatus] = useState<Status>('pending');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [leaving, setLeaving] = useState<string | null>(null);
+  // The decided row folds away before the refetch removes it, so the reviewer sees where the queue moved.
+  const decided = async () => {
+    setLeaving(openId);
+    setOpenId(null);
+    if (!prefersReducedMotion()) await new Promise((r) => setTimeout(r, 300));
+  };
   const list = useQuery(evidenceListQuery({ status }));
   const teams = useQuery(teamsQuery);
   const names = new Map((teams.data ?? []).map((t) => [t.id, t.name]));
@@ -145,8 +154,12 @@ export function ReviewQueuePage() {
       ) : (
         <ul className="divide-y rounded-lg border bg-card">
           {list.data?.map((e) => (
-            <li key={e.id}>
-              <button type="button" onClick={() => setOpenId(e.id)} className="hover:bg-muted/50 grid w-full gap-1 px-4 py-3 text-left transition-colors">
+            <li
+              key={e.id}
+              className={cn('grid transition-[grid-template-rows,opacity] duration-300 motion-reduce:transition-none', e.id === leaving ? 'grid-rows-[0fr] opacity-0' : 'grid-rows-[1fr]')}
+            >
+              <div className="min-h-0 overflow-hidden">
+<button type="button" onClick={() => setOpenId(e.id)} className="hover:bg-muted/50 grid w-full gap-1 px-4 py-3 text-left transition-colors">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm">
                   <span className="font-medium">{who(e)}</span>
                   <span className="text-muted-foreground">{EVIDENCE_SUBJECT[e.subjectType] ?? 'Подтверждение'}</span>
@@ -155,11 +168,12 @@ export function ReviewQueuePage() {
                 </div>
                 {e.note && <p className="text-muted-foreground line-clamp-1 text-sm">{e.note}</p>}
               </button>
+</div>
             </li>
           ))}
         </ul>
       )}
-      <EvidenceSheet id={openId} teamName={opened ? who(opened) : ''} onClose={() => setOpenId(null)} />
+      <EvidenceSheet id={openId} teamName={opened ? who(opened) : ''} onClose={() => setOpenId(null)} onDecided={decided} />
     </div>
   );
 }

@@ -8,6 +8,8 @@ import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
 import { isActive, NAV } from './nav';
+import { NavCount } from './nav-count';
+import { usePendingReviews } from './pending-reviews';
 import { THEMES } from './themes';
 
 /** Narrow screens: everything the header holds on desktop, in one sheet. */
@@ -17,6 +19,7 @@ export function MobileMenu() {
   const { team, teams, setActiveTeam } = useActiveTeam();
   const { theme, setTheme } = useTheme();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pending = usePendingReviews(profile.role);
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
@@ -45,6 +48,7 @@ export function MobileMenu() {
               )}
             >
               {item.label}
+              {item.to === '/review' && <NavCount value={pending} />}
             </Link>
           ))}
         </nav>

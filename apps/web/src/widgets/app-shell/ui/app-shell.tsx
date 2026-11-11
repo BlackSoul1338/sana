@@ -5,6 +5,8 @@ import { cn } from '@/shared/lib/utils';
 import { Logo } from '@/shared/ui/logo';
 import { MobileMenu } from './mobile-menu';
 import { isActive, NAV } from './nav';
+import { NavCount } from './nav-count';
+import { usePendingReviews } from './pending-reviews';
 import { TeamSwitcher } from './team-switcher';
 import { UserMenu } from './user-menu';
 
@@ -12,6 +14,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const me = useMe();
   const role = me.profile!.role;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pending = usePendingReviews(role);
 
   return (
     <div className="min-h-dvh">
@@ -34,6 +37,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 )}
               >
                 {item.label}
+                {item.to === '/review' && <NavCount value={pending} />}
               </Link>
             ))}
           </nav>
