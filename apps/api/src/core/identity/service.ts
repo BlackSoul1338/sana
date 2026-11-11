@@ -104,36 +104,57 @@ export async function teamIdsOf(db: DbLike, profileId: string): Promise<string[]
   return rows.map((r) => r.id);
 }
 
-export async function getTeam(ctx: Ctx, teamId: string): Promise<Team> {
-  requireProfile(ctx);
-  const [team] = await ctx.db.select().from(teams).where(eq(teams.id, teamId)).limit(1);
-  if (!team) throw notFound('Команда');
+/**
+ * Teams with members and skills in three queries, whatever the number of teams.
+ * `ids` undefined means all teams; the result keeps the order of the teams query (by name).
+ */
+async function loadTeams(db: DbLike, ids?: string[]): Promise<Team[]> {
+  if (ids && ids.length === 0) return [];
+  const rows = await db
+    .select()
+    .from(teams)
+    .where(ids ? inArray(teams.id, ids) : undefined)
+    .orderBy(asc(teams.name));
+  if (rows.length === 0) return [];
+  const teamIds = rows.map((t) => t.id);
   const [members, skills] = await Promise.all([
-    ctx.db
-      .select({ profileId: teamMembers.profileId, displayName: profiles.displayName, roleSlug: teamMembers.roleSlug, joinedAt: teamMembers.joinedAt })
+    db
+      .select({
+        teamId: teamMembers.teamId,
+        profileId: teamMembers.profileId,
+        displayName: profiles.displayName,
+        roleSlug: teamMembers.roleSlug,
+        joinedAt: teamMembers.joinedAt,
+      })
       .from(teamMembers)
       .innerJoin(profiles, eq(profiles.id, teamMembers.profileId))
-      .where(eq(teamMembers.teamId, teamId))
+      .where(inArray(teamMembers.teamId, teamIds))
       .orderBy(asc(teamMembers.joinedAt)),
-    ctx.db.select().from(teamSkills).where(eq(teamSkills.teamId, teamId)).orderBy(asc(teamSkills.skillSlug)),
+    db.select().from(teamSkills).where(inArray(teamSkills.teamId, teamIds)).orderBy(asc(teamSkills.skillSlug)),
   ]);
-  return {
+  return rows.map((team) => ({
     id: team.id,
     name: team.name,
     weeklyHours: team.weeklyHours,
     interests: team.interests,
-    members: members.map((m) => ({ ...m, joinedAt: iso(m.joinedAt) })),
-    skills: skills.map((s) => ({ slug: s.skillSlug, level: s.level })),
+    members: members
+      .filter((m) => m.teamId === team.id)
+      .map(({ teamId: _teamId, ...m }) => ({ ...m, joinedAt: iso(m.joinedAt) })),
+    skills: skills.filter((s) => s.teamId === team.id).map((s) => ({ slug: s.skillSlug, level: s.level })),
     createdAt: iso(team.createdAt),
-  };
+  }));
+}
+
+export async function getTeam(ctx: Ctx, teamId: string): Promise<Team> {
+  requireProfile(ctx);
+  const [team] = await loadTeams(ctx.db, [teamId]);
+  if (!team) throw notFound('Команда');
+  return team;
 }
 
 export async function listTeams(ctx: Ctx, opts: { mine: boolean }): Promise<Team[]> {
   const p = requireProfile(ctx);
-  const ids = opts.mine
-    ? await teamIdsOf(ctx.db, p.id)
-    : (await ctx.db.select({ id: teams.id }).from(teams).orderBy(asc(teams.name))).map((r) => r.id);
-  return Promise.all(ids.map((id) => getTeam(ctx, id)));
+  return loadTeams(ctx.db, opts.mine ? await teamIdsOf(ctx.db, p.id) : undefined);
 }
 
 export async function createTeam(ctx: Ctx, input: z.infer<typeof CreateTeamInput>): Promise<Team> {

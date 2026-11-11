@@ -89,4 +89,24 @@ describe('ядро: профиль, команды, права', () => {
     expect((await api.get('/api/students?q=%25', alice)).body).toEqual([]);
     expect((await api.get('/api/students', biz)).status).toBe(403);
   });
+
+  it('список команд: участники и навыки не смешиваются между командами', async () => {
+    const alice = await createUser('student', 'Алиса');
+    const bob = await createUser('student', 'Боб');
+    const a = (await api.post('/api/teams', alice, { name: 'Альфа' })).body;
+    const b = (await api.post('/api/teams', bob, { name: 'Бета' })).body;
+    await api.put(`/api/teams/${a.id}/skills`, alice, { skills: [{ slug: 'python', level: 2 }] });
+    await api.put(`/api/teams/${b.id}/skills`, bob, { skills: [{ slug: 'react', level: 1 }] });
+
+    const all = await api.get('/api/teams', alice);
+    expect(all.status).toBe(200);
+    expect(all.body.map((t: any) => t.name)).toEqual(['Альфа', 'Бета']);
+    expect(all.body[0]).toMatchObject({ members: [{ profileId: alice.id }], skills: [{ slug: 'python', level: 2 }] });
+    expect(all.body[1]).toMatchObject({ members: [{ profileId: bob.id }], skills: [{ slug: 'react', level: 1 }] });
+    expect(all.body[0].members).toHaveLength(1);
+
+    const mine = await api.get('/api/teams?mine=true', bob);
+    expect(mine.body.map((t: any) => t.id)).toEqual([b.id]);
+    expect((await api.get('/api/teams/00000000-0000-4000-8000-000000000000', alice)).status).toBe(404);
+  });
 });
