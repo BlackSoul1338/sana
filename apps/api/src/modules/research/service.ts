@@ -8,7 +8,7 @@ import { AppError, conflict, forbidden, invalid, notFound } from '../../platform
 import { profiles, teamMembers } from '../../core/identity/schema.js';
 import { isTeamMember, teamIdsOf, teamNames } from '../../core/identity/service.js';
 import { createEvidence } from '../../core/evidence/service.js';
-import { totalsFor } from '../../core/points/ledger.js';
+import { pointEvents } from '../../core/points/schema.js';
 import { assessConclusion, summarize } from './ai.js';
 import { argumentMap, checkStatements, citedIds, contributions, positionGrowth, verifyGrowth } from './rules.js';
 import { raConclusions, raItems, raMessages, raRoles, raTasks, raThreads, raWorkspaces } from './schema.js';
@@ -123,7 +123,7 @@ export async function listWorkspaces(ctx: Ctx, q: z.infer<typeof research.Worksp
   const [names, itemCounts, totals] = await Promise.all([
     teamNames(ctx.db, teamIds),
     ctx.db.select({ id: raItems.workspaceId, n: count() }).from(raItems).where(inArray(raItems.workspaceId, ids)).groupBy(raItems.workspaceId),
-    totalsFor(ctx.db, 'team', teamIds, MODULE),
+    workspacePoints(ctx.db, ids),
   ]);
   const n = new Map(itemCounts.map((r) => [r.id, Number(r.n)]));
   return rows.map(({ ws, taskTitle }) => ({
@@ -134,9 +134,20 @@ export async function listWorkspaces(ctx: Ctx, q: z.infer<typeof research.Worksp
     teamName: names.get(ws.teamId) ?? '',
     status: ws.status,
     items: n.get(ws.id) ?? 0,
-    points: totals.get(ws.teamId) ?? 0,
+    points: totals.get(ws.id) ?? 0,
     createdAt: iso(ws.createdAt),
   }));
+}
+
+/** Team points earned by each workspace: events tied to its conclusions' evidence, reviewer adjustments included. */
+async function workspacePoints(db: DbLike, workspaceIds: string[]) {
+  const rows = await db
+    .select({ id: raConclusions.workspaceId, total: sql<number>`coalesce(sum(${pointEvents.points}), 0)::int` })
+    .from(raConclusions)
+    .innerJoin(pointEvents, eq(pointEvents.evidenceId, raConclusions.evidenceId))
+    .where(and(inArray(raConclusions.workspaceId, workspaceIds), eq(pointEvents.subjectType, 'team')))
+    .groupBy(raConclusions.workspaceId);
+  return new Map(rows.map((r) => [r.id, r.total]));
 }
 
 async function loadBoard(db: DbLike, ws: WsRow) {
@@ -159,7 +170,7 @@ async function loadBoard(db: DbLike, ws: WsRow) {
 export async function getWorkspace(ctx: Ctx, id: string): Promise<z.infer<typeof research.Workspace>> {
   const { ws } = await access(ctx, id);
   const b = await loadBoard(ctx.db, ws);
-  const [names, totals] = await Promise.all([teamNames(ctx.db, [ws.teamId]), totalsFor(ctx.db, 'team', [ws.teamId], MODULE)]);
+  const [names, totals] = await Promise.all([teamNames(ctx.db, [ws.teamId]), workspacePoints(ctx.db, [ws.id])]);
   const cited = b.conclusion ? citedIds(b.conclusion.statements) : new Set<string>();
   const roleOf = new Map(b.roles.map((r) => [r.profileId, r.role]));
   const nameOf = new Map(b.members.map((m) => [m.id, m.name]));
@@ -176,7 +187,7 @@ export async function getWorkspace(ctx: Ctx, id: string): Promise<z.infer<typeof
     argumentMap: argumentMap(b.threads.map((t) => t.id), b.items),
     contribution: contributions(b.members.map((m) => m.id), roleOf, b.items, cited).map((c) => ({ ...c, name: nameOf.get(c.profileId) ?? '' })),
     conclusion: b.conclusion ? toConclusion(b.conclusion, b.items) : null,
-    points: totals.get(ws.teamId) ?? 0,
+    points: totals.get(ws.id) ?? 0,
     createdAt: iso(ws.createdAt),
   };
 }
