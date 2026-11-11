@@ -1,12 +1,13 @@
 import { randomUUID } from 'node:crypto';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import type { z } from 'zod';
-import type { Evidence, EvidenceQueueQuery, ReviewInput, ReviewResult, UploadUrlInput } from '@sana/contracts';
+import type { Evidence, EvidenceQueueItem, EvidenceQueueQuery, ReviewInput, ReviewResult, UploadUrlInput } from '@sana/contracts';
 import { inTx, requireProfile, requireRole, type Ctx } from '../../platform/context.js';
 import type { DbLike } from '../../platform/db/client.js';
 import { iso, isoOrNull } from '../../platform/db/columns.js';
 import { conflict, forbidden, invalid, notFound } from '../../platform/errors.js';
 import type { EvidenceSnapshot } from '../../platform/events.js';
+import { profiles } from '../identity/schema.js';
 import { teamIdsOf, isTeamMember } from '../identity/service.js';
 import { award, eventsForEvidence, toPointEvent } from '../points/ledger.js';
 import { evidence } from './schema.js';
@@ -115,7 +116,7 @@ export async function evidenceForTeam(db: DbLike, teamId: string, module?: strin
 }
 
 /** Очередь проверки: проверяющий видит подтверждения своей роли, студент — подтверждения своих команд. */
-export async function listEvidence(ctx: Ctx, q: z.infer<typeof EvidenceQueueQuery>): Promise<Evidence[]> {
+export async function listEvidence(ctx: Ctx, q: z.infer<typeof EvidenceQueueQuery>): Promise<z.infer<typeof EvidenceQueueItem>[]> {
   const p = requireRole(ctx, 'mentor', 'teacher', 'student');
   let teamFilter: string[] | undefined;
   if (p.role === 'student') {
@@ -135,7 +136,11 @@ export async function listEvidence(ctx: Ctx, q: z.infer<typeof EvidenceQueueQuer
       ),
     )
     .orderBy(q.status === 'pending' ? evidence.createdAt : desc(evidence.createdAt));
-  return rows.map(toEvidence);
+  // Individual work has no team, so the queue names the submitter (one batched query).
+  const ids = [...new Set(rows.map((r) => r.submittedBy))];
+  const names = ids.length ? await ctx.db.select({ id: profiles.id, name: profiles.displayName }).from(profiles).where(inArray(profiles.id, ids)) : [];
+  const nameOf = new Map(names.map((n) => [n.id, n.name]));
+  return rows.map((r) => ({ ...toEvidence(r), submitterName: nameOf.get(r.submittedBy) ?? '' }));
 }
 
 export async function getEvidence(ctx: Ctx, id: string) {

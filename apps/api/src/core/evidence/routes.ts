@@ -1,6 +1,6 @@
 import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
-import { Evidence, EvidenceDetail, EvidenceQueueQuery, ReviewInput, ReviewResult, UploadUrl, UploadUrlInput } from '@sana/contracts';
+import { EvidenceDetail, EvidenceQueueItem, EvidenceQueueQuery, ReviewInput, ReviewResult, UploadUrl, UploadUrlInput } from '@sana/contracts';
 import { createRouter, errorResponses, IdParam, jsonBody, jsonRes, secured } from '../../platform/http.js';
 import * as svc from './service.js';
 
@@ -26,9 +26,9 @@ evidenceRoutes.openapi(
     path: '/evidence',
     tags,
     security: secured,
-    summary: 'Очередь проверки (куратор) или подтверждения своих команд (студент)',
+    summary: 'Очередь проверки (куратор или преподаватель — по своей роли) или подтверждения своих команд (студент)',
     request: { query: EvidenceQueueQuery },
-    responses: { 200: jsonRes(z.array(Evidence)), ...errorResponses },
+    responses: { 200: jsonRes(z.array(EvidenceQueueItem)), ...errorResponses },
   }),
   async (c) => c.json(await svc.listEvidence(c.get('ctx'), c.req.valid('query')), 200),
 );
