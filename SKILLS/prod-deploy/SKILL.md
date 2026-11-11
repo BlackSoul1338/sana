@@ -53,6 +53,14 @@ Needed when the merge added files under `apps/api/drizzle/`. Run before the API 
 pnpm db:migrate
 ```
 
+## Learning catalog
+
+After migrations that add catalog data, or when `data/practice-*.json` or `data/research-tasks.json` gained items. Needs at least one teacher account; adds only titles that are not in the database and deletes nothing:
+
+```bash
+pnpm seed:content
+```
+
 ## Web redeploy without a code change
 
 Only after changing `VITE_*` variables in Vercel (for example a new API URL):
