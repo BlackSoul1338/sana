@@ -77,7 +77,7 @@ pnpm dev:web
 ```
 
 - API: http://localhost:8787, документация: http://localhost:8787/docs.
-- Веб: http://localhost:5173. API разрешает CORS только для `http://localhost:5173` и `http://localhost:3000` (`apps/api/src/app.ts`).
+- Веб: http://localhost:5173. API разрешает CORS для адресов из `CORS_ORIGINS` (по умолчанию `http://localhost:5173` и `http://localhost:3000`).
 - Демо-аккаунты после seed: `alice@sana.local` (студент), `mentor@sana.local` (куратор), `daily@sana.local` (бизнес). Пароль seed записывает в `data/demo-accounts.json` — файл в `.gitignore`.
 
 Остановка: Ctrl+C в терминалах dev-процессов, затем
@@ -105,11 +105,16 @@ API и веб читают один файл `.env` в корне репозит
 | `AI_THINKING_FAST`, `AI_THINKING_STRONG` | нет | не задаётся | уровень размышлений `minimal`, `low`, `medium` или `high`; только для моделей, которые его поддерживают |
 | `PORT` | нет | `8787` | порт API |
 | `EVIDENCE_BUCKET` | нет | `evidence` | бакет Storage для файлов подтверждений |
+| `CORS_ORIGINS` | нет | `http://localhost:5173,http://localhost:3000` | адреса веб-клиента через запятую, которым API разрешает запросы |
 | `VITE_API_URL` | да, для веба | — | адрес API, например `http://localhost:8787` |
 | `VITE_SUPABASE_URL` | да, для веба | — | адрес Supabase; в `.env.example` — `$SUPABASE_URL` |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | да, для веба | — | публичный ключ Supabase; в `.env.example` — `$SUPABASE_PUBLISHABLE_KEY` |
 
 API при старте проверяет переменные и завершается со списком ошибок, если обязательные не заданы.
+
+## Развёртывание веба
+
+`apps/web` собирается в статические файлы (`dist`). В `apps/web/vercel.json` все пути переписываются на `index.html`, чтобы прямые ссылки на экраны открывались. На Vercel укажите корневую папку `apps/web` и задайте `VITE_API_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` — Vite подставляет их при сборке, поэтому после изменения нужна новая сборка. Адрес развёрнутого веба добавьте в `CORS_ORIGINS` API.
 
 ## Проверки
 
