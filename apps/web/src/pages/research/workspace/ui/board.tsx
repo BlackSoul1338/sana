@@ -32,7 +32,8 @@ function AddItem({ ws }: { ws: ResearchWorkspace }) {
   const [kind, setKind] = useState<Kind>('argument');
   const [text, setText] = useState('');
   const [url, setUrl] = useState('');
-  const [threadId, setThreadId] = useState(ws.threads[0]?.id ?? '');
+  const [picked, setThreadId] = useState('');
+  const threadId = ws.threads.some((t) => t.id === picked) ? picked : (ws.threads[0]?.id ?? '');
   const [stance, setStance] = useState<'for' | 'against'>('for');
   const [links, setLinks] = useState<string[]>([]);
   const queryClient = useQueryClient();
