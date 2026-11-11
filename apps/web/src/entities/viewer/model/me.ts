@@ -18,10 +18,12 @@ export const ROLE_HOME: Record<Role, string> = {
   student: '/sprint',
   mentor: '/review',
   business: '/builder',
+  teacher: '/review',
 };
 
 export const ROLE_LABEL: Record<Role, string> = {
   student: 'Студент',
   mentor: 'Ментор',
   business: 'Бизнес',
+  teacher: 'Преподаватель',
 };

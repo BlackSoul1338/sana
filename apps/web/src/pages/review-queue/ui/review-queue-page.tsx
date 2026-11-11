@@ -2,16 +2,53 @@ import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, FileText } from 'lucide-react';
 import { useState } from 'react';
 import { ReviewForm } from '@/features/review-evidence';
-import { evidenceDetailQuery, evidenceListQuery, EvidenceStatus, type Evidence } from '@/entities/evidence';
+import { evidenceDetailQuery, evidenceListQuery, EvidenceStatus } from '@/entities/evidence';
+import { attemptQuery, CheckResult } from '@/entities/practice';
+import { ConclusionView, workspaceByEvidenceQuery } from '@/entities/research';
 import { teamsQuery } from '@/entities/team';
 import { EVIDENCE_KIND, EVIDENCE_SUBJECT } from '@/shared/config';
 import { formatDateTime, formatRelative } from '@/shared/lib/format';
+import { type Schemas } from '@/shared/api';
+import { points } from '@/shared/lib/format';
 import { Segmented } from '@/shared/ui/segmented';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/shared/ui/sheet';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { EmptyState } from '@/shared/ui/status';
 
 type Status = 'pending' | 'approved' | 'rejected';
+type QueueItem = Schemas['EvidenceQueueItem'];
+
+function PracticePanel({ attemptId }: { attemptId: string }) {
+  const { data: a } = useQuery(attemptQuery(attemptId));
+  if (!a) return <Skeleton className="h-40" />;
+  const pre = a.preview.correctness + a.preview.completeness + a.preview.selfCorrection + a.preview.completion;
+  return (
+    <div className="grid gap-5">
+      <div className="grid gap-1">
+        <p className="text-sm font-medium">{a.assignment.title}</p>
+        <p className="text-muted-foreground text-sm">{a.assignment.condition}</p>
+      </div>
+      <blockquote className="bg-muted/40 rounded-md px-3 py-2 text-sm whitespace-pre-line">{a.answer}</blockquote>
+      <CheckResult criteria={a.assignment.criteria} check={a.check} corrected={a.corrected} />
+      <p className="text-sm tabular-nums">
+        По правилам при принятии: <span className="font-medium">{points(pre)}</span>
+        {a.preview.selfCorrection > 0 && <span className="text-muted-foreground">, из них за исправления {points(a.preview.selfCorrection)}</span>}
+      </p>
+    </div>
+  );
+}
+
+function ResearchPanel({ evidenceId }: { evidenceId: string }) {
+  const { data: ws } = useQuery(workspaceByEvidenceQuery(evidenceId));
+  if (!ws) return <Skeleton className="h-40" />;
+  return (
+    <div className="grid gap-4">
+      <p className="text-muted-foreground text-sm">{ws.task.question}</p>
+      <p className="text-sm">Начальная позиция: «{ws.initialPosition}»</p>
+      <ConclusionView ws={ws} />
+    </div>
+  );
+}
 
 function EvidenceSheet({ id, teamName, onClose }: { id: string | null; teamName: string; onClose: () => void }) {
   const detail = useQuery({ ...evidenceDetailQuery(id ?? ''), enabled: !!id });
@@ -33,7 +70,13 @@ function EvidenceSheet({ id, teamName, onClose }: { id: string | null; teamName:
           <Skeleton className="mx-4 h-40" />
         ) : (
           <div className="grid gap-6 px-4 pb-6">
-            {e.note && <p className="text-sm whitespace-pre-line">{e.note}</p>}
+            {e.subjectType === 'practice_attempt' ? (
+              <PracticePanel attemptId={e.subjectId} />
+            ) : e.subjectType === 'research_conclusion' ? (
+              <ResearchPanel evidenceId={e.id} />
+            ) : (
+              e.note && <p className="text-sm whitespace-pre-line">{e.note}</p>
+            )}
             {e.url && (
               <a href={e.url} target="_blank" rel="noreferrer" className="text-primary inline-flex items-center gap-1.5 text-sm break-all">
                 <ExternalLink className="size-4 shrink-0" />
@@ -74,7 +117,7 @@ export function ReviewQueuePage() {
   const list = useQuery(evidenceListQuery({ status }));
   const teams = useQuery(teamsQuery);
   const names = new Map((teams.data ?? []).map((t) => [t.id, t.name]));
-  const teamName = (e: Evidence) => (e.teamId && names.get(e.teamId)) || 'Команда';
+  const who = (e: QueueItem) => (e.teamId ? names.get(e.teamId) : null) ?? e.submitterName;
   const opened = list.data?.find((e) => e.id === openId);
 
   return (
@@ -82,7 +125,7 @@ export function ReviewQueuePage() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold sm:text-3xl">Проверка</h1>
-          <p className="text-muted-foreground mt-1">Баллы команды получают только после вашего решения.</p>
+          <p className="text-muted-foreground mt-1">Баллы начисляются только после вашего решения.</p>
         </div>
         <Segmented
           label="Статус"
@@ -104,8 +147,8 @@ export function ReviewQueuePage() {
           {list.data?.map((e) => (
             <li key={e.id}>
               <button type="button" onClick={() => setOpenId(e.id)} className="hover:bg-muted/50 grid w-full gap-1 px-4 py-3 text-left transition-colors">
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="font-medium">{teamName(e)}</span>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm">
+                  <span className="font-medium">{who(e)}</span>
                   <span className="text-muted-foreground">{EVIDENCE_SUBJECT[e.subjectType] ?? 'Подтверждение'}</span>
                   <span className="text-muted-foreground">{EVIDENCE_KIND[e.kind].toLowerCase()}</span>
                   <span className="text-muted-foreground ml-auto text-xs">{formatRelative(e.createdAt)}</span>
@@ -116,7 +159,7 @@ export function ReviewQueuePage() {
           ))}
         </ul>
       )}
-      <EvidenceSheet id={openId} teamName={opened ? teamName(opened) : ''} onClose={() => setOpenId(null)} />
+      <EvidenceSheet id={openId} teamName={opened ? who(opened) : ''} onClose={() => setOpenId(null)} />
     </div>
   );
 }

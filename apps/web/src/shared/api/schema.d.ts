@@ -1250,7 +1250,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Очередь проверки (куратор) или подтверждения своих команд (студент) */
+        /** Очередь проверки (куратор или преподаватель — по своей роли) или подтверждения своих команд (студент) */
         get: {
             parameters: {
                 query?: {
@@ -1270,7 +1270,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Evidence"][];
+                        "application/json": components["schemas"]["EvidenceQueueItem"][];
                     };
                 };
                 /** @description Нет или неверный токен */
@@ -3762,6 +3762,1976 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/practice/modules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Учебные модули; для студента — результат теста */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeModule"][];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/practice/modules/{id}/quiz": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Вопросы теста без ключа; последний результат студента */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeQuiz"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Сдать тест: разбор по вопросам; баллы только за первую попытку */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PracticeQuizInput"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeQuizResult"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/practice/assignments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Практические задания модуля */
+        get: {
+            parameters: {
+                query?: {
+                    moduleId?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeAssignment"][];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Новое задание с критериями (преподаватель) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PracticeNewAssignment"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeAssignment"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/practice/assignments/{id}/attempts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Мои попытки по заданию */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeAttempt"][];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Новая попытка: проверка моделью по критериям задания (без оценки) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PracticeAttemptInput"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeAttempt"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/practice/attempts/{id}/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Отправить последнюю попытку преподавателю */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeAttempt"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/practice/attempts/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Попытка с заданием и проверкой (владелец или преподаватель) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeAttemptDetail"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/practice/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Панель преподавателя: студенты × задания, проблемные темы */
+        get: {
+            parameters: {
+                query: {
+                    moduleId: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeDashboard"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/practice/recommendation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Следующее задание по найденным пробелам */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PracticeRecommendation"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Исследовательские задачи */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchTask"][];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Новая задача с рубрикой (преподаватель) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ResearchNewTask"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchTask"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/tasks/{id}/workspaces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Команда берёт задачу и фиксирует начальную позицию */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ResearchStartInput"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchWorkspace"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/workspaces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Исследования команд (студент — свои, преподаватель — все) */
+        get: {
+            parameters: {
+                query?: {
+                    taskId?: string;
+                    teamId?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchWorkspaceSummary"][];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/workspaces/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Рабочее пространство: ветки, доска, карта аргументов, вклад, вывод */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchWorkspace"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/evidence/{id}/workspace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Исследование по подтверждению вывода (для проверки) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchWorkspace"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/workspaces/{id}/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Роли участников в исследовании */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ResearchRolesInput"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchWorkspace"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/workspaces/{id}/threads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Новая ветка обсуждения (гипотеза) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ResearchNewThread"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchThread"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/threads/{id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Сообщение в ветке (баллов не даёт) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ResearchNewMessage"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchMessage"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/workspaces/{id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Сообщения после курсора (для опроса) */
+        get: {
+            parameters: {
+                query?: {
+                    cursor?: string;
+                };
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchMessagePage"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/workspaces/{id}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Аргумент, источник или вопрос на доску */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ResearchNewItem"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchItem"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/workspaces/{id}/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Сводка обсуждения моделью: недостающие аргументы и вопросы */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchWorkspace"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Модель недоступна или нарушила схему */
+                502: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/research/workspaces/{id}/conclusion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Отправить вывод преподавателю: каждое утверждение со ссылками на доску */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ResearchConclusionInput"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResearchWorkspace"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/match/applications/{id}/decision": {
         parameters: {
             query?: never;
@@ -3879,7 +5849,7 @@ export interface components {
          * @description Роль пользователя на платформе
          * @enum {string}
          */
-        Role: "student" | "mentor" | "business";
+        Role: "student" | "mentor" | "business" | "teacher";
         Problem: {
             type: string;
             title: string;
@@ -4024,7 +5994,7 @@ export interface components {
             /** @enum {string} */
             contentType: "image/png" | "image/jpeg" | "image/webp" | "application/pdf";
         };
-        Evidence: {
+        EvidenceQueueItem: {
             /** Format: uuid */
             id: string;
             module: string;
@@ -4040,6 +6010,7 @@ export interface components {
             url: string | null;
             storagePath: string | null;
             note: string;
+            reviewerRole: components["schemas"]["Role"];
             /** @enum {string} */
             status: "pending" | "approved" | "rejected" | "adjusted";
             /** Format: uuid */
@@ -4049,6 +6020,7 @@ export interface components {
             reviewedAt: string | null;
             /** Format: date-time */
             createdAt: string;
+            submitterName: string;
         };
         EvidenceDetail: {
             /** Format: uuid */
@@ -4066,6 +6038,7 @@ export interface components {
             url: string | null;
             storagePath: string | null;
             note: string;
+            reviewerRole: components["schemas"]["Role"];
             /** @enum {string} */
             status: "pending" | "approved" | "rejected" | "adjusted";
             /** Format: uuid */
@@ -4082,6 +6055,33 @@ export interface components {
             evidence: components["schemas"]["Evidence"];
             /** @description Все начисления, связанные с этим подтверждением */
             awarded: components["schemas"]["PointEvent"][];
+        };
+        Evidence: {
+            /** Format: uuid */
+            id: string;
+            module: string;
+            subjectType: string;
+            /** Format: uuid */
+            subjectId: string;
+            /** Format: uuid */
+            teamId: string | null;
+            /** Format: uuid */
+            submittedBy: string;
+            /** @enum {string} */
+            kind: "link" | "screenshot" | "interview" | "report";
+            url: string | null;
+            storagePath: string | null;
+            note: string;
+            reviewerRole: components["schemas"]["Role"];
+            /** @enum {string} */
+            status: "pending" | "approved" | "rejected" | "adjusted";
+            /** Format: uuid */
+            reviewedBy: string | null;
+            reviewComment: string | null;
+            /** Format: date-time */
+            reviewedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
         };
         PointEvent: {
             /** Format: uuid */
@@ -4506,6 +6506,426 @@ export interface components {
             verdict: "positive" | "needs_work";
             /** @default  */
             comment: string;
+        };
+        PracticeModule: {
+            /** Format: uuid */
+            id: string;
+            slug: string;
+            title: string;
+            description: string;
+            topics: string[];
+            quiz: {
+                correct: number;
+                total: number;
+            } | null;
+        };
+        PracticeQuiz: {
+            /** Format: uuid */
+            moduleId: string;
+            questions: components["schemas"]["PracticeQuestion"][];
+            result: components["schemas"]["PracticeQuizResult"];
+        };
+        PracticeQuestion: {
+            /** Format: uuid */
+            id: string;
+            topic: string;
+            text: string;
+            options: string[];
+        };
+        PracticeQuizResult: {
+            correct: number;
+            total: number;
+            /** @description Начислено за этот тест (только за первую попытку) */
+            points: number;
+            perQuestion: {
+                /** Format: uuid */
+                questionId: string;
+                option: number | null;
+                correct: number;
+                ok: boolean;
+                explanation: string;
+            }[];
+        } | null;
+        PracticeQuizInput: {
+            answers: {
+                /** Format: uuid */
+                questionId: string;
+                option: number;
+            }[];
+        };
+        PracticeAssignment: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            moduleId: string;
+            title: string;
+            condition: string;
+            materials: string;
+            /** @description Сложность от 1 до 3 */
+            difficulty: number;
+            criteria: components["schemas"]["PracticeCriterion"][];
+            /** Format: date-time */
+            createdAt: string;
+            /** @enum {string|null} */
+            myStatus: "checked" | "sent" | "approved" | "rejected" | null;
+        };
+        PracticeCriterion: {
+            id: string;
+            title: string;
+            description: string;
+            topic: string;
+            maxPoints: number;
+        };
+        PracticeNewAssignment: {
+            /** Format: uuid */
+            moduleId: string;
+            title: string;
+            condition: string;
+            /** @default  */
+            materials: string;
+            /** @description Сложность от 1 до 3 */
+            difficulty: number;
+            criteria: {
+                title: string;
+                description: string;
+                topic: string;
+                maxPoints: number;
+            }[];
+        };
+        PracticeAttempt: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            assignmentId: string;
+            /** Format: uuid */
+            profileId: string;
+            attemptNo: number;
+            answer: string;
+            /** @description null — модель была недоступна, работу проверит преподаватель */
+            check: {
+                criteria: components["schemas"]["PracticeCheckedCriterion"][];
+                droppedQuotes: number;
+            } | null;
+            /** @enum {string} */
+            status: "checked" | "sent" | "approved" | "rejected";
+            /** Format: uuid */
+            evidenceId: string | null;
+            preview: {
+                correctness: number;
+                completeness: number;
+                selfCorrection: number;
+                completion: number;
+            };
+            corrected: string[];
+            /** Format: date-time */
+            createdAt: string;
+        };
+        PracticeCheckedCriterion: {
+            criterionId: string;
+            /** @enum {string|null} */
+            verdict: "met" | "partial" | "missed" | null;
+            explanation: string;
+            errors: {
+                quote: string;
+                issue: string;
+            }[];
+            recommendation: string;
+        };
+        PracticeAttemptInput: {
+            answer: string;
+        };
+        PracticeAttemptDetail: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            assignmentId: string;
+            /** Format: uuid */
+            profileId: string;
+            attemptNo: number;
+            answer: string;
+            /** @description null — модель была недоступна, работу проверит преподаватель */
+            check: {
+                criteria: components["schemas"]["PracticeCheckedCriterion"][];
+                droppedQuotes: number;
+            } | null;
+            /** @enum {string} */
+            status: "checked" | "sent" | "approved" | "rejected";
+            /** Format: uuid */
+            evidenceId: string | null;
+            preview: {
+                correctness: number;
+                completeness: number;
+                selfCorrection: number;
+                completion: number;
+            };
+            corrected: string[];
+            /** Format: date-time */
+            createdAt: string;
+            assignment: components["schemas"]["PracticeAssignment"];
+            studentName: string;
+        };
+        PracticeDashboard: {
+            assignments: {
+                /** Format: uuid */
+                id: string;
+                title: string;
+                students: number;
+                approved: number;
+                avgAttempts: number;
+            }[];
+            students: {
+                /** Format: uuid */
+                profileId: string;
+                name: string;
+                quiz: {
+                    correct: number;
+                    total: number;
+                } | null;
+                points: number;
+                cells: {
+                    /** Format: uuid */
+                    assignmentId: string;
+                    attempts: number;
+                    /** @enum {string} */
+                    status: "checked" | "sent" | "approved" | "rejected";
+                    /** Format: uuid */
+                    evidenceId: string | null;
+                    /** @description Только как дополнительный показатель, баллов не даёт */
+                    minutesToSend: number | null;
+                }[];
+            }[];
+            problemTopics: {
+                topic: string;
+                quizWrong: number;
+                criteriaMissed: number;
+                share: number;
+            }[];
+        };
+        PracticeRecommendation: {
+            /** Format: uuid */
+            assignmentId: string;
+            title: string;
+            topic: string | null;
+            reason: string;
+        } | null;
+        ResearchTask: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            question: string;
+            context: string;
+            rubric: components["schemas"]["ResearchRubricItem"][];
+            /** Format: date-time */
+            createdAt: string;
+        };
+        ResearchRubricItem: {
+            key: components["schemas"]["ResearchRubricKey"];
+            title: string;
+            description: string;
+            maxPoints: number;
+        };
+        /** @enum {string} */
+        ResearchRubricKey: "argumentation" | "completeness" | "understanding" | "originality";
+        ResearchNewTask: {
+            title: string;
+            question: string;
+            /** @default  */
+            context: string;
+            rubric: {
+                key: components["schemas"]["ResearchRubricKey"];
+                maxPoints: number;
+                /** @default  */
+                description: string;
+            }[];
+        };
+        ResearchWorkspace: {
+            /** Format: uuid */
+            id: string;
+            task: components["schemas"]["ResearchTask"];
+            /** Format: uuid */
+            teamId: string;
+            teamName: string;
+            status: components["schemas"]["ResearchWorkspaceStatus"];
+            initialPosition: string;
+            threads: components["schemas"]["ResearchThread"][];
+            items: components["schemas"]["ResearchItem"][];
+            summary: components["schemas"]["ResearchSummary"];
+            argumentMap: components["schemas"]["ResearchArgumentMap"];
+            /** @description Вклад по действиям; сообщения не учитываются */
+            contribution: components["schemas"]["ResearchContribution"][];
+            conclusion: components["schemas"]["ResearchConclusion"];
+            points: number;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @enum {string} */
+        ResearchWorkspaceStatus: "active" | "submitted" | "approved";
+        ResearchThread: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            /** Format: uuid */
+            createdBy: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        ResearchItem: {
+            /** Format: uuid */
+            id: string;
+            kind: components["schemas"]["ResearchItemKind"];
+            text: string;
+            url: string | null;
+            /** Format: uuid */
+            threadId: string | null;
+            /** @enum {string|null} */
+            stance: "for" | "against" | null;
+            linkIds: string[];
+            /** Format: uuid */
+            createdBy: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @enum {string} */
+        ResearchItemKind: "argument" | "source" | "question";
+        ResearchSummary: {
+            text: string;
+            threads: {
+                /** Format: uuid */
+                threadId: string;
+                summary: string;
+                keyItemIds: string[];
+                missingArguments: string[];
+            }[];
+            missingQuestions: string[];
+            /** Format: date-time */
+            createdAt: string;
+        } | null;
+        ResearchArgumentMap: {
+            threads: {
+                /** Format: uuid */
+                threadId: string;
+                for: string[];
+                against: string[];
+                /** @description Аргументы без связанного источника */
+                unsupported: string[];
+            }[];
+            /** @description Ветки без аргументов «против» */
+            noCounterArguments: string[];
+        };
+        ResearchContribution: {
+            /** Format: uuid */
+            profileId: string;
+            name: string;
+            /** @enum {string|null} */
+            role: "coordinator" | "researcher" | "critic" | "editor" | null;
+            sourcesAdded: number;
+            argumentsAdded: number;
+            questionsAdded: number;
+            citedInConclusion: number;
+        };
+        ResearchConclusion: {
+            /** Format: uuid */
+            id: string;
+            version: number;
+            finalPosition: string;
+            statements: components["schemas"]["ResearchStatement"][];
+            assessment: components["schemas"]["ResearchAssessment"];
+            growth: components["schemas"]["ResearchGrowth"];
+            /** Format: uuid */
+            evidenceId: string | null;
+            /** Format: date-time */
+            createdAt: string;
+        } | null;
+        ResearchStatement: {
+            text: string;
+            itemIds: string[];
+        };
+        ResearchAssessment: {
+            rubric: {
+                key: components["schemas"]["ResearchRubricKey"];
+                /** @enum {string|null} */
+                level: "strong" | "adequate" | "weak" | null;
+                explanation: string;
+                itemIds: string[];
+            }[];
+            growth: {
+                initialQuote: string;
+                finalQuote: string;
+                explanation: string;
+            } | null;
+            recommendations: string[];
+        } | null;
+        ResearchGrowth: {
+            citedSources: number;
+            citedArguments: number;
+            counterArgumentsAddressed: number;
+            statements: number;
+        };
+        ResearchStartInput: {
+            /** Format: uuid */
+            teamId: string;
+            initialPosition: string;
+        };
+        ResearchWorkspaceSummary: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            taskId: string;
+            taskTitle: string;
+            /** Format: uuid */
+            teamId: string;
+            teamName: string;
+            status: components["schemas"]["ResearchWorkspaceStatus"];
+            items: number;
+            points: number;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        ResearchRolesInput: {
+            roles: {
+                /** Format: uuid */
+                profileId: string;
+                /** @enum {string} */
+                role: "coordinator" | "researcher" | "critic" | "editor";
+            }[];
+        };
+        ResearchNewThread: {
+            title: string;
+        };
+        ResearchMessage: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            threadId: string;
+            /** Format: uuid */
+            authorId: string;
+            text: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        ResearchNewMessage: {
+            text: string;
+        };
+        ResearchMessagePage: {
+            items: components["schemas"]["ResearchMessage"][];
+            /** @description Курсор следующей страницы или null */
+            nextCursor: string | null;
+        };
+        ResearchNewItem: {
+            kind: components["schemas"]["ResearchItemKind"];
+            text: string;
+            /** Format: uri */
+            url?: string;
+            /** Format: uuid */
+            threadId?: string;
+            /** @enum {string} */
+            stance?: "for" | "against";
+            /** @default [] */
+            linkIds: string[];
+        };
+        ResearchConclusionInput: {
+            finalPosition: string;
+            statements: components["schemas"]["ResearchStatement"][];
         };
         DecisionResult: {
             application: components["schemas"]["Application"];
