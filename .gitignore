@@ -9,7 +9,6 @@ coverage/
 supabase/.branches
 supabase/.temp
 docs/*
-CLAUDE.md
 
 # Генерируется pnpm seed: локальные тестовые аккаунты
 data/demo-accounts.json

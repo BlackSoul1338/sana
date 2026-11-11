@@ -98,6 +98,25 @@ export async function eventsForEvidence(db: DbLike, evidenceId: string): Promise
   return db.select().from(pointEvents).where(eq(pointEvents.evidenceId, evidenceId));
 }
 
+/** Totals for several subjects in one query; subjects without events get 0. */
+export async function totalsFor(db: DbLike, subjectType: SubjectType, subjectIds: string[], module?: string): Promise<Map<string, number>> {
+  const totals = new Map(subjectIds.map((id) => [id, 0]));
+  if (subjectIds.length === 0) return totals;
+  const rows = await db
+    .select({ subjectId: pointEvents.subjectId, total: sql<number>`coalesce(sum(${pointEvents.points}), 0)::int` })
+    .from(pointEvents)
+    .where(
+      and(
+        eq(pointEvents.subjectType, subjectType),
+        inArray(pointEvents.subjectId, subjectIds),
+        module ? eq(pointEvents.module, module) : undefined,
+      ),
+    )
+    .groupBy(pointEvents.subjectId);
+  for (const r of rows) totals.set(r.subjectId, r.total);
+  return totals;
+}
+
 export async function totalFor(db: DbLike, subjectType: SubjectType, subjectId: string, module?: string): Promise<number> {
   const [r] = await db
     .select({ total: sql<number>`coalesce(sum(${pointEvents.points}), 0)::int` })
