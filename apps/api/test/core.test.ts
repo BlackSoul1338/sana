@@ -65,6 +65,8 @@ describe('ядро: профиль, команды, права', () => {
     expect(res.status).toBe(200);
     expect(res.body.evidence).toMatchObject({ status: 'adjusted', reviewerRole: 'teacher', reviewedBy: teacher.id });
     expect(res.body.awarded).toEqual([expect.objectContaining({ ruleId: 'teacher_adjustment', subjectType: 'profile', subjectId: student.id, points: 7 })]);
+    // Accepted with an adjustment stays in the reviewer's «accepted» history.
+    expect((await api.get('/api/evidence?status=approved', teacher)).body.map((e: any) => e.id)).toEqual([practiceEv!.id]);
   });
 
   it('команда: создатель — участник, чужой студент не может менять, куратор может', async () => {
@@ -100,11 +102,18 @@ describe('ядро: профиль, команды, права', () => {
     expect((await api.post('/api/points/adjustments', alice, body)).status).toBe(403);
     expect((await api.post('/api/points/adjustments', mentor, body)).status).toBe(201);
     expect((await api.post('/api/points/adjustments', mentor, { ...body, points: -5, comment: 'Штраф за просрочку' })).status).toBe(201);
+    // Learning-track points are the teacher's: the mentor cannot touch them.
+    expect((await api.post('/api/points/adjustments', mentor, { ...body, subjectType: 'profile', subjectId: alice.id, module: 'practice' })).status).toBe(403);
     const board = await api.get('/api/leaderboard?subjectType=team', alice);
     expect(board.body[0]).toMatchObject({ name: 'Бета', total: 10, rank: 1 });
     const events = await api.get(`/api/points?subjectType=team&subjectId=${team.id}`, alice);
     expect(events.body).toHaveLength(2);
     expect(events.body.every((e: any) => e.explanation.startsWith('Корректировка куратора'))).toBe(true);
+    // Someone else's ledger stays closed to students; reviewers can read it.
+    const outsider = await createUser('student');
+    expect((await api.get(`/api/points?subjectType=team&subjectId=${team.id}`, outsider)).status).toBe(403);
+    expect((await api.get(`/api/points?subjectType=profile&subjectId=${alice.id}`, outsider)).status).toBe(403);
+    expect((await api.get(`/api/points?subjectType=team&subjectId=${team.id}`, mentor)).status).toBe(200);
   });
 
   it('поиск студентов по имени: только студенты, бизнесу недоступно', async () => {

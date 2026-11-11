@@ -98,7 +98,7 @@ function EvidenceSheet({ id, teamName, onClose, onDecided }: { id: string | null
               ))}
             {e.status === 'pending' ? (
               <div className="border-t pt-6">
-                <ReviewForm evidenceId={e.id} subjectName={teamName} onDone={onDecided} />
+                <ReviewForm evidenceId={e.id} subjectName={teamName} individual={!e.teamId} onDone={onDecided} />
               </div>
             ) : (
               <div className="grid gap-1 border-t pt-4 text-sm">
@@ -139,7 +139,11 @@ export function ReviewQueuePage() {
         <Segmented
           label="Статус"
           value={status}
-          onChange={setStatus}
+          onChange={(s) => {
+            setStatus(s);
+            // The folded row belongs to the queue it left; in another tab the same item must show.
+            setLeaving(null);
+          }}
           options={[
             { value: 'pending', label: 'Ждут' },
             { value: 'approved', label: 'Приняты' },

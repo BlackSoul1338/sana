@@ -54,7 +54,8 @@ describe('Team Research Arena', () => {
     const q1 = (await api.post(`${w}/items`, ann, { kind: 'question', text: 'Сколько бариста на смене?' })).body;
     expect((await api.post(`${w}/items`, ann, { kind: 'source', text: 'Без ссылки' })).status).toBe(422);
 
-    const summarized = (await api.post(`${w}/summary`, teacher)).body;
+    expect((await api.post(`${w}/summary`, teacher)).status).toBe(403);
+    const summarized = (await api.post(`${w}/summary`, bob)).body;
     expect(summarized.summary.threads[0]).toMatchObject({ threadId: thread.id, keyItemIds: [a1.id] });
     expect(summarized.argumentMap.noCounterArguments).toEqual([thread.id]);
 

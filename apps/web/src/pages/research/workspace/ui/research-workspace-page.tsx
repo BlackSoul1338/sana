@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
+import { ReturnNote } from '@/entities/evidence';
 import { ConclusionView, workspaceQuery } from '@/entities/research';
 import { useMe } from '@/entities/viewer';
 import { WS_STATUS } from '@/shared/config';
@@ -66,7 +67,11 @@ export function ResearchWorkspacePage({ workspaceId }: { workspaceId: string }) 
         <SectionTitle>Вывод</SectionTitle>
         {editable ? (
           <>
-            {ws.conclusion && <p className="bg-warning-soft mb-4 rounded-md px-3 py-2 text-sm">Преподаватель вернул вывод на доработку. Исправьте утверждения и отправьте снова.</p>}
+            {ws.conclusion?.evidenceId && (
+              <div className="mb-4">
+                <ReturnNote evidenceId={ws.conclusion.evidenceId}>Преподаватель вернул вывод на доработку. Исправьте утверждения и отправьте снова.</ReturnNote>
+              </div>
+            )}
             <ConclusionEditor ws={ws} />
           </>
         ) : ws.conclusion ? (

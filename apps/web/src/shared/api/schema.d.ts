@@ -1254,6 +1254,7 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
+                    /** @description approved includes adjusted (accepted with an adjustment) */
                     status?: "pending" | "approved" | "rejected" | "adjusted";
                     module?: string;
                     teamId?: string;
@@ -1590,7 +1591,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Журнал начислений субъекта с объяснениями */
+        /** Журнал начислений с объяснениями: свой, своей команды или организации; проверяющему — любой */
         get: {
             parameters: {
                 query: {
@@ -5562,7 +5563,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Сводка обсуждения моделью: недостающие аргументы и вопросы */
+        /** Сводка обсуждения моделью: недостающие аргументы и вопросы (участник команды) */
         post: {
             parameters: {
                 query?: never;
@@ -6107,7 +6108,7 @@ export interface components {
             decision: "approve" | "reject" | "adjust";
             /** @default  */
             comment: string;
-            /** @description Только для adjust: поправка к баллам команды с обязательным комментарием */
+            /** @description Только для adjust: поправка с обязательным комментарием — команде, а работе без команды — её автору */
             adjustPoints?: number;
         };
         LeaderboardEntry: {

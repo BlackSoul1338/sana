@@ -1,8 +1,10 @@
+import { practice } from '@sana/contracts';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { ReturnNote } from '@/entities/evidence';
 import { assignmentsQuery, attemptsQuery, CheckResult, practiceKeys, type PracticeAttempt } from '@/entities/practice';
 import { api, problemMessage, unwrap } from '@/shared/api';
 import { DIFFICULTY } from '@/shared/config';
@@ -50,6 +52,8 @@ export function PracticeAssignmentPage({ assignmentId }: { assignmentId: string 
   const list = attempts.data ?? [];
   const last = list.at(-1);
   const locked = last?.status === 'sent' || last?.status === 'approved';
+  const returned = locked ? undefined : list.findLast((t) => t.status === 'rejected');
+  const canCheck = list.length < practice.MAX_ATTEMPTS || last?.status === 'rejected';
   const answer = draft ?? last?.answer ?? '';
 
   return (
@@ -60,7 +64,7 @@ export function PracticeAssignmentPage({ assignmentId }: { assignmentId: string 
       </Link>
       <header>
         <h1 className="text-2xl font-semibold sm:text-3xl">{a.title}</h1>
-        <p className="text-muted-foreground mt-1">{DIFFICULTY[a.difficulty as 1 | 2 | 3]} уровень</p>
+        <p className="text-muted-foreground mt-1">Сложность: {DIFFICULTY[a.difficulty as 1 | 2 | 3].toLowerCase()}</p>
       </header>
 
       <section className="grid gap-3">
@@ -97,13 +101,19 @@ export function PracticeAssignmentPage({ assignmentId }: { assignmentId: string 
 
       {!locked && (
         <section className="grid gap-3">
-          <SectionTitle>{last ? 'Исправленный ответ' : 'Ваш ответ'}</SectionTitle>
-          <Textarea rows={10} value={answer} onChange={(e) => setDraft(e.target.value)} placeholder="Опишите решение по шагам, приложите ключевой код." aria-label="Ответ" />
+          <SectionTitle aside={last && list.length < practice.MAX_ATTEMPTS && <span className="text-muted-foreground text-sm">осталось проверок: {practice.MAX_ATTEMPTS - list.length}</span>}>
+            {last ? 'Исправленный ответ' : 'Ваш ответ'}
+          </SectionTitle>
+          {returned?.evidenceId && <ReturnNote evidenceId={returned.evidenceId}>Комментарий преподавателя к возвращённой работе:</ReturnNote>}
+          {!canCheck && <p className="text-muted-foreground text-sm">Проверки закончились — отправьте последнюю попытку преподавателю.</p>}
+          <Textarea rows={10} readOnly={!canCheck} value={answer} onChange={(e) => setDraft(e.target.value)} placeholder="Опишите решение по шагам, приложите ключевой код." aria-label="Ответ" />
           <FormError message={check.isError ? problemMessage(check.error) : send.isError ? problemMessage(send.error) : undefined} />
           <div className="flex flex-wrap gap-3">
-            <Button disabled={answer.trim().length < 20 || check.isPending || (draft === null && !!last)} onClick={() => check.mutate(answer)}>
-              {check.isPending ? 'Проверяем…' : 'Проверить'}
-            </Button>
+            {canCheck && (
+              <Button disabled={answer.trim().length < 20 || check.isPending || (draft === null && !!last)} onClick={() => check.mutate(answer)}>
+                {check.isPending ? 'Проверяем…' : 'Проверить'}
+              </Button>
+            )}
             {last?.status === 'checked' && (
               <Button variant="outline" disabled={send.isPending || draft !== null} onClick={() => send.mutate(last.id)}>
                 Отправить преподавателю

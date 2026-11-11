@@ -183,7 +183,8 @@ export async function createAttempt(ctx: Ctx, assignmentId: string, input: z.inf
   if (!quiz) throw rule('Сначала пройдите тест модуля');
   const before = await myAttempts(ctx.db, a.id, p.id);
   if (before.some((x) => x.status === 'sent' || x.status === 'approved')) throw conflict('Работа уже у преподавателя');
-  if (before.length >= MAX_ATTEMPTS) throw conflict(`Попыток не больше ${MAX_ATTEMPTS}`);
+  // A teacher's return must never leave the student without a way forward, even at the cap.
+  if (before.length >= MAX_ATTEMPTS && before.at(-1)?.status !== 'rejected') throw conflict(`Попыток не больше ${MAX_ATTEMPTS}`);
 
   // The model runs outside the transaction; when it is unavailable the work still goes to the teacher unchecked.
   let check: practice.Check | null = null;

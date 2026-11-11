@@ -18,8 +18,21 @@ import { Textarea } from '@/shared/ui/textarea';
 type Input_ = z.input<typeof ReviewInput>;
 type Output = z.output<typeof ReviewInput>;
 
-/** `onDone` runs before the lists refetch, so the caller can let the decided row leave first. */
-export function ReviewForm({ evidenceId, subjectName, onDone }: { evidenceId: string; subjectName?: string; onDone: () => void | Promise<void> }) {
+/**
+ * `onDone` runs before the lists refetch, so the caller can let the decided row leave first.
+ * `individual`: work without a team, so an adjustment goes to the student.
+ */
+export function ReviewForm({
+  evidenceId,
+  subjectName,
+  individual = false,
+  onDone,
+}: {
+  evidenceId: string;
+  subjectName?: string;
+  individual?: boolean;
+  onDone: () => void | Promise<void>;
+}) {
   const queryClient = useQueryClient();
   const form = useForm<Input_, unknown, Output>({
     resolver: zodResolver(ReviewInput),
@@ -72,7 +85,7 @@ export function ReviewForm({ evidenceId, subjectName, onDone }: { evidenceId: st
         )}
       />
       {decision === 'adjust' && (
-        <Field label="Поправка к баллам команды" htmlFor="adj" error={errors.adjustPoints?.message} hint="От −200 до 200, добавится к начислению по правилам">
+        <Field label={individual ? 'Поправка к баллам студента' : 'Поправка к баллам команды'} htmlFor="adj" error={errors.adjustPoints?.message} hint="От −200 до 200, добавится к начислению по правилам">
           <Input id="adj" type="number" className="w-28" {...form.register('adjustPoints', { setValueAs: (v: string) => (v === '' ? undefined : Number(v)) })} />
         </Field>
       )}

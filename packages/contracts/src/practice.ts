@@ -7,6 +7,9 @@ export type Verdict = z.infer<typeof Verdict>;
 
 export const AttemptStatus = z.enum(['checked', 'sent', 'approved', 'rejected']);
 
+/** Model checks per assignment; a teacher's return always leaves one more attempt. */
+export const MAX_ATTEMPTS = 5;
+
 export const Module = z
   .object({
     id: Id,
