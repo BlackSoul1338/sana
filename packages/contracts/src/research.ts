@@ -3,10 +3,10 @@ import { Id, Page, Timestamp } from './common.js';
 
 export const RUBRIC_KEYS = ['argumentation', 'completeness', 'understanding', 'originality'] as const;
 export const RubricKey = z.enum(RUBRIC_KEYS).meta({ id: 'ResearchRubricKey' });
-export const Level = z.enum(['strong', 'adequate', 'weak']).meta({ id: 'ResearchLevel' });
-export const ResearchRole = z.enum(['coordinator', 'researcher', 'critic', 'editor']).meta({ id: 'ResearchRole' });
+export const Level = z.enum(['strong', 'adequate', 'weak']);
+export const ResearchRole = z.enum(['coordinator', 'researcher', 'critic', 'editor']);
 export const ItemKind = z.enum(['argument', 'source', 'question']).meta({ id: 'ResearchItemKind' });
-export const Stance = z.enum(['for', 'against']).meta({ id: 'ResearchStance' });
+export const Stance = z.enum(['for', 'against']);
 export const WorkspaceStatus = z.enum(['active', 'submitted', 'approved']).meta({ id: 'ResearchWorkspaceStatus' });
 
 export const RubricItem = z

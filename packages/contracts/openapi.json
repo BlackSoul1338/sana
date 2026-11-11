@@ -2862,7 +2862,17 @@
             "format": "date-time"
           },
           "myStatus": {
-            "$ref": "#/components/schemas/PracticeAttemptStatus"
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "checked",
+              "sent",
+              "approved",
+              "rejected",
+              null
+            ]
           }
         },
         "required": [
@@ -2904,19 +2914,6 @@
           "description",
           "topic",
           "maxPoints"
-        ]
-      },
-      "PracticeAttemptStatus": {
-        "type": [
-          "string",
-          "null"
-        ],
-        "enum": [
-          "checked",
-          "sent",
-          "approved",
-          "rejected",
-          null
         ]
       },
       "PracticeNewAssignment": {
@@ -3034,7 +3031,13 @@
             "description": "null — модель была недоступна, работу проверит преподаватель"
           },
           "status": {
-            "$ref": "#/components/schemas/PracticeAttemptStatus"
+            "type": "string",
+            "enum": [
+              "checked",
+              "sent",
+              "approved",
+              "rejected"
+            ]
           },
           "evidenceId": {
             "type": [
@@ -3098,7 +3101,16 @@
             "type": "string"
           },
           "verdict": {
-            "$ref": "#/components/schemas/PracticeVerdict"
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "met",
+              "partial",
+              "missed",
+              null
+            ]
           },
           "explanation": {
             "type": "string"
@@ -3131,18 +3143,6 @@
           "explanation",
           "errors",
           "recommendation"
-        ]
-      },
-      "PracticeVerdict": {
-        "type": [
-          "string",
-          "null"
-        ],
-        "enum": [
-          "met",
-          "partial",
-          "missed",
-          null
         ]
       },
       "PracticeAttemptInput": {
@@ -3202,7 +3202,13 @@
             "description": "null — модель была недоступна, работу проверит преподаватель"
           },
           "status": {
-            "$ref": "#/components/schemas/PracticeAttemptStatus"
+            "type": "string",
+            "enum": [
+              "checked",
+              "sent",
+              "approved",
+              "rejected"
+            ]
           },
           "evidenceId": {
             "type": [
@@ -3347,7 +3353,13 @@
                         "type": "integer"
                       },
                       "status": {
-                        "$ref": "#/components/schemas/PracticeAttemptStatus"
+                        "type": "string",
+                        "enum": [
+                          "checked",
+                          "sent",
+                          "approved",
+                          "rejected"
+                        ]
                       },
                       "evidenceId": {
                         "type": [
@@ -3703,7 +3715,15 @@
             "format": "uuid"
           },
           "stance": {
-            "$ref": "#/components/schemas/ResearchStance"
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "for",
+              "against",
+              null
+            ]
           },
           "linkIds": {
             "type": "array",
@@ -3739,17 +3759,6 @@
           "argument",
           "source",
           "question"
-        ]
-      },
-      "ResearchStance": {
-        "type": [
-          "string",
-          "null"
-        ],
-        "enum": [
-          "for",
-          "against",
-          null
         ]
       },
       "ResearchSummary": {
@@ -3881,7 +3890,17 @@
             "type": "string"
           },
           "role": {
-            "$ref": "#/components/schemas/ResearchRole"
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "coordinator",
+              "researcher",
+              "critic",
+              "editor",
+              null
+            ]
           },
           "sourcesAdded": {
             "type": "integer"
@@ -3904,19 +3923,6 @@
           "argumentsAdded",
           "questionsAdded",
           "citedInConclusion"
-        ]
-      },
-      "ResearchRole": {
-        "type": [
-          "string",
-          "null"
-        ],
-        "enum": [
-          "coordinator",
-          "researcher",
-          "critic",
-          "editor",
-          null
         ]
       },
       "ResearchConclusion": {
@@ -4007,7 +4013,16 @@
                   "$ref": "#/components/schemas/ResearchRubricKey"
                 },
                 "level": {
-                  "$ref": "#/components/schemas/ResearchLevel"
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "strong",
+                    "adequate",
+                    "weak",
+                    null
+                  ]
                 },
                 "explanation": {
                   "type": "string"
@@ -4061,18 +4076,6 @@
           "rubric",
           "growth",
           "recommendations"
-        ]
-      },
-      "ResearchLevel": {
-        "type": [
-          "string",
-          "null"
-        ],
-        "enum": [
-          "strong",
-          "adequate",
-          "weak",
-          null
         ]
       },
       "ResearchGrowth": {
@@ -4176,7 +4179,13 @@
                   "format": "uuid"
                 },
                 "role": {
-                  "$ref": "#/components/schemas/ResearchRole"
+                  "type": "string",
+                  "enum": [
+                    "coordinator",
+                    "researcher",
+                    "critic",
+                    "editor"
+                  ]
                 }
               },
               "required": [
@@ -4290,7 +4299,11 @@
             "format": "uuid"
           },
           "stance": {
-            "$ref": "#/components/schemas/ResearchStance"
+            "type": "string",
+            "enum": [
+              "for",
+              "against"
+            ]
           },
           "linkIds": {
             "type": "array",
