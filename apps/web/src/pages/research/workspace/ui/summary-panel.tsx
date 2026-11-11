@@ -34,7 +34,9 @@ export function SummaryPanel({ ws, editable }: { ws: ResearchWorkspace; editable
           <p className="text-muted-foreground text-xs">Сводка от {formatRelative(s.createdAt)}</p>
         </>
       ) : (
-        <p className="text-muted-foreground text-sm">Модель прочитает обсуждение и доску и подскажет, каких аргументов и вопросов не хватает.</p>
+        <p className="text-muted-foreground text-sm">
+          {editable ? 'Модель прочитает обсуждение и доску и подскажет, каких аргументов и вопросов не хватает.' : 'Команда не запрашивала сводку.'}
+        </p>
       )}
       {editable && (
         <div>
