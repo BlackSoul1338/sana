@@ -1,62 +1,63 @@
-# AI Sana — платформа практических заданий
+# AI Sana — practical tasks platform
 
-AI Sana связывает студенческие команды, кураторов и бизнес вокруг практических задач: команда ведёт проект по этапам и получает баллы только за подтверждённый прогресс, бизнес с помощью модели превращает описание проблемы в карточку задачи, а подбор объясняет, какой команде какая задача подходит.
+[![Русский](https://img.shields.io/badge/README-на_русском-1f6feb)](docs/README.ru.md)
+[![Live demo](https://img.shields.io/badge/demo-sana--alpha--one.vercel.app-ff6b4a?logo=vercel&logoColor=white)](https://sana-alpha-one.vercel.app)
+![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A524-5fa04e?logo=nodedotjs&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-12-f69220?logo=pnpm&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)
+![Hono](https://img.shields.io/badge/Hono-4-e36002?logo=hono&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%7C%20Auth-3ecf8e?logo=supabase&logoColor=white)
+![Cloudflare Workers](https://img.shields.io/badge/API-Cloudflare%20Workers-f38020?logo=cloudflareworkers&logoColor=white)
 
-Репозиторий — pnpm-монорепозиторий: API-first модульный монолит на TypeScript и русскоязычный веб-клиент.
+AI Sana brings student teams, mentors and businesses together around practical tasks. A team runs its project through stages and earns points only for progress a mentor has confirmed; a business turns a problem description into a task card with the help of a model; matching explains which task suits which team.
 
-| Модуль | Что делает |
+The repository is a pnpm monorepo: an API-first modular monolith in TypeScript and a web client (the interface is in Russian).
+
+**Deployment:** [local](docs/local-deploy.md) · [server (Vercel + Cloudflare Workers + Supabase)](docs/server-deploy.md)
+
+| Module | What it does |
 | --- | --- |
-| Ядро | профили и роли (студент, куратор, бизнес), команды и навыки, каталог задач, подтверждения, журнал баллов, рейтинги |
-| Startup Sprint | проект команды, 5 этапов от идеи до тестирования, задачи с технологиями, баллы за подтверждённый прогресс, достижения, следующий шаг |
-| Business Challenge Builder | диалог с бизнесом: проверка полноты, уточняющие вопросы, готовность, карточка задачи, ручная публикация, сравнение до/после |
-| Challenge Match | рекомендации задач команде с объяснением, отклик, решение бизнеса → проект в трекере, отзыв бизнеса и коэффициент реальной задачи |
+| Core | profiles and roles (student, mentor, business), teams and skills, task catalog, evidence, points ledger, leaderboards |
+| Startup Sprint | team project, 5 stages from idea to testing, tasks with technologies, points for confirmed progress, achievements, next step |
+| Business Challenge Builder | dialog with a business: completeness check, follow-up questions, readiness, task card, manual publishing, before/after comparison |
+| Challenge Match | task recommendations for a team with explanations, applications, business decision → project in the tracker, business feedback and a real-task multiplier |
 
-## Пакеты
+## Packages
 
-- `apps/api` (`@sana/api`) — HTTP API на Hono с OpenAPI 3.1: документация на `/docs`, все маршруты под `/api`. Хранит данные в Postgres (Drizzle ORM), проверяет JWT Supabase Auth, файлы подтверждений кладёт в Supabase Storage, модель вызывает через AI SDK и Gemini.
-- `apps/web` (`@sana/web`) — SPA на Vite, React 19, TanStack Router и Query, Tailwind CSS 4 и shadcn/ui; структура по Feature-Sliced Design.
-- `packages/contracts` (`@sana/contracts`) — Zod-схемы запросов и ответов и выгруженный `openapi.json`. Пакет публикуется как исходники TypeScript, без сборки.
+- `apps/api` (`@sana/api`) — HTTP API on Hono with OpenAPI 3.1: docs at `/docs`, all routes under `/api`. Stores data in Postgres (Drizzle ORM), verifies Supabase Auth JWTs, keeps evidence files in Supabase Storage, calls the model through the AI SDK and Gemini. Runs as a Node server locally and as a Cloudflare Worker in production.
+- `apps/web` (`@sana/web`) — SPA on Vite, React 19, TanStack Router and Query, Tailwind CSS 4 and shadcn/ui, structured by Feature-Sliced Design.
+- `packages/contracts` (`@sana/contracts`) — Zod request and response schemas and the exported `openapi.json`. Shipped as TypeScript source, no build step.
 
-Связи: API валидирует запросы схемами из `@sana/contracts` и выгружает из них `openapi.json`; веб генерирует из этого файла типы клиента `openapi-fetch` и использует те же схемы в формах. Supabase в браузере нужен только для входа и загрузки файла по подписанной ссылке — все данные идут через API.
+The API validates requests with `@sana/contracts` and exports `openapi.json` from them; the web client generates its `openapi-fetch` types from that file and reuses the same schemas in forms. In the browser, Supabase is used only to sign in and to upload files through signed URLs; all data goes through the API.
 
-## Веб-клиент
+## Web client
 
-Домашний экран зависит от роли.
+The home screen depends on the role.
 
-- **Студент** — команда (участники, роли, навыки), проекты спринта, проект: карта этапов, следующий шаг, задачи, подтверждения с загрузкой файлов, лента баллов, рейтинг; задачи бизнеса с рекомендациями и отклик; заявки.
-- **Куратор** — очередь проверки (принять / с поправкой / на доработку), проекты: сроки этапов и поправка баллов.
-- **Бизнес** — конструктор задачи: диалог с живой карточкой, сборка и правка карточки, публикация, «до и после»; мои задачи: отклики, решение по заявке, прогресс команды, отзыв на результат.
+- **Student** — team (members, roles, skills), sprint projects; project page: stage map, next step, tasks, evidence with file uploads, points feed, leaderboard; business tasks with recommendations and applying; applications.
+- **Mentor** — review queue (approve / approve with adjustment / send back), projects: stage dates and point adjustments.
+- **Business** — task builder: dialog with a live card, composing and editing the card, publishing, before/after; my tasks: applications, decisions, team progress, feedback on results.
 
-Вход — почта и пароль Supabase Auth. После регистрации пользователь выбирает роль: студент или бизнес; роль куратора самостоятельно не выдаётся.
+Sign-in uses Supabase Auth email and password. After sign-up the user picks a role: student or business; the mentor role cannot be self-assigned.
 
-## Требования
+## Quick start
 
-- Node.js 24 или новее.
-- pnpm 12.17.0 (зафиксирован в `packageManager`, удобно через `corepack enable`).
-- Podman с пользовательским сокетом: скрипты `db:*` запускают Supabase CLI (ставится как dev-зависимость) с `DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock`. Для Docker вызывайте `pnpm exec supabase start` / `stop` / `status` напрямую.
-- Для конструктора задачи — ключ Gemini API. Без него API запускается, конструктор отвечает ошибкой `ai_unavailable`, а подсказка следующего шага формулируется по шаблону.
-
-## Локальный запуск
+Requires Node.js 24+, pnpm 12.17.0 and Podman (or Docker) for the local Supabase. Full walkthrough: [docs/local-deploy.md](docs/local-deploy.md).
 
 ```bash
 pnpm install
 ```
 
 ```bash
-systemctl --user enable --now podman.socket
-```
-
-```bash
 pnpm db:start
 ```
-
-Скопируйте `.env.example` в `.env` в корне и подставьте `PUBLISHABLE_KEY` и `SECRET_KEY` из вывода `pnpm db:status` (см. [Настройка](#настройка)).
 
 ```bash
 cp .env.example .env
 ```
 
-Примените миграции и заполните базу синтетическими данными. `pnpm seed` удаляет все данные и по умолчанию работает только с локальным хостом (`127.0.0.1` или `localhost`); для другого хоста нужен флаг `--force`.
+Fill `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` from `pnpm db:status`, then:
 
 ```bash
 pnpm db:migrate
@@ -66,8 +67,6 @@ pnpm db:migrate
 pnpm seed
 ```
 
-Запустите API и веб в отдельных терминалах:
-
 ```bash
 pnpm dev
 ```
@@ -76,77 +75,33 @@ pnpm dev
 pnpm dev:web
 ```
 
-- API: http://localhost:8787, документация: http://localhost:8787/docs.
-- Веб: http://localhost:5173. API разрешает CORS для адресов из `CORS_ORIGINS` (по умолчанию `http://localhost:5173` и `http://localhost:3000`).
-- Демо-аккаунты после seed: `alice@sana.local` (студент), `mentor@sana.local` (куратор), `daily@sana.local` (бизнес). Пароль seed записывает в `data/demo-accounts.json` — файл в `.gitignore`.
+API: http://localhost:8787 (docs at `/docs`). Web: http://localhost:5173. Demo accounts: `alice@sana.local` (student), `mentor@sana.local`, `daily@sana.local` (business); the password is in `data/demo-accounts.json` after seeding.
 
-Остановка: Ctrl+C в терминалах dev-процессов, затем
+## Configuration
 
-```bash
-pnpm db:stop
-```
+The API and the web client read one `.env` in the repository root: the API through `--env-file-if-exists` in the `@sana/api` scripts, Vite through `envDir`, and only `VITE_*` variables reach the browser. `.env.example` holds values for the local Supabase. The Cloudflare Worker gets the same settings as bindings; see [server deployment](docs/server-deploy.md).
 
-Docker Compose в проекте нет: в контейнерах работает только Supabase, приложение запускается напрямую на Node.
-
-## Настройка
-
-API и веб читают один файл `.env` в корне репозитория: API — через `--env-file-if-exists` в скриптах `@sana/api`, Vite — через `envDir`, причём в браузер попадают только переменные `VITE_*`. Значения по умолчанию в `.env.example` рассчитаны на локальный Supabase.
-
-| Переменная | Обязательна | По умолчанию | Назначение |
+| Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| `DATABASE_URL` | да | — | строка подключения Postgres; локально `postgresql://postgres:postgres@127.0.0.1:54322/postgres` |
-| `SUPABASE_URL` | да | — | адрес Supabase; локально `http://127.0.0.1:54321` |
-| `SUPABASE_PUBLISHABLE_KEY` | да | — | публичный ключ Supabase |
-| `SUPABASE_SECRET_KEY` | да | — | секретный ключ Supabase для API и seed; никогда не передавайте его в веб |
-| `AI_PROVIDER` | нет | `mock` | `google` — вызывать Gemini; `mock` — модель отключена |
-| `GOOGLE_API_KEY` | для `google` | — | ключ Gemini API |
-| `AI_MODEL_FAST` | для `google` | — | модель для быстрых вызовов: ход диалога конструктора, требования к задаче, текст следующего шага |
-| `AI_MODEL_STRONG` | нет | значение `AI_MODEL_FAST` | модель для сборки карточки |
-| `AI_THINKING_FAST`, `AI_THINKING_STRONG` | нет | не задаётся | уровень размышлений `minimal`, `low`, `medium` или `high`; только для моделей, которые его поддерживают |
-| `PORT` | нет | `8787` | порт API |
-| `EVIDENCE_BUCKET` | нет | `evidence` | бакет Storage для файлов подтверждений |
-| `CORS_ORIGINS` | нет | `http://localhost:5173,http://localhost:3000` | адреса веб-клиента через запятую, которым API разрешает запросы |
-| `VITE_API_URL` | да, для веба | — | адрес API, например `http://localhost:8787` |
-| `VITE_SUPABASE_URL` | да, для веба | — | адрес Supabase; в `.env.example` — `$SUPABASE_URL` |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | да, для веба | — | публичный ключ Supabase; в `.env.example` — `$SUPABASE_PUBLISHABLE_KEY` |
+| `DATABASE_URL` | yes | — | Postgres connection string; locally `postgresql://postgres:postgres@127.0.0.1:54322/postgres` |
+| `SUPABASE_URL` | yes | — | Supabase URL; locally `http://127.0.0.1:54321` |
+| `SUPABASE_PUBLISHABLE_KEY` | yes | — | Supabase publishable key |
+| `SUPABASE_SECRET_KEY` | yes | — | Supabase secret key for the API and seeding; never expose it to the web client |
+| `AI_PROVIDER` | no | `mock` | `google` calls Gemini; `mock` disables the model |
+| `GOOGLE_API_KEY` | with `google` | — | Gemini API key |
+| `AI_MODEL_FAST` | with `google` | — | model for quick calls: builder dialog turns, task requirements, next-step text |
+| `AI_MODEL_STRONG` | no | `AI_MODEL_FAST` | model for composing the task card |
+| `AI_THINKING_FAST`, `AI_THINKING_STRONG` | no | unset | thinking level `minimal`, `low`, `medium` or `high`, for models that support it |
+| `PORT` | no | `8787` | API port (Node server) |
+| `EVIDENCE_BUCKET` | no | `evidence` | Storage bucket for evidence files |
+| `CORS_ORIGINS` | no | `http://localhost:5173,http://localhost:3000` | comma-separated web origins allowed to call the API |
+| `VITE_API_URL` | yes, for web | — | API URL, e.g. `http://localhost:8787` |
+| `VITE_SUPABASE_URL` | yes, for web | — | Supabase URL; `.env.example` uses `$SUPABASE_URL` |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | yes, for web | — | Supabase publishable key; `.env.example` uses `$SUPABASE_PUBLISHABLE_KEY` |
 
-API при старте проверяет переменные и завершается со списком ошибок, если обязательные не заданы.
+The API validates the variables on start and exits with a list of errors if required ones are missing.
 
-## Развёртывание
-
-### Веб на Vercel
-
-`apps/web` собирается в статические файлы (`dist`). В `apps/web/vercel.json` все пути переписываются на `index.html`, чтобы прямые ссылки на экраны открывались. На Vercel укажите корневую папку `apps/web` и задайте `VITE_API_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` — Vite подставляет их при сборке, поэтому после изменения нужна новая сборка. Адрес развёрнутого веба добавьте в `CORS_ORIGINS` API.
-
-### API на Cloudflare Workers
-
-Точка входа — `apps/api/src/worker.ts`, настройки — `apps/api/cloudflare.config.ts` (формат CLI `cf`, пока в бете). Postgres подключается через Hyperdrive; на каждый запрос открывается своё соединение. Бакет `evidence` Worker не создаёт: он должен уже существовать (его создают `pnpm dev` и `pnpm seed`). Миграции применяются отдельно: `pnpm db:migrate` с `DATABASE_URL` облачной базы.
-
-1. Войдите (`cf auth login`) и один раз зарегистрируйте поддомен `workers.dev` в панели Cloudflare (Workers → Onboarding).
-2. Создайте Hyperdrive для базы Supabase (параметры — в Supabase → Connect, например session pooler на порту 5432) и запомните его id:
-
-   ```bash
-   cf hyperdrive create --name sana-db --origin-scheme postgresql --origin-host <host> --origin-port 5432 --origin-database postgres --origin-user <user> --origin-password <password>
-   ```
-
-   Отключите кэш запросов Hyperdrive, иначе после записи чтение может вернуть устаревшие данные:
-
-   ```bash
-   cf hyperdrive update <id> --caching-disabled
-   ```
-
-3. Положите секреты в `apps/api/.dev.vars.production` (файл в `.gitignore`): `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `GOOGLE_API_KEY`.
-4. Разверните из `apps/api`. Обычные настройки (`AI_*`, `EVIDENCE_BUCKET`, `CORS_ORIGINS`) берутся из окружения оболочки при развёртывании; незаданные получают значения по умолчанию из таблицы выше.
-
-   ```bash
-   HYPERDRIVE_ID=<id> AI_PROVIDER=google AI_MODEL_FAST=<model> CORS_ORIGINS=https://<web-domain> pnpm deploy:worker --secrets-file .dev.vars.production
-   ```
-
-Локально Worker запускается командой `pnpm --filter @sana/api dev:worker` на http://localhost:8787 (не одновременно с `pnpm dev`) и подключается к локальному Postgres. Секреты для него — в `apps/api/.dev.vars` в формате `.env`.
-
-На бесплатном плане Workers даёт 10 мс процессорного времени на запрос (ожидание базы и модели не считается) и 100 000 запросов в день; Hyperdrive — 100 000 запросов к базе в день.
-
-## Проверки
+## Checks
 
 ```bash
 pnpm typecheck
@@ -164,13 +119,13 @@ pnpm test
 pnpm build
 ```
 
-- `pnpm lint` — ESLint, включая границы модулей API (модули не импортируют друг друга) и правила React-хуков.
-- `pnpm test` — unit-тесты правил, интеграционные HTTP-тесты API и unit-тесты веба. HTTP-тесты пересоздают отдельную базу `sana_test` в локальном Postgres, поэтому нужен запущенный `pnpm db:start`; другой адрес задаётся через `TEST_DATABASE_URL`. Только тесты без базы: `pnpm --filter @sana/api test:unit`.
-- `pnpm --filter @sana/web lint:fsd` — Steiger: слои и публичные API Feature-Sliced Design.
+- `pnpm lint` — ESLint, including API module boundaries (modules don't import each other) and React hooks rules.
+- `pnpm test` — rule unit tests, API HTTP integration tests and web unit tests. The HTTP tests recreate a separate `sana_test` database in the local Postgres, so `pnpm db:start` must be running.
+- `pnpm --filter @sana/web lint:fsd` — Steiger: Feature-Sliced Design layers and public APIs.
 
-## Изменение API
+## Changing the API
 
-После изменения маршрутов или схем выгрузите OpenAPI и перегенерируйте типы клиента:
+After changing routes or schemas, export OpenAPI and regenerate the client types:
 
 ```bash
 pnpm --filter @sana/api openapi
@@ -180,35 +135,38 @@ pnpm --filter @sana/api openapi
 pnpm --filter @sana/web gen:api
 ```
 
-Миграции: после изменения схемы Drizzle — `pnpm db:generate`, затем `pnpm db:migrate`. Миграции включают RLS и снимают права Data API: данные доступны только через API.
+Migrations: after changing the Drizzle schema run `pnpm db:generate`, then `pnpm db:migrate`. Migrations enable RLS and revoke Data API grants: data is reachable only through the API.
 
-Скрипты для модели (нужен `AI_PROVIDER=google` и ключ):
+Model scripts (need `AI_PROVIDER=google` and a key):
 
-- `pnpm --filter @sana/api ai:smoke [модели…]` — доступ к Gemini и структурный ответ.
-- `pnpm --filter @sana/api eval:bcb` — прогон конструктора на 15 описаниях из `data/bcb-descriptions.json`: сильные описания должны получать готовность выше слабых.
-- `pnpm --filter @sana/api demo:match [Команда]` — рекомендации и план роста для команды на данных seed (модель не нужна).
+- `pnpm --filter @sana/api ai:smoke [models…]` — Gemini access and a structured response.
+- `pnpm --filter @sana/api eval:bcb` — runs the builder on the 15 descriptions in `data/bcb-descriptions.json`: strong descriptions must score higher readiness than weak ones.
+- `pnpm --filter @sana/api demo:match [Team]` — recommendations and a growth plan for a seeded team (no model needed).
 
-## Устройство кода
+## Code layout
 
 ```
-packages/contracts/   Zod-схемы API (общие с вебом) и openapi.json
+packages/contracts/   Zod API schemas (shared with web) and openapi.json
 apps/api/src/
-  platform/           env, БД, auth (проверка JWT), ошибки RFC 9457, события, AI-провайдер, storage
-  core/               identity, catalog, evidence, points — общее ядро
-  modules/            sprint, challenge-builder, match — не импортируют друг друга
-  flows/              межмодульные сценарии (принятие заявки → задача → проект Sprint)
-apps/api/drizzle/     SQL-миграции
+  platform/           env, database, auth (JWT verification), RFC 9457 errors, events, AI provider, storage
+  core/               identity, catalog, evidence, points — shared core
+  modules/            sprint, challenge-builder, match — never import each other
+  flows/              cross-module scenarios (accepted application → task → Sprint project)
+  index.ts, worker.ts Node server and Cloudflare Worker entry points
+apps/api/drizzle/     SQL migrations
 apps/web/src/         app → pages → widgets → features → entities → shared (FSD)
-data/                 синтетические данные для seed: навыки, роли, шаблоны, задачи, команды, описания
+data/                 synthetic seed data: skills, roles, templates, tasks, teams, descriptions
+docs/                 deployment guides and the Russian README
+SKILLS/               agent skills for this repository (production deploy)
 ```
 
-Ошибки API приходят в формате `application/problem+json` (RFC 9457); веб показывает ошибки полей прямо в формах.
+API errors use `application/problem+json` (RFC 9457); the web client shows field errors inline in forms.
 
-## Правила предметной области
+## Domain rules
 
-- Баллы считает код, а не модель. Модель классифицирует и формулирует; начисления — чистые функции, журнал только дополняется, ключ идемпотентности не даёт начислить дважды.
-- Баллы — только за подтверждённые куратором действия. Скорость даёт бонус лишь к баллам подтверждённого этапа.
-- Конструктор не придумывает сведения за компанию: цитата модели должна найтись в репликах бизнеса, иначе поле — «не указано». Персональные данные (email, телефон, ИИН с контрольной цифрой, карта по Луну) блокируют публикацию.
-- Подбор использует только навыки, время и интересы команды; рекомендация — не назначение, сотрудничество подтверждают обе стороны.
+- Code computes points, not the model. The model classifies and phrases; awards are pure functions, the ledger is append-only, and an idempotency key prevents double awards.
+- Points only for actions a mentor has confirmed. Speed adds a bonus only to the points of a confirmed stage.
+- The builder never invents facts about the company: the model's quote must be found in the business's own messages, otherwise the field is "not specified". Personal data (email, phone, IIN with a valid check digit, card numbers passing Luhn) blocks publishing.
+- Matching uses only the team's skills, time and interests; a recommendation is not an assignment, and both sides confirm the collaboration.
 
-Шкалы баллов и веса полей — стартовые и задаются в коде: `apps/api/src/modules/sprint/points.config.ts`, `apps/api/src/modules/challenge-builder/readiness.ts`, `apps/api/src/modules/match/scoring.ts`.
+Point scales and field weights are initial values set in code: `apps/api/src/modules/sprint/points.config.ts`, `apps/api/src/modules/challenge-builder/readiness.ts`, `apps/api/src/modules/match/scoring.ts`.
