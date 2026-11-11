@@ -40,7 +40,7 @@ export function CheckResult({ criteria, check, corrected = [], reveal = false }:
                 <span className="text-muted-foreground"> — {e.issue}</span>
               </p>
             ))}
-            {c?.recommendation && <p className="text-muted-foreground text-sm">Что сделать: {c.recommendation}</p>}
+            {c?.recommendation && c.verdict !== 'met' && <p className="text-muted-foreground text-sm">Что сделать: {c.recommendation}</p>}
           </li>
         );
       })}

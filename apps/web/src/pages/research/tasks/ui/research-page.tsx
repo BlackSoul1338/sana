@@ -35,7 +35,7 @@ function StartDialog({ task, teamId, children }: { task: Schemas['ResearchTask']
           <DialogDescription>{task.question}</DialogDescription>
         </DialogHeader>
         <Field label="С чего начинаете" htmlFor="ws-pos" hint="Начальная позиция команды. В конце сравним её с выводом.">
-          <Textarea id="ws-pos" rows={4} value={position} onChange={(e) => setPosition(e.target.value)} placeholder="Например: думаем, что очереди из-за медленной кассы." />
+          <Textarea id="ws-pos" rows={4} value={position} onChange={(e) => setPosition(e.target.value)} placeholder="Что команда думает сейчас и почему" />
         </Field>
         <FormError message={start.isError ? problemMessage(start.error) : undefined} />
         <DialogFooter>
@@ -158,15 +158,33 @@ export function ResearchPage() {
         </section>
       )}
 
+      {!isTeacher && mine.size > 0 && (
+        <section>
+          <SectionTitle>Исследования команды</SectionTitle>
+          <ul className="bg-card divide-y rounded-lg border">
+            {[...mine.values()].map((w) => (
+              <li key={w.id}>
+                <Link to="/research/$workspaceId" params={{ workspaceId: w.id }} className="hover:bg-muted/50 flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 py-3 transition-colors">
+                  <span className="font-medium">{w.taskTitle}</span>
+                  <Status tone={WS_STATUS[w.status].tone}>{WS_STATUS[w.status].label}</Status>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section>
-        <SectionTitle>Задачи</SectionTitle>
+        <SectionTitle>{isTeacher || mine.size === 0 ? 'Задачи' : 'Другие задачи'}</SectionTitle>
         {tasks.isPending ? (
           <Skeleton className="h-48" />
         ) : tasks.data?.length === 0 ? (
           <EmptyState title="Задач пока нет" text={isTeacher ? 'Опубликуйте первую — команды увидят её здесь.' : 'Преподаватель ещё не опубликовал задачи.'} />
         ) : (
           <ul className="grid gap-6">
-            {tasks.data?.map((t) => {
+            {tasks.data
+              ?.filter((t) => isTeacher || !mine.has(t.id))
+              .map((t) => {
               const ws = mine.get(t.id);
               return (
                 <li key={t.id} className="grid gap-2 border-b pb-6 last:border-none">
@@ -183,7 +201,9 @@ export function ResearchPage() {
                         </Button>
                       ) : team ? (
                         <StartDialog task={t} teamId={team.id}>
-                          <Button size="sm">Начать с командой {team.name}</Button>
+                          <Button size="sm" variant="outline">
+                            Начать с командой {team.name}
+                          </Button>
                         </StartDialog>
                       ) : (
                         <p className="text-muted-foreground text-sm">Исследование ведёт команда — создайте её в разделе «Команда».</p>

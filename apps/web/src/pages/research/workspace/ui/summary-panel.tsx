@@ -24,7 +24,7 @@ export function SummaryPanel({ ws, editable }: { ws: ResearchWorkspace; editable
           {missing.length > 0 && (
             <ul className="grid gap-2">
               {missing.map((m) => (
-                <li key={m.key} className="bg-warning-soft rounded-md px-3 py-2 text-sm">
+                <li key={m.key} className="border-warning border-l-2 pl-3 text-sm">
                   {m.where && <span className="text-muted-foreground block text-xs">{m.where}</span>}
                   {m.text}
                 </li>

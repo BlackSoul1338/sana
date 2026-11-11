@@ -2,7 +2,7 @@ import type { Schemas } from '@/shared/api';
 import { RESEARCH_LEVEL, RUBRIC_TITLE } from '@/shared/config';
 import { Status, type Tone } from '@/shared/ui/status';
 
-const LEVEL_TONE: Record<keyof typeof RESEARCH_LEVEL, Tone> = { strong: 'success', adequate: 'primary', weak: 'warning' };
+const LEVEL_TONE: Record<keyof typeof RESEARCH_LEVEL, Tone> = { strong: 'success', adequate: 'neutral', weak: 'warning' };
 
 /** The submitted conclusion with what each statement rests on, the model's rubric assessment and the position before and after. */
 export function ConclusionView({ ws }: { ws: Schemas['ResearchWorkspace'] }) {
