@@ -41,9 +41,13 @@ export function ReadinessDiff({ draftId }: { draftId: string }) {
                 <div className="min-w-0">
                   <p className="text-sm">«{s.answer}»</p>
                   {s.changes.length > 0 && (
-                    <p className="text-muted-foreground mt-1 text-xs">
-                      {s.changes.map((c) => `${CARD_FIELDS[c.field].label}: ${STATUS[c.from]} → ${STATUS[c.to]}`).join(' · ')}
-                    </p>
+                    <ul className="text-muted-foreground mt-1 text-xs">
+                      {s.changes.map((c) => (
+                        <li key={c.field}>
+                          {CARD_FIELDS[c.field].label}: {STATUS[c.from]} → {STATUS[c.to]}
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
               </li>

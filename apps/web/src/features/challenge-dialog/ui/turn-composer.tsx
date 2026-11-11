@@ -53,8 +53,7 @@ export function TurnComposer({ draftId, turnsLeft, warnReset }: { draftId: strin
       />
       <div className="flex items-center justify-between gap-3 pt-1">
         <span className="text-muted-foreground px-1 text-xs">
-          {warnReset ? 'Новый ответ пересоберёт карточку заново · ' : ''}
-          осталось ходов: {turnsLeft}
+          {warnReset ? `Новый ответ пересоберёт карточку заново. Осталось ходов: ${turnsLeft}` : `Осталось ходов: ${turnsLeft}`}
         </span>
         <Button size="icon-sm" onClick={submit} disabled={disabled || !text.trim()} aria-label="Отправить">
           <ArrowUp />

@@ -16,7 +16,7 @@ export function EvidenceList({ project, members, canFeedback }: { project: Proje
           <div className="flex items-center gap-3 text-sm">
             <span className="font-medium">{EVIDENCE_KIND[e.kind]}</span>
             <span className="text-muted-foreground text-xs">
-              {members[e.submittedBy] ?? 'участник'} · {formatRelative(e.createdAt)}
+              {members[e.submittedBy] ?? 'Участник'}, {formatRelative(e.createdAt)}
             </span>
             <EvidenceStatus status={e.status} />
             {canFeedback && (e.status === 'approved' || e.status === 'adjusted') && (

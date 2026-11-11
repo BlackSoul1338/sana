@@ -7,7 +7,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     <div className="mx-auto max-w-md px-4 py-24 text-center">
       <h1 className="text-2xl font-semibold">Такой страницы нет</h1>
       <Link to="/" className="text-primary mt-4 inline-block">
-        На главную →
+        На главную
       </Link>
     </div>
   ),

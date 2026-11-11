@@ -7,10 +7,16 @@ import { DIFFICULTY } from '@/shared/config';
 import { Button } from '@/shared/ui/button';
 import { Segmented } from '@/shared/ui/segmented';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { SubNav } from '@/shared/ui/sub-nav';
 import { EmptyState, SectionTitle } from '@/shared/ui/status';
 import { RecommendationList } from '@/widgets/recommendation-list';
 
 type Diff = 'all' | '1' | '2' | '3';
+
+const CHALLENGES_NAV = [
+  { to: '/challenges', label: 'Каталог' },
+  { to: '/applications', label: 'Мои заявки' },
+] as const;
 
 export function ChallengesPage() {
   const { team } = useActiveTeam();
@@ -23,8 +29,11 @@ export function ChallengesPage() {
   return (
     <div className="grid gap-12">
       <header>
-        <h1 className="text-3xl font-semibold">Задачи бизнеса</h1>
+        <h1 className="text-2xl font-semibold sm:text-3xl">Задачи бизнеса</h1>
         <p className="text-muted-foreground mt-1 max-w-xl">Реальные задачи компаний. Подбор объясняет, почему задача вам подходит и чего не хватает.</p>
+        <div className="mt-5">
+          <SubNav items={CHALLENGES_NAV} label="Задачи бизнеса" />
+        </div>
       </header>
 
       {team ? (

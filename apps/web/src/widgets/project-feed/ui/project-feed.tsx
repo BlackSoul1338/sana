@@ -42,7 +42,7 @@ export function ProjectFeed({ projectId, members }: { projectId: string; members
                 <div className="text-sm font-medium">
                   {item.type === 'points' ? (RULE_TITLES[item.title] ?? 'Начисление') : item.title}
                   {item.subjectType === 'profile' && members[item.subjectId] && (
-                    <span className="text-muted-foreground font-normal"> · {members[item.subjectId]}</span>
+                    <span className="text-muted-foreground ml-2 font-normal">{members[item.subjectId]}</span>
                   )}
                 </div>
                 {item.explanation && <p className="text-muted-foreground text-sm">{item.explanation}</p>}

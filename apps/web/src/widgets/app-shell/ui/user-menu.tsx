@@ -1,4 +1,4 @@
-import { LogOut, Monitor, Moon, Sun } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { signOut } from '@/features/auth';
 import { ROLE_LABEL, useMe } from '@/entities/viewer';
 import { useTheme, type Theme } from '@/shared/lib/theme-context';
@@ -13,12 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-
-const THEMES: { value: Theme; label: string; icon: typeof Sun }[] = [
-  { value: 'light', label: 'Светлая', icon: Sun },
-  { value: 'dark', label: 'Тёмная', icon: Moon },
-  { value: 'system', label: 'Как в системе', icon: Monitor },
-];
+import { THEMES } from './themes';
 
 export function UserMenu() {
   const me = useMe();
@@ -37,9 +32,8 @@ export function UserMenu() {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="font-normal">
           <div className="font-medium">{profile.displayName}</div>
-          <div className="text-muted-foreground text-xs">
-            {ROLE_LABEL[profile.role]} · {me.email}
-          </div>
+          <div className="text-muted-foreground text-xs">{ROLE_LABEL[profile.role]}</div>
+          <div className="text-muted-foreground truncate text-xs">{me.email}</div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={theme} onValueChange={(v) => setTheme(v as Theme)}>

@@ -17,7 +17,7 @@ export function BusinessTasksPage() {
     <div className="grid gap-12">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">Мои задачи</h1>
+          <h1 className="text-2xl font-semibold sm:text-3xl">Мои задачи</h1>
           <p className="text-muted-foreground mt-1">Отклики команд и подтверждённый прогресс по вашим задачам.</p>
         </div>
         <Button asChild variant="outline">
@@ -43,8 +43,10 @@ export function BusinessTasksPage() {
                     <div className="font-medium">{t.title}</div>
                     <TaskMeta topic={t.topic} difficulty={t.difficulty} estHours={t.estHours} />
                   </div>
-                  <Status tone={t.status === 'published' ? 'success' : 'neutral'}>{CATALOG_STATUS[t.status]}</Status>
-                  <span className="text-muted-foreground w-24 text-right text-sm tabular-nums">готовность {t.readiness}%</span>
+                  <div className="grid shrink-0 justify-items-end gap-1">
+                    <Status tone={t.status === 'published' ? 'success' : 'neutral'}>{CATALOG_STATUS[t.status]}</Status>
+                    <span className="text-muted-foreground text-xs tabular-nums">готовность {t.readiness}%</span>
+                  </div>
                 </Link>
               </li>
             ))}

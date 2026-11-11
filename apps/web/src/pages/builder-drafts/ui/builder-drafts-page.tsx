@@ -28,7 +28,7 @@ export function BuilderDraftsPage() {
     <div className="grid gap-8">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">Конструктор задач</h1>
+          <h1 className="text-2xl font-semibold sm:text-3xl">Конструктор задач</h1>
           <p className="text-muted-foreground mt-1 max-w-xl">Опишите проблему как есть — ассистент задаст вопросы и соберёт понятную карточку для студентов.</p>
         </div>
         {drafts.data && drafts.data.length > 0 && newButton}
@@ -47,9 +47,7 @@ export function BuilderDraftsPage() {
                   <ReadinessMeter value={d.readiness} size="sm" />
                   <div className="flex items-center justify-between">
                     <Status tone={STATUS[d.status].tone}>{STATUS[d.status].label}</Status>
-                    <span className="text-muted-foreground text-xs">
-                      {d.readiness}% · {formatRelative(d.createdAt)}
-                    </span>
+                    <span className="text-muted-foreground text-xs">{formatRelative(d.createdAt)}</span>
                   </div>
                 </div>
               </Link>

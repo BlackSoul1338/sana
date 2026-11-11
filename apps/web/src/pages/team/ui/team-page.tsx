@@ -15,7 +15,7 @@ export function TeamPage() {
     return (
       <div className="grid gap-6">
         <header>
-          <h1 className="text-3xl font-semibold">Соберите команду</h1>
+          <h1 className="text-2xl font-semibold sm:text-3xl">Соберите команду</h1>
           <p className="text-muted-foreground mt-2 max-w-xl">Спринт и задачи бизнеса проходят командой. Создайте её — участников добавите следом.</p>
         </header>
         <CreateTeamForm onCreated={setActiveTeam} />
@@ -29,9 +29,10 @@ export function TeamPage() {
   return (
     <div className="grid max-w-3xl gap-12">
       <header>
-        <h1 className="text-3xl font-semibold">{t.name}</h1>
-        <p className="text-muted-foreground mt-1">
-          {t.weeklyHours} ч в неделю{t.interests.length > 0 && ` · интересы: ${t.interests.join(', ')}`}
+        <h1 className="text-2xl font-semibold sm:text-3xl">{t.name}</h1>
+        <p className="text-muted-foreground mt-1 flex flex-wrap gap-x-6">
+          <span>{t.weeklyHours} ч в неделю</span>
+          {t.interests.length > 0 && <span>Интересы: {t.interests.join(', ')}</span>}
         </p>
       </header>
 
@@ -45,7 +46,7 @@ export function TeamPage() {
               </span>
               <span className="flex-1">
                 {m.displayName}
-                {m.profileId === me.profile?.id && <span className="text-muted-foreground"> · вы</span>}
+                {m.profileId === me.profile?.id && <span className="text-muted-foreground"> (вы)</span>}
               </span>
               <MemberRoleSelect teamId={t.id} profileId={m.profileId} roleSlug={m.roleSlug} />
             </li>

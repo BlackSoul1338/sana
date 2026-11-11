@@ -10,7 +10,7 @@ export function MentorProjectsPage() {
   return (
     <div className="grid gap-8">
       <header>
-        <h1 className="text-3xl font-semibold">Проекты</h1>
+        <h1 className="text-2xl font-semibold sm:text-3xl">Проекты</h1>
         <p className="text-muted-foreground mt-1">Сроки этапов и поправки баллов — внутри проекта.</p>
       </header>
       {projects.isPending ? (

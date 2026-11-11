@@ -32,10 +32,10 @@ export function SprintProjectsPage() {
 
   return (
     <div className="grid gap-8">
-      <header className="flex items-end justify-between gap-4">
+      <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-muted-foreground text-sm">{team.name}</p>
-          <h1 className="text-3xl font-semibold">Проекты</h1>
+          <h1 className="text-2xl font-semibold sm:text-3xl">Проекты</h1>
+          <p className="text-muted-foreground mt-1">Команда {team.name}</p>
         </div>
         <CreateProjectDialog teamId={team.id} onCreated={openProject}>
           <Button>
