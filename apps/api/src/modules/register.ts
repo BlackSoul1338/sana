@@ -7,6 +7,8 @@ import { challengeBuilderRoutes } from './challenge-builder/routes.js';
 import { matchRoutes } from './match/routes.js';
 import { registerPracticeHandlers } from './practice/handlers.js';
 import { practiceRoutes } from './practice/routes.js';
+import { registerResearchHandlers } from './research/handlers.js';
+import { researchRoutes } from './research/routes.js';
 
 type ModuleRoutes = { routes: OpenAPIHono<AppEnv>[] };
 
@@ -14,5 +16,6 @@ type ModuleRoutes = { routes: OpenAPIHono<AppEnv>[] };
 export function registerModules(bus: EventBus): ModuleRoutes {
   registerSprintHandlers(bus);
   registerPracticeHandlers(bus);
-  return { routes: [sprintRoutes, challengeBuilderRoutes, matchRoutes, practiceRoutes] };
+  registerResearchHandlers(bus);
+  return { routes: [sprintRoutes, challengeBuilderRoutes, matchRoutes, practiceRoutes, researchRoutes] };
 }

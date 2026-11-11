@@ -8,3 +8,4 @@ export * as sprint from './sprint.js';
 export * as bcb from './bcb.js';
 export * as match from './match.js';
 export * as practice from './practice.js';
+export * as research from './research.js';
