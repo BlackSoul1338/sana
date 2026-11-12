@@ -4,7 +4,8 @@ import type { AddMemberInput, CreateProfileInput, CreateTeamInput, Me, Profile, 
 import { inTx, requireProfile, requireRole, type ActorProfile, type Ctx } from '../../platform/context.js';
 import type { DbLike } from '../../platform/db/client.js';
 import { iso } from '../../platform/db/columns.js';
-import { conflict, forbidden, invalid, notFound } from '../../platform/errors.js';
+import { authUsers } from '../../platform/db/auth-users.js';
+import { conflict, forbidden, invalid, notFound, unauthorized } from '../../platform/errors.js';
 import { orgs, profiles, refRoles, refSkills, teamMembers, teams, teamSkills } from './schema.js';
 
 type ProfileRow = typeof profiles.$inferSelect;
@@ -22,8 +23,15 @@ export async function loadActorProfile(db: DbLike, userId: string): Promise<Acto
   return row ? { id: row.id, role: row.role, orgId: row.orgId, displayName: row.displayName } : null;
 }
 
+/** A token stays valid after its account is deleted (e.g. a database reseed); such a session must sign in again. */
+async function requireAccount(db: DbLike, userId: string) {
+  const [user] = await db.select({ id: authUsers.id }).from(authUsers).where(eq(authUsers.id, userId)).limit(1);
+  if (!user) throw unauthorized('Аккаунт не найден — войдите или зарегистрируйтесь снова');
+}
+
 export async function getMe(ctx: Ctx): Promise<z.infer<typeof Me>> {
   const [row] = await ctx.db.select().from(profiles).where(eq(profiles.id, ctx.actor.userId)).limit(1);
+  if (!row) await requireAccount(ctx.db, ctx.actor.userId);
   const myTeams = row
     ? await ctx.db
         .select({ id: teams.id, name: teams.name, roleSlug: teamMembers.roleSlug })
@@ -37,6 +45,7 @@ export async function getMe(ctx: Ctx): Promise<z.infer<typeof Me>> {
 
 export async function createProfile(ctx: Ctx, input: z.infer<typeof CreateProfileInput>): Promise<Profile> {
   if (ctx.actor.profile) throw conflict('Профиль уже создан');
+  await requireAccount(ctx.db, ctx.actor.userId);
   return inTx(ctx, async (t) => {
     let orgId: string | null = null;
     if (input.role === 'business' && input.orgName) {
