@@ -102,7 +102,7 @@ export function SprintProjectPage({ projectId, backTo }: { projectId: string; ba
 
       <div className="grid gap-10 lg:grid-cols-[1fr_280px]">
         <Tabs defaultValue={role === 'business' ? 'evidence' : 'tasks'}>
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
             <TabsList>
               {role !== 'business' && <TabsTrigger value="tasks">Задачи</TabsTrigger>}
               <TabsTrigger value="evidence">Подтверждения</TabsTrigger>

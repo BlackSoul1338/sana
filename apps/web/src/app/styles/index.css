@@ -95,6 +95,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* A grid without explicit columns sizes its one column to the widest unbreakable child, which widens the
+     whole page on phones. A zero minimum keeps the column at the viewport; grid-cols-* utilities still win. */
+  main .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: 'tnum' 1;

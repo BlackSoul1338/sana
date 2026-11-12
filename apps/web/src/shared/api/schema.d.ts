@@ -4,6 +4,91 @@
  */
 
 export interface paths {
+    "/auth/sign-up": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Регистрация по почте и паролю без письма подтверждения; дальше клиент входит паролем */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SignUpInput"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["SignUpResult"];
+                    };
+                };
+                /** @description Нет или неверный токен */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Недостаточно прав */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Объект не найден */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Конфликт состояния */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Ошибка валидации или нарушено правило */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/me": {
         parameters: {
             query?: never;
@@ -5824,6 +5909,31 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        SignUpResult: {
+            /** Format: uuid */
+            userId: string;
+        };
+        Problem: {
+            type: string;
+            title: string;
+            status: number;
+            detail: string;
+            code: components["schemas"]["ErrorCode"];
+            errors?: {
+                path: string;
+                message: string;
+            }[];
+            details?: {
+                [key: string]: unknown;
+            };
+            requestId?: string;
+        };
+        /** @enum {string} */
+        ErrorCode: "unauthorized" | "forbidden" | "not_found" | "conflict" | "validation_failed" | "business_rule" | "sensitive_data" | "ai_unavailable" | "turn_limit" | "internal";
+        SignUpInput: {
+            email: string;
+            password: string;
+        };
         Me: {
             /** Format: uuid */
             userId: string;
@@ -5851,23 +5961,6 @@ export interface components {
          * @enum {string}
          */
         Role: "student" | "mentor" | "business" | "teacher";
-        Problem: {
-            type: string;
-            title: string;
-            status: number;
-            detail: string;
-            code: components["schemas"]["ErrorCode"];
-            errors?: {
-                path: string;
-                message: string;
-            }[];
-            details?: {
-                [key: string]: unknown;
-            };
-            requestId?: string;
-        };
-        /** @enum {string} */
-        ErrorCode: "unauthorized" | "forbidden" | "not_found" | "conflict" | "validation_failed" | "business_rule" | "sensitive_data" | "ai_unavailable" | "turn_limit" | "internal";
         CreateProfileInput: {
             displayName: string;
             /** @enum {string} */

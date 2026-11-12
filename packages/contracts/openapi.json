@@ -15,6 +15,102 @@
       }
     },
     "schemas": {
+      "SignUpResult": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "userId"
+        ]
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ErrorCode"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "message"
+              ]
+            }
+          },
+          "details": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail",
+          "code"
+        ]
+      },
+      "ErrorCode": {
+        "type": "string",
+        "enum": [
+          "unauthorized",
+          "forbidden",
+          "not_found",
+          "conflict",
+          "validation_failed",
+          "business_rule",
+          "sensitive_data",
+          "ai_unavailable",
+          "turn_limit",
+          "internal"
+        ]
+      },
+      "SignUpInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 72
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
       "Me": {
         "type": "object",
         "properties": {
@@ -110,73 +206,6 @@
           "teacher"
         ],
         "description": "Роль пользователя на платформе"
-      },
-      "Problem": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "detail": {
-            "type": "string"
-          },
-          "code": {
-            "$ref": "#/components/schemas/ErrorCode"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "path": {
-                  "type": "string"
-                },
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "path",
-                "message"
-              ]
-            }
-          },
-          "details": {
-            "type": "object",
-            "additionalProperties": {}
-          },
-          "requestId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "title",
-          "status",
-          "detail",
-          "code"
-        ]
-      },
-      "ErrorCode": {
-        "type": "string",
-        "enum": [
-          "unauthorized",
-          "forbidden",
-          "not_found",
-          "conflict",
-          "validation_failed",
-          "business_rule",
-          "sensitive_data",
-          "ai_unavailable",
-          "turn_limit",
-          "internal"
-        ]
       },
       "CreateProfileInput": {
         "type": "object",
@@ -4399,6 +4428,86 @@
     "parameters": {}
   },
   "paths": {
+    "/auth/sign-up": {
+      "post": {
+        "tags": [
+          "Профиль"
+        ],
+        "summary": "Регистрация по почте и паролю без письма подтверждения; дальше клиент входит паролем",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignUpResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет или неверный токен",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Недостаточно прав",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Объект не найден",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт состояния",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации или нарушено правило",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/me": {
       "get": {
         "tags": [

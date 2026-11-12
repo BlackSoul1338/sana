@@ -26,7 +26,7 @@ function TaskRow({
   const Icon = ICON[task.status];
   const open = task.status === 'todo' || task.status === 'in_progress';
   return (
-    <li className="group flex items-center gap-3 py-2.5">
+    <li className="group flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5">
       <Icon
         aria-label={TASK_STATUS[task.status]}
         className={cn(
@@ -37,23 +37,26 @@ function TaskRow({
           task.status === 'todo' && 'text-muted-foreground',
         )}
       />
-      <span className={cn('min-w-0 flex-1 truncate text-sm', task.status === 'done' && 'text-muted-foreground line-through')}>
+      <span className={cn('min-w-0 flex-1 basis-[calc(100%-1.75rem)] truncate text-sm sm:basis-0', task.status === 'done' && 'text-muted-foreground line-through')}>
         {task.title}
       </span>
-      <AssigneeSelect task={task} team={team} disabled={!editable || !open} />
-      {editable && open && (
-        <div className="flex items-center gap-3 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
-          <StartTaskToggle task={task} />
-          {canSubmit && (
-            <SubmitEvidenceDialog project={project} defaultTarget="task" defaultTaskId={task.id}>
-              <Button variant="outline" size="xs">
-                Сдать
-              </Button>
-            </SubmitEvidenceDialog>
-          )}
-        </div>
-      )}
-      {task.status === 'submitted' && <span className="text-muted-foreground text-xs">на проверке</span>}
+      {/* Under the title on phones, inline from sm. */}
+      <div className="flex w-full items-center gap-3 pl-7 sm:w-auto sm:pl-0">
+        <AssigneeSelect task={task} team={team} disabled={!editable || !open} />
+        {editable && open && (
+          <div className="flex items-center gap-3 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
+            <StartTaskToggle task={task} />
+            {canSubmit && (
+              <SubmitEvidenceDialog project={project} defaultTarget="task" defaultTaskId={task.id}>
+                <Button variant="outline" size="xs">
+                  Сдать
+                </Button>
+              </SubmitEvidenceDialog>
+            )}
+          </div>
+        )}
+        {task.status === 'submitted' && <span className="text-muted-foreground text-xs">на проверке</span>}
+      </div>
     </li>
   );
 }

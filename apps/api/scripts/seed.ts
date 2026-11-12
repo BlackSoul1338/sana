@@ -65,7 +65,8 @@ const admin = createClient(e.SUPABASE_URL, e.SUPABASE_SECRET_KEY, { auth: { pers
 const storage = supabaseStorage(e.SUPABASE_URL, e.SUPABASE_SECRET_KEY, e.EVIDENCE_BUCKET);
 const bus = new EventBus();
 registerModules(bus);
-const PASSWORD = `sana-${randomBytes(4).toString('hex')}`;
+// SEED_PASSWORD keeps the demo password stable across reseeds (e.g. one already shared with reviewers).
+const PASSWORD = process.env.SEED_PASSWORD || `sana-${randomBytes(4).toString('hex')}`;
 
 const DAY = 86_400_000;
 const today = new Date();
@@ -291,7 +292,7 @@ async function main() {
 
   const accounts = {
     password: PASSWORD,
-    note: 'Локальные тестовые аккаунты (создаются pnpm seed, пароль меняется при каждом запуске)',
+    note: 'Тестовые аккаунты из pnpm seed; пароль новый при каждом запуске, если не задан SEED_PASSWORD',
     mentor: mentor.email,
     mentor2: mentor2.email,
     teacher: `${teacher.email} (Practice Lab и исследования: задания, задачи, проверка работ)`,

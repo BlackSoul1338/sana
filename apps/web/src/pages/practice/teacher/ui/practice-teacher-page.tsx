@@ -3,11 +3,20 @@ import { Link } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { dashboardQuery, modulesQuery } from '@/entities/practice';
+import { plural } from '@/shared/lib/format';
 import { Button } from '@/shared/ui/button';
 import { Segmented } from '@/shared/ui/segmented';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { EmptyState, SectionTitle, Status } from '@/shared/ui/status';
 import { NewAssignmentDialog } from './new-assignment-dialog';
+
+/** Time from the first attempt to sending: shown for context, never scored. */
+function duration(minutes: number) {
+  if (minutes < 60) return `${Math.max(1, minutes)} мин`;
+  if (minutes < 24 * 60) return `${Math.round(minutes / 60)} ч`;
+  const days = Math.round(minutes / (24 * 60));
+  return `${days} ${plural(days, ['день', 'дня', 'дней'])}`;
+}
 
 const CELL = {
   checked: { label: 'черновик', tone: 'neutral' },
@@ -25,7 +34,7 @@ export function PracticeTeacherPage() {
   const dash = useQuery({ ...dashboardQuery(moduleId), enabled: !!moduleId });
 
   return (
-    <div className="grid gap-10">
+    <div className="grid grid-cols-1 gap-10">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold sm:text-3xl">Практика</h1>
@@ -98,6 +107,7 @@ export function PracticeTeacherPage() {
 
           <section>
             <SectionTitle>Студенты</SectionTitle>
+            <p className="text-muted-foreground -mt-1 mb-3 text-sm">Время сдачи — от первой попытки до отправки. Только для справки: в баллы оно не идёт.</p>
             {dash.data.students.length === 0 ? (
               <p className="text-muted-foreground text-sm">Модуль ещё никто не начал.</p>
             ) : (
@@ -133,9 +143,10 @@ export function PracticeTeacherPage() {
                               ) : (
                                 <Status tone={CELL[c.status].tone}>
                                   {CELL[c.status].label}
-                                  {c.attempts > 1 ? `, ${c.attempts} поп.` : ''}
+                                  {c.attempts > 1 ? `, ${c.attempts} ${plural(c.attempts, ['попытка', 'попытки', 'попыток'])}` : ''}
                                 </Status>
                               )}
+                              {c?.minutesToSend != null && <span className="text-muted-foreground block text-xs">сдано за {duration(c.minutesToSend)}</span>}
                             </td>
                           );
                         })}

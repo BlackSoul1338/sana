@@ -53,7 +53,7 @@ pnpm dev:web
 
 - API: http://localhost:8787, interactive docs at http://localhost:8787/docs.
 - Web: http://localhost:5173.
-- Demo accounts after seeding: `alice@sana.local` (student), `mentor@sana.local` (mentor), `daily@sana.local` (business). The password is written to `data/demo-accounts.json` (gitignored).
+- Demo accounts after seeding: `alice@sana.local` (student), `mentor@sana.local` (mentor), `teacher@sana.local` (teacher), `daily@sana.local` (business). The password is written to `data/demo-accounts.json` (gitignored); it changes on every run unless `SEED_PASSWORD` is set.
 
 ## Run the API as a Cloudflare Worker locally
 

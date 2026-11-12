@@ -7,7 +7,8 @@ export function SignInPage() {
   return (
     <AuthLayout
       title="С возвращением"
-      subtitle="Войдите, чтобы продолжить спринт"
+      subtitle="Войдите, чтобы продолжить работу"
+      pitch
       footer={
         <>
           Впервые здесь?{' '}

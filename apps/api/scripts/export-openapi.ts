@@ -5,9 +5,10 @@ import path from 'node:path';
 import { API_INFO, createApp } from '../src/app.js';
 import { testVerifier } from '../src/platform/auth.js';
 import { fakeStorage } from '../src/platform/storage.js';
+import { fakeAccounts } from '../src/platform/accounts.js';
 import type { Db } from '../src/platform/db/client.js';
 
-const app = createApp({ db: {} as Db, verifier: testVerifier(), ai: null, storage: fakeStorage() });
+const app = createApp({ db: {} as Db, verifier: testVerifier(), ai: null, storage: fakeStorage(), accounts: fakeAccounts() });
 const doc = app.getOpenAPI31Document(API_INFO);
 const out = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../packages/contracts/openapi.json');
 writeFileSync(out, `${JSON.stringify(doc, null, 2)}\n`);

@@ -63,7 +63,7 @@ export function BusinessTaskPage({ taskId }: { taskId: string }) {
                 <div className="flex items-start gap-4">
                   <FitScore score={a.score} />
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                       <span className="font-medium">{a.teamName}</span>
                       <ApplicationStatus status={a.status} />
                       <span className="text-muted-foreground ml-auto text-xs">{formatRelative(a.createdAt)}</span>

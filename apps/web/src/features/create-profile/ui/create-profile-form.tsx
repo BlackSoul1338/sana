@@ -14,7 +14,7 @@ import { Input } from '@/shared/ui/input';
 type Values = z.input<typeof CreateProfileInput>;
 
 const ROLES = [
-  { value: 'student', icon: GraduationCap, title: 'Я студент', text: 'Собираю команду и веду стартап' },
+  { value: 'student', icon: GraduationCap, title: 'Я студент', text: 'Команда, стартап, практика и исследования' },
   { value: 'business', icon: Briefcase, title: 'Я из бизнеса', text: 'Ставлю задачи для студенческих команд' },
 ] as const;
 
