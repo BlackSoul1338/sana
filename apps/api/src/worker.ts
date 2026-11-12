@@ -38,9 +38,9 @@ function init(bindings: Bindings) {
 export default {
   async fetch(request: Request, bindings: Bindings, ctx: ExecutionContext): Promise<Response> {
     instance ??= init(bindings);
-    // A Worker request may hold only 6 open connections; extra ones wait for a free slot and Postgres sockets never free
-    // theirs, so a wide Promise.all hangs the request. Two connections stay well under the limit; Hyperdrive pools the rest.
-    const { db, sql } = openDb(bindings.HYPERDRIVE.connectionString, 2);
+    // Behind Hyperdrive a query that has to wait for a busy connection never completes, so no request may run
+    // more queries at once than this limit (keep every Promise.all over the database at 5 or fewer).
+    const { db, sql } = openDb(bindings.HYPERDRIVE.connectionString, 5);
     try {
       return await requestDb.run(db, () => instance!.app.fetch(request));
     } finally {

@@ -151,7 +151,8 @@ async function workspacePoints(db: DbLike, workspaceIds: string[]) {
 }
 
 async function loadBoard(db: DbLike, ws: WsRow) {
-  const [members, roles, threads, items, [conclusion], [task]] = await Promise.all([
+  // Five at most: the Worker has five connections per request (see worker.ts).
+  const [members, roles, threads, items, [conclusion]] = await Promise.all([
     db
       .select({ id: profiles.id, name: profiles.displayName })
       .from(teamMembers)
@@ -162,8 +163,8 @@ async function loadBoard(db: DbLike, ws: WsRow) {
     db.select().from(raThreads).where(eq(raThreads.workspaceId, ws.id)).orderBy(asc(raThreads.createdAt)),
     db.select().from(raItems).where(eq(raItems.workspaceId, ws.id)).orderBy(asc(raItems.createdAt)),
     db.select().from(raConclusions).where(eq(raConclusions.workspaceId, ws.id)).orderBy(desc(raConclusions.version)).limit(1),
-    db.select().from(raTasks).where(eq(raTasks.id, ws.taskId)).limit(1),
   ]);
+  const [task] = await db.select().from(raTasks).where(eq(raTasks.id, ws.taskId)).limit(1);
   return { members, roles, threads, items, conclusion, task: task! };
 }
 
