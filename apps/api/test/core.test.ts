@@ -32,6 +32,13 @@ describe('ядро: профиль, команды, права', () => {
     expect(bad.body.errors.map((e: any) => e.path).sort()).toEqual(['email', 'password']);
   });
 
+  it('сессия удалённого аккаунта (после пересева) получает 401, а не 500', async () => {
+    const ghost = { id: randomUUID(), token: '', role: 'business' as const, orgId: null, name: 'x' };
+    ghost.token = `test:${ghost.id}`;
+    expect((await api.get('/api/me', ghost)).status).toBe(401);
+    expect((await api.post('/api/me/profile', ghost, { displayName: 'Призрак', role: 'business', orgName: 'ООО Тест' })).status).toBe(401);
+  });
+
   it('создание профиля: ментора самостоятельно не создать, бизнесу нужна компания', async () => {
     const user = { id: '11111111-1111-4111-8111-111111111111', token: 'test:11111111-1111-4111-8111-111111111111', role: 'student' as const, orgId: null, name: 'x' };
     const { testDb } = await import('./helpers/env.js');
