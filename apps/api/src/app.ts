@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { OpenAPIHono } from '@hono/zod-openapi';
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 import { Scalar } from '@scalar/hono-api-reference';
 import { cors } from 'hono/cors';
 import { z } from 'zod';
@@ -8,9 +8,11 @@ import type { Db } from './platform/db/client.js';
 import type { AiModels } from './platform/ai/index.js';
 import type { TokenVerifier } from './platform/auth.js';
 import type { StoragePort } from './platform/storage.js';
+import type { AccountsPort } from './platform/accounts.js';
 import { EventBus } from './platform/events.js';
 import { AppError, unauthorized } from './platform/errors.js';
-import { sendProblem, zodIssuesToFieldErrors, type AppEnv } from './platform/http.js';
+import { errorResponses, jsonBody, jsonRes, sendProblem, zodIssuesToFieldErrors, type AppEnv } from './platform/http.js';
+import { SignUpInput, SignUpResult } from '@sana/contracts';
 import { loadActorProfile } from './core/identity/service.js';
 import { identityRoutes } from './core/identity/routes.js';
 import { catalogRoutes } from './core/catalog/routes.js';
@@ -25,6 +27,7 @@ export type AppDeps = {
   verifier: TokenVerifier;
   ai: AiModels | null;
   storage: StoragePort;
+  accounts: AccountsPort;
   clock?: () => Date;
   corsOrigins?: string[];
 };
@@ -82,6 +85,21 @@ export function createApp(deps: AppDeps) {
   app.get('/health', (c) => c.json({ ok: true, ai: deps.ai?.provider ?? 'disabled' }));
   app.doc31('/openapi.json', API_INFO);
   app.get('/docs', Scalar({ url: '/openapi.json', pageTitle: 'AI Sana API' }));
+
+  app.openapi(
+    createRoute({
+      method: 'post',
+      path: '/auth/sign-up',
+      tags: ['Профиль'],
+      summary: 'Регистрация по почте и паролю без письма подтверждения; дальше клиент входит паролем',
+      request: { body: jsonBody(SignUpInput) },
+      responses: { 201: jsonRes(SignUpResult), ...errorResponses },
+    }),
+    async (c) => {
+      const { email, password } = c.req.valid('json');
+      return c.json(await deps.accounts.create(email, password), 201);
+    },
+  );
 
   // Всё под /api требует токен. Профиль подгружается один раз и кладётся в контекст use case.
   app.use('/api/*', async (c, next) => {

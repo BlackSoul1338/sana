@@ -10,7 +10,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%7C%20Auth-3ecf8e?logo=supabase&logoColor=white)
 ![Cloudflare Workers](https://img.shields.io/badge/API-Cloudflare%20Workers-f38020?logo=cloudflareworkers&logoColor=white)
 
-AI Sana brings student teams, mentors and businesses together around practical tasks. A team runs its project through stages and earns points only for progress a mentor has confirmed; a business turns a problem description into a task card with the help of a model; matching explains which task suits which team.
+AI Sana brings students, mentors, teachers and businesses together around practical tasks. A team runs its project through stages and earns points only for progress a mentor has confirmed; a business turns a problem description into a task card with the help of a model; matching explains which task suits which team; in Practice Lab a model checks a student's work against criteria before a teacher decides; in Research Arena a team argues its way to a conclusion that a teacher reviews.
 
 The repository is a pnpm monorepo: an API-first modular monolith in TypeScript and a web client (the interface is in Russian).
 
@@ -18,10 +18,12 @@ The repository is a pnpm monorepo: an API-first modular monolith in TypeScript a
 
 | Module | What it does |
 | --- | --- |
-| Core | profiles and roles (student, mentor, business), teams and skills, task catalog, evidence, points ledger, leaderboards |
+| Core | profiles and roles (student, mentor, teacher, business), teams and skills, task catalog, evidence, points ledger, leaderboards |
 | Startup Sprint | team project, 5 stages from idea to testing, tasks with technologies, points for confirmed progress, achievements, next step |
 | Business Challenge Builder | dialog with a business: completeness check, follow-up questions, readiness, task card, manual publishing, before/after comparison |
 | Challenge Match | task recommendations for a team with explanations, applications, business decision → project in the tracker, business feedback and a real-task multiplier |
+| Practice Lab | modules with a test, assignments with criteria, model check with quoted errors, up to 5 attempts, points for self-correction after the teacher accepts, teacher dashboard with problem topics |
+| Research Arena | research questions, team discussion with roles, a conclusion with arguments and sources, teacher review |
 
 ## Packages
 
@@ -37,9 +39,10 @@ The home screen depends on the role.
 
 - **Student** — team (members, roles, skills), sprint projects; project page: stage map, next step, tasks, evidence with file uploads, points feed, leaderboard; business tasks with recommendations and applying; applications.
 - **Mentor** — review queue (approve / approve with adjustment / send back), projects: stage dates and point adjustments.
+- **Teacher** — practice modules: assignments, student results, problem topics; review of practice work and research conclusions.
 - **Business** — task builder: dialog with a live card, composing and editing the card, publishing, before/after; my tasks: applications, decisions, team progress, feedback on results.
 
-Sign-in uses Supabase Auth email and password. After sign-up the user picks a role: student or business; the mentor role cannot be self-assigned.
+Sign-in uses Supabase Auth email and password. Sign-up goes through the API (`POST /auth/sign-up`), which creates an already confirmed account, so no confirmation email is sent. After sign-up the user picks a role: student or business; mentor and teacher roles cannot be self-assigned.
 
 ## Quick start
 
@@ -75,7 +78,7 @@ pnpm dev
 pnpm dev:web
 ```
 
-API: http://localhost:8787 (docs at `/docs`). Web: http://localhost:5173. Demo accounts: `alice@sana.local` (student), `mentor@sana.local`, `daily@sana.local` (business); the password is in `data/demo-accounts.json` after seeding.
+API: http://localhost:8787 (docs at `/docs`). Web: http://localhost:5173. Demo accounts: `alice@sana.local` (student), `mentor@sana.local`, `teacher@sana.local`, `daily@sana.local` (business); the password is in `data/demo-accounts.json` after seeding (set `SEED_PASSWORD` to keep it between runs).
 
 ## Configuration
 
@@ -150,12 +153,12 @@ packages/contracts/   Zod API schemas (shared with web) and openapi.json
 apps/api/src/
   platform/           env, database, auth (JWT verification), RFC 9457 errors, events, AI provider, storage
   core/               identity, catalog, evidence, points — shared core
-  modules/            sprint, challenge-builder, match — never import each other
+  modules/            sprint, challenge-builder, match, practice, research — never import each other
   flows/              cross-module scenarios (accepted application → task → Sprint project)
   index.ts, worker.ts Node server and Cloudflare Worker entry points
 apps/api/drizzle/     SQL migrations
 apps/web/src/         app → pages → widgets → features → entities → shared (FSD)
-data/                 synthetic seed data: skills, roles, templates, tasks, teams, descriptions
+data/                 synthetic seed data: skills, roles, templates, tasks, teams, descriptions, practice modules, research tasks and discussions
 docs/                 deployment guides and the Russian README
 SKILLS/               agent skills for this repository (production deploy)
 ```

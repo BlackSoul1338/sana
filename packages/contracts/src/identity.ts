@@ -18,6 +18,14 @@ export const Profile = z
 export type Profile = z.infer<typeof Profile>;
 
 /** Самостоятельная регистрация: куратор (mentor) назначается только администратором/seed. */
+export const SignUpInput = z
+  .object({
+    email: z.string().trim().toLowerCase().pipe(z.email('Похоже, в адресе опечатка')),
+    password: z.string().min(8, 'Минимум 8 символов').max(72),
+  })
+  .meta({ id: 'SignUpInput' });
+export const SignUpResult = z.object({ userId: Id }).meta({ id: 'SignUpResult' });
+
 export const CreateProfileInput = z
   .object({
     displayName: z.string().trim().min(2).max(80),

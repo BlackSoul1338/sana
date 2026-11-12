@@ -22,6 +22,16 @@ describe('ядро: профиль, команды, права', () => {
     expect(Object.keys(doc.body.paths)).toContain('/api/teams');
   });
 
+  it('регистрация без письма: аккаунт создаётся сразу, дубль и плохие данные отклоняются', async () => {
+    const ok = await api.post('/auth/sign-up', null, { email: ' New@Example.com ', password: 'secret-123' });
+    expect(ok.status).toBe(201);
+    expect(ok.body.userId).toBeTruthy();
+    expect((await api.post('/auth/sign-up', null, { email: 'new@example.com', password: 'other-123' })).status).toBe(409);
+    const bad = await api.post('/auth/sign-up', null, { email: 'not-an-email', password: 'short' });
+    expect(bad.status).toBe(422);
+    expect(bad.body.errors.map((e: any) => e.path).sort()).toEqual(['email', 'password']);
+  });
+
   it('создание профиля: ментора самостоятельно не создать, бизнесу нужна компания', async () => {
     const user = { id: '11111111-1111-4111-8111-111111111111', token: 'test:11111111-1111-4111-8111-111111111111', role: 'student' as const, orgId: null, name: 'x' };
     const { testDb } = await import('./helpers/env.js');

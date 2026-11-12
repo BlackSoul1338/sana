@@ -5,6 +5,7 @@ import { openDb, type Db } from './platform/db/client.js';
 import { createAiModels } from './platform/ai/index.js';
 import { supabaseVerifier } from './platform/auth.js';
 import { supabaseStorage } from './platform/storage.js';
+import { supabaseAccounts } from './platform/accounts.js';
 
 /**
  * Cloudflare Workers entry. Postgres goes through the HYPERDRIVE binding; other settings are vars and secrets.
@@ -28,6 +29,7 @@ function init(bindings: Bindings) {
     verifier: supabaseVerifier(env.SUPABASE_URL, env.SUPABASE_PUBLISHABLE_KEY),
     ai: createAiModels(env),
     storage: supabaseStorage(env.SUPABASE_URL, env.SUPABASE_SECRET_KEY, env.EVIDENCE_BUCKET),
+    accounts: supabaseAccounts(env.SUPABASE_URL, env.SUPABASE_SECRET_KEY),
     corsOrigins: env.CORS_ORIGINS,
   });
   return { app, env };

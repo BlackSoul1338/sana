@@ -49,7 +49,7 @@ export function ApplicationsPage() {
           {apps.data?.map((a) => {
             const project = a.status === 'accepted' ? projectFor(a.taskId) : undefined;
             return (
-              <li key={a.id} className="flex items-center gap-4 px-4 py-3">
+              <li key={a.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
                 <FitScore score={a.score} size={40} />
                 <div className="min-w-0 flex-1">
                   <Link to="/challenges/$taskId" params={{ taskId: a.taskId }} className="font-medium hover:underline">
@@ -58,15 +58,17 @@ export function ApplicationsPage() {
                   <div className="text-muted-foreground text-xs">{formatRelative(a.createdAt)}</div>
                   {a.decisionComment && <p className="mt-1 text-sm">«{a.decisionComment}»</p>}
                 </div>
-                <ApplicationStatus status={a.status} />
-                {a.status === 'pending' && <WithdrawButton applicationId={a.id} />}
-                {project && (
-                  <Button asChild size="xs" variant="outline">
-                    <Link to="/sprint/$projectId" params={{ projectId: project.id }}>
-                      В трекер
-                    </Link>
-                  </Button>
-                )}
+                <div className="flex basis-full items-center gap-4 pl-14 sm:basis-auto sm:pl-0">
+                  <ApplicationStatus status={a.status} />
+                  {a.status === 'pending' && <WithdrawButton applicationId={a.id} />}
+                  {project && (
+                    <Button asChild size="xs" variant="outline">
+                      <Link to="/sprint/$projectId" params={{ projectId: project.id }}>
+                        В трекер
+                      </Link>
+                    </Button>
+                  )}
+                </div>
               </li>
             );
           })}

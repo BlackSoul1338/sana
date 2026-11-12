@@ -5,6 +5,7 @@ import { createApp, type App } from '../../src/app.js';
 import { createDb, type Db } from '../../src/platform/db/client.js';
 import { testVerifier } from '../../src/platform/auth.js';
 import { fakeStorage } from '../../src/platform/storage.js';
+import { fakeAccounts } from '../../src/platform/accounts.js';
 import type { AiModels, ModelTier } from '../../src/platform/ai/index.js';
 import { orgs, profiles } from '../../src/core/identity/schema.js';
 import { seedReferenceData } from '../../src/seed/refs.js';
@@ -22,6 +23,7 @@ export function makeApp(opts: { ai?: AiModels | null; clock?: Clock } = {}): App
     verifier: testVerifier(),
     ai: opts.ai ?? null,
     storage: fakeStorage(),
+    accounts: fakeAccounts(),
     ...(clock ? { clock: () => new Date(clock.now) } : {}),
   });
 }
