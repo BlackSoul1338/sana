@@ -22,7 +22,7 @@ export function CreateProfileForm({ onCreated }: { onCreated: () => void }) {
   const queryClient = useQueryClient();
   const form = useForm<Values>({
     resolver: zodResolver(CreateProfileInput),
-    defaultValues: { displayName: '', role: 'student', orgName: '' },
+    defaultValues: { displayName: '', role: 'student' },
   });
   const role = useWatch({ control: form.control, name: 'role' });
   const { errors } = form.formState;
@@ -35,7 +35,8 @@ export function CreateProfileForm({ onCreated }: { onCreated: () => void }) {
         }),
       ),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: meQuery.queryKey });
+      // Dropped, not invalidated: nothing observes /me here, so the route guard would read the stale "no profile" answer.
+      queryClient.removeQueries({ queryKey: meQuery.queryKey });
       onCreated();
     },
     onError: (error) => {
@@ -54,7 +55,11 @@ export function CreateProfileForm({ onCreated }: { onCreated: () => void }) {
             type="button"
             role="radio"
             aria-checked={role === value}
-            onClick={() => form.setValue('role', value)}
+            onClick={() => {
+              form.setValue('role', value);
+              // The hidden company field must not keep a value that fails validation out of sight.
+              if (value === 'student') form.resetField('orgName');
+            }}
             className={cn(
               'rounded-lg border p-4 text-left transition-colors',
               role === value ? 'border-primary bg-accent' : 'hover:bg-muted',
