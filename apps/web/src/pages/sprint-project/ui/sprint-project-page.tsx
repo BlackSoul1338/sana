@@ -73,7 +73,7 @@ export function SprintProjectPage({ projectId, backTo }: { projectId: string; ba
               {project.challengeTaskId && <ChallengeLink taskId={project.challengeTaskId} role={role} />}
             </p>
           </div>
-          <div className="text-right">
+          <div className="sm:text-right">
             <div className="text-4xl font-semibold tabular-nums sm:text-5xl">{teamPoints}</div>
             <div className="text-muted-foreground text-sm">{plural(project.points.team, ['балл', 'балла', 'баллов'])} команды</div>
           </div>
