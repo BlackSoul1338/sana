@@ -176,7 +176,8 @@ export function ResearchPage() {
 
       <section>
         <SectionTitle>{isTeacher || mine.size === 0 ? 'Задачи' : 'Другие задачи'}</SectionTitle>
-        {tasks.isPending ? (
+        {/* Without the team's research list every task would look free to start. */}
+        {tasks.isPending || (!isTeacher && !workspaces.data) ? (
           <Skeleton className="h-48" />
         ) : tasks.data?.length === 0 ? (
           <EmptyState title="Задач пока нет" text={isTeacher ? 'Опубликуйте первую — команды увидят её здесь.' : 'Преподаватель ещё не опубликовал задачи.'} />
