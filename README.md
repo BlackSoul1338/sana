@@ -92,7 +92,7 @@ The API and the web client read one `.env` in the repository root: the API throu
 | `SUPABASE_SECRET_KEY` | yes | — | Supabase secret key for the API and seeding; never expose it to the web client |
 | `AI_PROVIDER` | no | `mock` | `google` calls Gemini; `mock` disables the model |
 | `GOOGLE_API_KEY` | with `google` | — | Gemini API key |
-| `AI_MODEL_FAST` | with `google` | — | model for quick calls: builder dialog turns, task requirements, next-step text |
+| `AI_MODEL_FAST` | with `google` | — | model for quick calls: builder dialog turns, task requirements, next-step text, practice checks, research summary and evaluation |
 | `AI_MODEL_STRONG` | no | `AI_MODEL_FAST` | model for composing the task card |
 | `AI_THINKING_FAST`, `AI_THINKING_STRONG` | no | unset | thinking level `minimal`, `low`, `medium` or `high`, for models that support it |
 | `PORT` | no | `8787` | API port (Node server) |
@@ -144,6 +144,7 @@ Model scripts (need `AI_PROVIDER=google` and a key):
 
 - `pnpm --filter @sana/api ai:smoke [models…]` — Gemini access and a structured response.
 - `pnpm --filter @sana/api eval:bcb` — runs the builder on the 15 descriptions in `data/bcb-descriptions.json`: strong descriptions must score higher readiness than weak ones.
+- `pnpm --filter @sana/api eval:practice` — runs the Practice Lab check on the 9 answers in `data/practice-answers.json`: strong answers must score higher than medium, medium higher than weak.
 - `pnpm --filter @sana/api demo:match [Team]` — recommendations and a growth plan for a seeded team (no model needed).
 
 ## Code layout

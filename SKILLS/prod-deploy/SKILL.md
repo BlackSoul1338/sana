@@ -14,8 +14,6 @@ description: Deploys AI Sana to production — the API Worker on Cloudflare, dat
 | Database schema (`apps/api/drizzle`) | Supabase project `nxxwdkkniparbquhdcsf` | **Manual migration** |
 | Web env vars (`VITE_*`) | Vercel project settings | Baked in at build: **manual redeploy** after changing them |
 
-The Cloudflare Worker named `sana` (Git-connected builds) is not used and its builds fail; ignore it.
-
 ## Rules
 
 - Production deploys and migrations need an explicit go-ahead from the user in this conversation.

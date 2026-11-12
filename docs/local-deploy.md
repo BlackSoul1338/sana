@@ -7,7 +7,7 @@ Runs the whole stack on one machine: Supabase (Postgres, Auth, Storage) in conta
 - Node.js 24 or newer.
 - pnpm 12.17.0, pinned in `packageManager` (`corepack enable` picks it up).
 - Podman with the user socket. The `db:*` scripts run the Supabase CLI (a dev dependency) with `DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock`. With Docker, call `pnpm exec supabase start` / `stop` / `status` directly instead.
-- Optional: a Gemini API key. Without it the API still starts, the challenge builder answers `ai_unavailable`, and the next-step hint falls back to a template.
+- Optional: a Gemini API key. Without it the API still starts, the challenge builder answers `ai_unavailable`, practice work and research conclusions go to the teacher without the model's check, and the next-step hint falls back to a template.
 
 ## Setup
 
@@ -57,7 +57,7 @@ pnpm dev:web
 
 ## Run the API as a Cloudflare Worker locally
 
-To reproduce production behavior (Workers runtime, one database connection per request), run the Worker build instead of `pnpm dev`. Both listen on port 8787, so run only one of them.
+To run the production entry point (Workers runtime, up to 5 database connections per request), run the Worker build instead of `pnpm dev`. Both listen on port 8787, so run only one of them.
 
 1. Put the local Supabase values into `apps/api/.dev.vars` (gitignored, `.env` format): `SUPABASE_URL=http://127.0.0.1:54321`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `GOOGLE_API_KEY`.
 2. Start it:
@@ -66,7 +66,7 @@ To reproduce production behavior (Workers runtime, one database connection per r
    pnpm --filter @sana/api dev:worker
    ```
 
-The local Hyperdrive binding connects straight to the local Postgres (`127.0.0.1:54322`), as configured in `apps/api/cloudflare.config.ts`.
+The local Hyperdrive binding connects straight to the local Postgres (`127.0.0.1:54322`), as configured in `apps/api/cloudflare.config.ts`. It does not reproduce production Hyperdrive limits: there a query that waits for a busy connection hangs instead of queueing.
 
 ## Tests
 

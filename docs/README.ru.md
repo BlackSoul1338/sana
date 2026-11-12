@@ -92,7 +92,7 @@ API и веб читают один файл `.env` в корне репозит
 | `SUPABASE_SECRET_KEY` | да | — | секретный ключ Supabase для API и seed; никогда не передавайте его в веб |
 | `AI_PROVIDER` | нет | `mock` | `google` — вызывать Gemini; `mock` — модель отключена |
 | `GOOGLE_API_KEY` | для `google` | — | ключ Gemini API |
-| `AI_MODEL_FAST` | для `google` | — | модель для быстрых вызовов: ход диалога конструктора, требования к задаче, текст следующего шага |
+| `AI_MODEL_FAST` | для `google` | — | модель для быстрых вызовов: ход диалога конструктора, требования к задаче, текст следующего шага, проверка практики, сводка и оценка исследования |
 | `AI_MODEL_STRONG` | нет | значение `AI_MODEL_FAST` | модель для сборки карточки |
 | `AI_THINKING_FAST`, `AI_THINKING_STRONG` | нет | не задаётся | уровень размышлений `minimal`, `low`, `medium` или `high`; только для моделей, которые его поддерживают |
 | `PORT` | нет | `8787` | порт API (Node-сервер) |
@@ -144,6 +144,7 @@ pnpm --filter @sana/web gen:api
 
 - `pnpm --filter @sana/api ai:smoke [модели…]` — доступ к Gemini и структурный ответ.
 - `pnpm --filter @sana/api eval:bcb` — прогон конструктора на 15 описаниях из `data/bcb-descriptions.json`: сильные описания должны получать готовность выше слабых.
+- `pnpm --filter @sana/api eval:practice` — проверка Practice Lab на 9 ответах из `data/practice-answers.json`: сильные ответы должны получать больше баллов, чем средние, средние — больше, чем слабые.
 - `pnpm --filter @sana/api demo:match [Команда]` — рекомендации и план роста для команды на данных seed (модель не нужна).
 
 ## Устройство кода

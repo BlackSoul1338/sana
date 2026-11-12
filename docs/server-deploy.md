@@ -99,4 +99,4 @@ Tools: the `cf` CLI (`pnpm add --global cf`; also a dev dependency of `@sana/api
 
 - Workers: 100,000 requests per day; 10 ms of CPU time per request (time spent waiting for the database or the model does not count).
 - Hyperdrive: 100,000 database queries per day, up to 20 connections to the origin.
-- Keep list endpoints to a fixed number of queries: per-row queries exhaust the per-request connection quickly on Workers.
+- Each Worker request opens up to 5 database connections (`apps/api/src/worker.ts`). Behind Hyperdrive a query that waits for a busy connection never completes, so no request may run more than 5 queries at once (keep every `Promise.all` over the database at 5 or fewer), and list endpoints use a fixed number of queries rather than one per row.
