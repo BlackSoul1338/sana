@@ -4,9 +4,11 @@ import { ReturnNote } from '@/entities/evidence';
 import { ConclusionView, workspaceQuery } from '@/entities/research';
 import { useMe } from '@/entities/viewer';
 import { WS_STATUS } from '@/shared/config';
+import { problemMessage } from '@/shared/api';
 import { points } from '@/shared/lib/format';
+import { Button } from '@/shared/ui/button';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { SectionTitle, Status } from '@/shared/ui/status';
+import { EmptyState, SectionTitle, Status } from '@/shared/ui/status';
 import { Board } from './board';
 import { ConclusionEditor } from './conclusion-editor';
 import { Discussion } from './discussion';
@@ -15,8 +17,20 @@ import { TeamPanel } from './team-panel';
 
 export function ResearchWorkspacePage({ workspaceId }: { workspaceId: string }) {
   const me = useMe();
-  const { data: ws, isPending } = useQuery(workspaceQuery(workspaceId));
-  if (isPending || !ws) return <Skeleton className="h-96" />;
+  const { data: ws, error, refetch, isFetching } = useQuery(workspaceQuery(workspaceId));
+  if (error)
+    return (
+      <EmptyState
+        title="Не удалось открыть исследование"
+        text={problemMessage(error)}
+        action={
+          <Button variant="outline" disabled={isFetching} onClick={() => void refetch()}>
+            Повторить
+          </Button>
+        }
+      />
+    );
+  if (!ws) return <Skeleton className="h-96" />;
 
   const editable = me.profile!.role !== 'teacher' && ws.status === 'active';
   const names = new Map(ws.contribution.map((c) => [c.profileId, c.name]));
