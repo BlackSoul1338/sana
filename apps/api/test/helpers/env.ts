@@ -4,7 +4,7 @@ import { MockLanguageModelV4 } from 'ai/test';
 import { createApp, type App } from '../../src/app.js';
 import { createDb, type Db } from '../../src/platform/db/client.js';
 import { testVerifier } from '../../src/platform/auth.js';
-import { fakeStorage } from '../../src/platform/storage.js';
+import { fakeStorage, type StoragePort } from '../../src/platform/storage.js';
 import { fakeAccounts } from '../../src/platform/accounts.js';
 import type { AiModels, ModelTier } from '../../src/platform/ai/index.js';
 import { orgs, profiles } from '../../src/core/identity/schema.js';
@@ -16,19 +16,20 @@ export function testDb(): Db {
   return createDb(process.env.TEST_DATABASE_URL!).db;
 }
 
-export function makeApp(opts: { ai?: AiModels | null; clock?: Clock } = {}): App {
+export function makeApp(opts: { ai?: AiModels | null; clock?: Clock; signupRateLimit?: number; storage?: StoragePort } = {}): App {
   const clock = opts.clock;
   return createApp({
     db: testDb(),
     verifier: testVerifier(),
     ai: opts.ai ?? null,
-    storage: fakeStorage(),
+    storage: opts.storage ?? fakeStorage(),
     accounts: fakeAccounts(),
     ...(clock ? { clock: () => new Date(clock.now) } : {}),
+    ...(opts.signupRateLimit !== undefined ? { signupRateLimit: opts.signupRateLimit } : {}),
   });
 }
 
-/** Чистая база с заполненными справочниками перед каждым тестом. */
+/** A clean database with reference data loaded, before each test. */
 export async function resetDb() {
   const db = testDb();
   const rows = await db.execute<{ tablename: string }>(dsql`select tablename from pg_tables where schemaname = 'public'`);
@@ -54,7 +55,7 @@ export async function createUser(role: TestUser['role'], name = `${role}-${rando
 
 export type Res<T = any> = { status: number; body: T };
 
-/** Тонкий HTTP-клиент поверх app.request — без сети и без запуска сервера. */
+/** A thin HTTP client over app.request — no network, no server started. */
 export function http(app: App) {
   const call = async <T = any>(method: string, path: string, user?: TestUser | null, body?: unknown): Promise<Res<T>> => {
     const headers: Record<string, string> = {};
@@ -73,7 +74,7 @@ export function http(app: App) {
 }
 
 /**
- * Mock-модель: responder получает system и текст промпта и возвращает объект, который «модель» выдаст как JSON.
+ * Mock model: the responder gets the system prompt and the prompt text and returns the object "the model" will emit as JSON.
  */
 export function mockAi(responder: (input: { tier: ModelTier; system: string; prompt: string }) => unknown): AiModels & { calls: { tier: ModelTier; system: string; prompt: string }[] } {
   const calls: { tier: ModelTier; system: string; prompt: string }[] = [];

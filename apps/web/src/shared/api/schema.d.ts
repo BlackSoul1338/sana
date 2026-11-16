@@ -13,7 +13,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Регистрация по почте и паролю без письма подтверждения; дальше клиент входит паролем */
+        /** Sign-up with email and password, no confirmation email; the client then signs in with the password */
         post: {
             parameters: {
                 query?: never;
@@ -36,7 +36,7 @@ export interface paths {
                         "application/json": components["schemas"]["SignUpResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -45,7 +45,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -54,7 +54,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -63,7 +63,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -72,8 +72,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -96,7 +105,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Текущий пользователь, профиль и команды */
+        /** The current user, their profile and teams */
         get: {
             parameters: {
                 query?: never;
@@ -115,7 +124,7 @@ export interface paths {
                         "application/json": components["schemas"]["Me"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -124,7 +133,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -133,7 +142,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -142,7 +151,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -151,8 +160,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -179,7 +197,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Создать профиль после регистрации в Supabase Auth (студент или бизнес) */
+        /** Create a profile after Supabase Auth sign-up (student or business) */
         post: {
             parameters: {
                 query?: never;
@@ -193,7 +211,7 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description Профиль создан */
+                /** @description The profile was created */
                 201: {
                     headers: {
                         [name: string]: unknown;
@@ -202,7 +220,7 @@ export interface paths {
                         "application/json": components["schemas"]["Profile"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -211,7 +229,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -220,7 +238,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -229,7 +247,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -238,8 +256,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -262,7 +289,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Справочник навыков и технологий */
+        /** The skills and technologies directory */
         get: {
             parameters: {
                 query?: never;
@@ -281,7 +308,7 @@ export interface paths {
                         "application/json": components["schemas"]["Skill"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -290,7 +317,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -299,7 +326,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -308,7 +335,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -317,8 +344,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -343,7 +379,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Поиск студентов по имени (для приглашения в команду) */
+        /** Find students by name (to invite them into a team) */
         get: {
             parameters: {
                 query?: {
@@ -364,7 +400,7 @@ export interface paths {
                         "application/json": components["schemas"]["StudentSearchItem"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -373,7 +409,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -382,7 +418,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -391,7 +427,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -400,8 +436,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -426,7 +471,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Справочник ролей в команде */
+        /** The teams role directory */
         get: {
             parameters: {
                 query?: never;
@@ -445,7 +490,7 @@ export interface paths {
                         "application/json": components["schemas"]["TeamRole"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -454,7 +499,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -463,7 +508,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -472,7 +517,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -481,8 +526,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -507,7 +561,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Список команд (mine=true — только мои) */
+        /** List teams (mine=true — only mine) */
         get: {
             parameters: {
                 query?: {
@@ -528,7 +582,7 @@ export interface paths {
                         "application/json": components["schemas"]["Team"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -537,7 +591,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -546,7 +600,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -555,7 +609,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -564,8 +618,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -576,7 +639,7 @@ export interface paths {
             };
         };
         put?: never;
-        /** Создать команду */
+        /** Create a team */
         post: {
             parameters: {
                 query?: never;
@@ -599,7 +662,7 @@ export interface paths {
                         "application/json": components["schemas"]["Team"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -608,7 +671,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -617,7 +680,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -626,7 +689,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -635,8 +698,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -659,7 +731,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Команда: участники, роли, навыки */
+        /** A team: members, roles, skills */
         get: {
             parameters: {
                 query?: never;
@@ -680,7 +752,7 @@ export interface paths {
                         "application/json": components["schemas"]["Team"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -689,7 +761,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -698,7 +770,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -707,7 +779,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -716,8 +788,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -732,7 +813,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Изменить команду (часы в неделю, интересы) */
+        /** Update a team (weekly hours, interests) */
         patch: {
             parameters: {
                 query?: never;
@@ -757,7 +838,7 @@ export interface paths {
                         "application/json": components["schemas"]["Team"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -766,7 +847,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -775,7 +856,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -784,7 +865,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -793,8 +874,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -815,7 +905,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Добавить участника */
+        /** Add a member */
         post: {
             parameters: {
                 query?: never;
@@ -840,7 +930,7 @@ export interface paths {
                         "application/json": components["schemas"]["Team"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -849,7 +939,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -858,7 +948,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -867,7 +957,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -876,8 +966,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -906,7 +1005,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Назначить роль участнику */
+        /** Assign a role to a member */
         patch: {
             parameters: {
                 query?: never;
@@ -932,7 +1031,7 @@ export interface paths {
                         "application/json": components["schemas"]["Team"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -941,7 +1040,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -950,7 +1049,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -959,7 +1058,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -968,8 +1067,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -989,7 +1097,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** Задать навыки команды (уровень 1–3) */
+        /** Set a team skills (level 1–3) */
         put: {
             parameters: {
                 query?: never;
@@ -1014,7 +1122,7 @@ export interface paths {
                         "application/json": components["schemas"]["Team"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1023,7 +1131,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1032,7 +1140,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1041,7 +1149,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1050,8 +1158,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1075,7 +1192,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Каталог опубликованных задач с фильтрами по теме и сложности */
+        /** The catalog of published tasks, with topic and difficulty filters */
         get: {
             parameters: {
                 query?: {
@@ -1083,7 +1200,7 @@ export interface paths {
                     cursor?: string;
                     topic?: string;
                     difficulty?: number;
-                    /** @description Для бизнеса: задачи своей организации в любом статусе */
+                    /** @description For a business: tasks of its own organisation, whatever their status */
                     mine?: "true" | "false";
                 };
                 header?: never;
@@ -1100,12 +1217,12 @@ export interface paths {
                     content: {
                         "application/json": {
                             items: components["schemas"]["Task"][];
-                            /** @description Курсор следующей страницы или null */
+                            /** @description The cursor of the next page, or null */
                             nextCursor: string | null;
                         };
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1114,7 +1231,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1123,7 +1240,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1132,7 +1249,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1141,8 +1258,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1167,7 +1293,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Карточка задачи */
+        /** A task card */
         get: {
             parameters: {
                 query?: never;
@@ -1188,7 +1314,7 @@ export interface paths {
                         "application/json": components["schemas"]["Task"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1197,7 +1323,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1206,7 +1332,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1215,7 +1341,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1224,8 +1350,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1252,7 +1387,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Подписанная ссылка для загрузки скриншота или отчёта в Storage */
+        /** A signed URL for uploading a screenshot or report to Storage */
         post: {
             parameters: {
                 query?: never;
@@ -1275,7 +1410,7 @@ export interface paths {
                         "application/json": components["schemas"]["UploadUrl"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1284,7 +1419,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1293,7 +1428,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1302,7 +1437,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1311,8 +1446,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1335,7 +1479,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Очередь проверки (куратор или преподаватель — по своей роли) или подтверждения своих команд (студент) */
+        /** The review queue (mentor or teacher, by reviewer role) or your teams confirmations (student) */
         get: {
             parameters: {
                 query?: {
@@ -1359,7 +1503,7 @@ export interface paths {
                         "application/json": components["schemas"]["EvidenceQueueItem"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1368,7 +1512,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1377,7 +1521,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1386,7 +1530,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1395,8 +1539,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1421,7 +1574,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Подтверждение со ссылкой на файл */
+        /** Evidence with a link to its file */
         get: {
             parameters: {
                 query?: never;
@@ -1442,7 +1595,7 @@ export interface paths {
                         "application/json": components["schemas"]["EvidenceDetail"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1451,7 +1604,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1460,7 +1613,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1469,7 +1622,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1478,8 +1631,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1506,7 +1668,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Решение куратора: подтвердить, отклонить или скорректировать баллы с пояснением */
+        /** The decision: confirm, reject or adjust the points, with a comment */
         post: {
             parameters: {
                 query?: never;
@@ -1531,7 +1693,7 @@ export interface paths {
                         "application/json": components["schemas"]["ReviewResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1540,7 +1702,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1549,7 +1711,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1558,7 +1720,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1567,8 +1729,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1591,7 +1762,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Рейтинг команд, участников или организаций (по всем модулям или одному) */
+        /** Leaderboard of teams, members or organisations (all modules or one) */
         get: {
             parameters: {
                 query?: {
@@ -1614,7 +1785,7 @@ export interface paths {
                         "application/json": components["schemas"]["LeaderboardEntry"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1623,7 +1794,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1632,7 +1803,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1641,7 +1812,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1650,8 +1821,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1676,7 +1856,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Журнал начислений с объяснениями: свой, своей команды или организации; проверяющему — любой */
+        /** The ledger with explanations: yours, your teams or your organisation; any for a reviewer */
         get: {
             parameters: {
                 query: {
@@ -1698,7 +1878,7 @@ export interface paths {
                         "application/json": components["schemas"]["PointEvent"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1707,7 +1887,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1716,7 +1896,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1725,7 +1905,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1734,8 +1914,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1762,7 +1951,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Корректировка баллов куратором (новое событие с комментарием) */
+        /** A mentor point adjustment (a new event with the comment) */
         post: {
             parameters: {
                 query?: never;
@@ -1785,7 +1974,7 @@ export interface paths {
                         "application/json": components["schemas"]["PointEvent"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1794,7 +1983,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1803,7 +1992,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1812,7 +2001,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1821,8 +2010,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1845,7 +2043,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** 25 типовых задач по этапам */
+        /** The 25 stage task templates */
         get: {
             parameters: {
                 query?: never;
@@ -1864,7 +2062,7 @@ export interface paths {
                         "application/json": components["schemas"]["TaskTemplate"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1873,7 +2071,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1882,7 +2080,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1891,7 +2089,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1900,8 +2098,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1926,7 +2133,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Проекты: свои (студент), все (куратор), по задачам организации (бизнес) */
+        /** Projects: your own (student), all (mentor), your organisation tasks (business) */
         get: {
             parameters: {
                 query?: {
@@ -1947,7 +2154,7 @@ export interface paths {
                         "application/json": components["schemas"]["SprintProjectSummary"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -1956,7 +2163,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -1965,7 +2172,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -1974,7 +2181,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -1983,8 +2190,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1995,7 +2211,7 @@ export interface paths {
             };
         };
         put?: never;
-        /** Создать проект команды: пять этапов с плановыми сроками */
+        /** Create a team project: the five stages with planned dates */
         post: {
             parameters: {
                 query?: never;
@@ -2018,7 +2234,7 @@ export interface paths {
                         "application/json": components["schemas"]["SprintProject"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2027,7 +2243,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2036,7 +2252,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2045,7 +2261,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2054,8 +2270,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2078,7 +2303,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Карта этапов, задачи, подтверждения и баллы проекта */
+        /** The stage map, tasks, evidence and points of a project */
         get: {
             parameters: {
                 query?: never;
@@ -2099,7 +2324,7 @@ export interface paths {
                         "application/json": components["schemas"]["SprintProject"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2108,7 +2333,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2117,7 +2342,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2126,7 +2351,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2135,8 +2360,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2167,7 +2401,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Изменить плановую дату этапа (куратор) */
+        /** Change a planned stage date (mentor) */
         patch: {
             parameters: {
                 query?: never;
@@ -2193,7 +2427,7 @@ export interface paths {
                         "application/json": components["schemas"]["SprintProject"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2202,7 +2436,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2211,7 +2445,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2220,7 +2454,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2229,8 +2463,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2251,7 +2494,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Добавить задачу (из шаблона или свою) с технологией и исполнителем */
+        /** Add a task (from a template or your own) with a technology and an assignee */
         post: {
             parameters: {
                 query?: never;
@@ -2276,7 +2519,7 @@ export interface paths {
                         "application/json": components["schemas"]["SprintTask"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2285,7 +2528,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2294,7 +2537,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2303,7 +2546,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2312,8 +2555,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2342,7 +2594,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Изменить задачу: исполнитель, технология, статус */
+        /** Update a task: assignee, technology, status */
         patch: {
             parameters: {
                 query?: never;
@@ -2367,7 +2619,7 @@ export interface paths {
                         "application/json": components["schemas"]["SprintTask"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2376,7 +2628,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2385,7 +2637,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2394,7 +2646,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2403,8 +2655,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2425,7 +2686,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Отправить подтверждение этапа, задачи или интервью на проверку куратору */
+        /** Submit stage, task or interview evidence for the mentor to review */
         post: {
             parameters: {
                 query?: never;
@@ -2450,7 +2711,7 @@ export interface paths {
                         "application/json": components["schemas"]["Evidence"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2459,7 +2720,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2468,7 +2729,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2477,7 +2738,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2486,8 +2747,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2510,7 +2780,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Лента начислений и достижений с объяснениями */
+        /** The feed of awards and achievements with explanations */
         get: {
             parameters: {
                 query?: never;
@@ -2531,7 +2801,7 @@ export interface paths {
                         "application/json": components["schemas"]["SprintFeed"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2540,7 +2810,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2549,7 +2819,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2558,7 +2828,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2567,8 +2837,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2593,7 +2872,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Следующее полезное действие: выбирает код, формулирует модель (или шаблон) */
+        /** The next useful action: code picks it, the model (or a template) phrases it */
         get: {
             parameters: {
                 query?: never;
@@ -2614,7 +2893,7 @@ export interface paths {
                         "application/json": components["schemas"]["NextStep"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2623,7 +2902,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2632,7 +2911,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2641,7 +2920,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2650,8 +2929,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2676,7 +2964,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Черновики своей организации */
+        /** Your organisation drafts */
         get: {
             parameters: {
                 query?: never;
@@ -2695,7 +2983,7 @@ export interface paths {
                         "application/json": components["schemas"]["DraftSummary"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2704,7 +2992,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2713,7 +3001,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2722,7 +3010,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2731,8 +3019,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2743,7 +3040,7 @@ export interface paths {
             };
         };
         put?: never;
-        /** Начать: свободное описание проблемы → проверка полноты и уточняющие вопросы (не меньше трёх) */
+        /** Start: free-text problem description → completeness check and follow-up questions (at least three) */
         post: {
             parameters: {
                 query?: never;
@@ -2766,7 +3063,7 @@ export interface paths {
                         "application/json": components["schemas"]["TurnResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2775,7 +3072,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2784,7 +3081,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2793,7 +3090,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2802,7 +3099,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
                     headers: {
                         [name: string]: unknown;
@@ -2811,7 +3108,16 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Модель недоступна или нарушила схему */
+                /** @description Too many requests */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The model was unavailable or broke the schema */
                 502: {
                     headers: {
                         [name: string]: unknown;
@@ -2835,7 +3141,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Черновик: диалог, поля, готовность, карточка */
+        /** A draft: the dialog, the fields, the readiness, the card */
         get: {
             parameters: {
                 query?: never;
@@ -2856,7 +3162,7 @@ export interface paths {
                         "application/json": components["schemas"]["Draft"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2865,7 +3171,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2874,7 +3180,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2883,7 +3189,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2892,8 +3198,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2920,7 +3235,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Ответ бизнеса на вопросы → новый анализ, готовность и следующие вопросы */
+        /** The business answer → a new analysis, readiness and follow-up questions */
         post: {
             parameters: {
                 query?: never;
@@ -2945,7 +3260,7 @@ export interface paths {
                         "application/json": components["schemas"]["TurnResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -2954,7 +3269,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -2963,7 +3278,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -2972,7 +3287,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -2981,7 +3296,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
                     headers: {
                         [name: string]: unknown;
@@ -2990,7 +3305,16 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Модель недоступна или нарушила схему */
+                /** @description Too many requests */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The model was unavailable or broke the schema */
                 502: {
                     headers: {
                         [name: string]: unknown;
@@ -3016,7 +3340,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Собрать карточку и предложить требования к команде (проверка на персональные данные до вызова модели) */
+        /** Compose the card and propose the team requirements (personal-data scan before calling the model) */
         post: {
             parameters: {
                 query?: never;
@@ -3037,7 +3361,7 @@ export interface paths {
                         "application/json": components["schemas"]["ComposeResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3046,7 +3370,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3055,7 +3379,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3064,7 +3388,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3073,7 +3397,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
                     headers: {
                         [name: string]: unknown;
@@ -3082,7 +3406,16 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Модель недоступна или нарушила схему */
+                /** @description Too many requests */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The model was unavailable or broke the schema */
                 502: {
                     headers: {
                         [name: string]: unknown;
@@ -3112,7 +3445,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Правки карточки и требований в предпросмотре */
+        /** Card and requirements edits in the preview */
         patch: {
             parameters: {
                 query?: never;
@@ -3137,7 +3470,7 @@ export interface paths {
                         "application/json": components["schemas"]["Draft"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3146,7 +3479,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3155,7 +3488,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3164,7 +3497,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3173,8 +3506,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3195,7 +3537,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Ручное подтверждение и публикация в каталог; баллы готовности — организации */
+        /** Manual confirmation and publishing into the catalog; readiness points go to the organisation */
         post: {
             parameters: {
                 query?: never;
@@ -3220,7 +3562,7 @@ export interface paths {
                         "application/json": components["schemas"]["PublishResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3229,7 +3571,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3238,7 +3580,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3247,7 +3589,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3256,8 +3598,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3280,7 +3631,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Сравнение до и после диалога: какой ответ поднял какое поле */
+        /** Compare before and after the dialog: which answer raised which field */
         get: {
             parameters: {
                 query?: never;
@@ -3301,7 +3652,7 @@ export interface paths {
                         "application/json": components["schemas"]["DraftDiff"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3310,7 +3661,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3319,7 +3670,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3328,7 +3679,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3337,8 +3688,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3363,7 +3723,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Не меньше пяти задач для команды с процентом соответствия, совпадениями, пробелами и планом роста */
+        /** At least five tasks for the team, with a fit percentage, matched skills, gaps and a growth plan */
         get: {
             parameters: {
                 query: {
@@ -3387,7 +3747,7 @@ export interface paths {
                         "application/json": components["schemas"]["RecommendationsResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3396,7 +3756,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3405,7 +3765,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3414,7 +3774,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3423,8 +3783,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3449,7 +3818,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Объяснение соответствия команды конкретной задаче */
+        /** How the team fits a specific task */
         get: {
             parameters: {
                 query: {
@@ -3472,7 +3841,7 @@ export interface paths {
                         "application/json": components["schemas"]["Fit"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3481,7 +3850,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3490,7 +3859,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3499,7 +3868,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3508,8 +3877,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3534,7 +3912,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Заявки команды или заявки на задачу (для её владельца) */
+        /** Team applications, or applications for a task (for its owner) */
         get: {
             parameters: {
                 query?: {
@@ -3556,7 +3934,7 @@ export interface paths {
                         "application/json": components["schemas"]["Application"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3565,7 +3943,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3574,7 +3952,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3583,7 +3961,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3592,8 +3970,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3604,7 +3991,7 @@ export interface paths {
             };
         };
         put?: never;
-        /** Отклик команды на задачу (баллы за выбор не начисляются) */
+        /** A team application for the task (no points for applying) */
         post: {
             parameters: {
                 query?: never;
@@ -3627,7 +4014,7 @@ export interface paths {
                         "application/json": components["schemas"]["Application"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3636,7 +4023,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3645,7 +4032,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3654,7 +4041,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3663,8 +4050,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3689,7 +4085,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Отозвать заявку */
+        /** Withdraw the application */
         post: {
             parameters: {
                 query?: never;
@@ -3710,7 +4106,7 @@ export interface paths {
                         "application/json": components["schemas"]["Application"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3719,7 +4115,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3728,7 +4124,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3737,7 +4133,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3746,8 +4142,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3772,7 +4177,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Отзыв бизнеса на подтверждённый результат; положительный даёт коэффициент реальной задачи */
+        /** Business feedback on a confirmed result; positive feedback grants the real-task multiplier */
         post: {
             parameters: {
                 query?: never;
@@ -3795,7 +4200,7 @@ export interface paths {
                         "application/json": components["schemas"]["FeedbackResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3804,7 +4209,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3813,7 +4218,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3822,7 +4227,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3831,8 +4236,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3855,7 +4269,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Учебные модули; для студента — результат теста */
+        /** The learning modules; for a student — the quiz result */
         get: {
             parameters: {
                 query?: never;
@@ -3874,7 +4288,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeModule"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3883,7 +4297,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3892,7 +4306,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3901,7 +4315,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3910,8 +4324,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -3936,7 +4359,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Вопросы теста без ключа; последний результат студента */
+        /** The quiz questions without the key; the student last result */
         get: {
             parameters: {
                 query?: never;
@@ -3957,7 +4380,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeQuiz"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -3966,7 +4389,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -3975,7 +4398,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -3984,7 +4407,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -3993,8 +4416,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4005,7 +4437,7 @@ export interface paths {
             };
         };
         put?: never;
-        /** Сдать тест: разбор по вопросам; баллы только за первую попытку */
+        /** Submit the quiz: the per-question breakdown; points for the first attempt only */
         post: {
             parameters: {
                 query?: never;
@@ -4030,7 +4462,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeQuizResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4039,7 +4471,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4048,7 +4480,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4057,7 +4489,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4066,8 +4498,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4090,7 +4531,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Практические задания модуля */
+        /** The practice assignments of the module */
         get: {
             parameters: {
                 query?: {
@@ -4111,7 +4552,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeAssignment"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4120,7 +4561,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4129,7 +4570,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4138,7 +4579,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4147,8 +4588,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4159,7 +4609,7 @@ export interface paths {
             };
         };
         put?: never;
-        /** Новое задание с критериями (преподаватель) */
+        /** A new assignment with criteria (teacher) */
         post: {
             parameters: {
                 query?: never;
@@ -4182,7 +4632,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeAssignment"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4191,7 +4641,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4200,7 +4650,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4209,7 +4659,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4218,8 +4668,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4242,7 +4701,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Мои попытки по заданию */
+        /** My attempts for the assignment */
         get: {
             parameters: {
                 query?: never;
@@ -4263,7 +4722,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeAttempt"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4272,7 +4731,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4281,7 +4740,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4290,7 +4749,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4299,8 +4758,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4311,7 +4779,7 @@ export interface paths {
             };
         };
         put?: never;
-        /** Новая попытка: проверка моделью по критериям задания (без оценки) */
+        /** A new attempt: the model checks it against the assignment criteria (no grading yet) */
         post: {
             parameters: {
                 query?: never;
@@ -4336,7 +4804,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeAttempt"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4345,7 +4813,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4354,7 +4822,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4363,7 +4831,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4372,8 +4840,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4398,7 +4875,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Отправить последнюю попытку преподавателю */
+        /** Send the last attempt to the teacher */
         post: {
             parameters: {
                 query?: never;
@@ -4419,7 +4896,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeAttempt"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4428,7 +4905,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4437,7 +4914,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4446,7 +4923,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4455,8 +4932,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4479,7 +4965,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Попытка с заданием и проверкой (владелец или преподаватель) */
+        /** An attempt with the assignment and the check (owner or teacher) */
         get: {
             parameters: {
                 query?: never;
@@ -4500,7 +4986,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeAttemptDetail"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4509,7 +4995,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4518,7 +5004,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4527,7 +5013,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4536,8 +5022,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4562,7 +5057,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Панель преподавателя: студенты × задания, проблемные темы */
+        /** The teacher dashboard: students × assignments, problem topics */
         get: {
             parameters: {
                 query: {
@@ -4583,7 +5078,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeDashboard"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4592,7 +5087,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4601,7 +5096,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4610,7 +5105,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4619,8 +5114,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4645,7 +5149,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Следующее задание по найденным пробелам */
+        /** The next assignment from the observed weaknesses */
         get: {
             parameters: {
                 query?: never;
@@ -4664,7 +5168,7 @@ export interface paths {
                         "application/json": components["schemas"]["PracticeRecommendation"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4673,7 +5177,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4682,7 +5186,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4691,7 +5195,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4700,8 +5204,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4726,7 +5239,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Исследовательские задачи */
+        /** The research tasks */
         get: {
             parameters: {
                 query?: never;
@@ -4745,7 +5258,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchTask"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4754,7 +5267,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4763,7 +5276,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4772,7 +5285,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4781,8 +5294,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4793,7 +5315,7 @@ export interface paths {
             };
         };
         put?: never;
-        /** Новая задача с рубрикой (преподаватель) */
+        /** A new task with a rubric (teacher) */
         post: {
             parameters: {
                 query?: never;
@@ -4816,7 +5338,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchTask"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4825,7 +5347,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4834,7 +5356,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4843,7 +5365,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4852,8 +5374,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4878,7 +5409,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Команда берёт задачу и фиксирует начальную позицию */
+        /** A team takes the task and records its initial position */
         post: {
             parameters: {
                 query?: never;
@@ -4903,7 +5434,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchWorkspace"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4912,7 +5443,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -4921,7 +5452,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -4930,7 +5461,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -4939,8 +5470,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -4963,7 +5503,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Исследования команд (студент — свои, преподаватель — все) */
+        /** The teams research workspaces (student — their own, teacher — all) */
         get: {
             parameters: {
                 query?: {
@@ -4985,7 +5525,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchWorkspaceSummary"][];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -4994,7 +5534,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5003,7 +5543,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5012,7 +5552,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5021,8 +5561,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5047,7 +5596,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Рабочее пространство: ветки, доска, карта аргументов, вклад, вывод */
+        /** The workspace: threads, the board, the argument map, contribution, the conclusion */
         get: {
             parameters: {
                 query?: never;
@@ -5068,7 +5617,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchWorkspace"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5077,7 +5626,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5086,7 +5635,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5095,7 +5644,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5104,8 +5653,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5130,7 +5688,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Исследование по подтверждению вывода (для проверки) */
+        /** The research behind a conclusion evidence (for review) */
         get: {
             parameters: {
                 query?: never;
@@ -5151,7 +5709,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchWorkspace"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5160,7 +5718,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5169,7 +5727,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5178,7 +5736,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5187,8 +5745,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5214,7 +5781,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** Роли участников в исследовании */
+        /** The roles of the participants in the research */
         put: {
             parameters: {
                 query?: never;
@@ -5239,7 +5806,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchWorkspace"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5248,7 +5815,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5257,7 +5824,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5266,7 +5833,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5275,8 +5842,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5302,7 +5878,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Новая ветка обсуждения (гипотеза) */
+        /** A new discussion thread (hypothesis) */
         post: {
             parameters: {
                 query?: never;
@@ -5327,7 +5903,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchThread"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5336,7 +5912,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5345,7 +5921,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5354,7 +5930,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5363,8 +5939,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5389,7 +5974,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Сообщение в ветке (баллов не даёт) */
+        /** A message in a thread (no points) */
         post: {
             parameters: {
                 query?: never;
@@ -5414,7 +5999,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchMessage"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5423,7 +6008,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5432,7 +6017,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5441,7 +6026,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5450,8 +6035,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5474,7 +6068,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Сообщения после курсора (для опроса) */
+        /** Messages after a cursor (for polling) */
         get: {
             parameters: {
                 query?: {
@@ -5497,7 +6091,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchMessagePage"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5506,7 +6100,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5515,7 +6109,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5524,7 +6118,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5533,8 +6127,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5561,7 +6164,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Аргумент, источник или вопрос на доску */
+        /** An argument, a source or a question for the board */
         post: {
             parameters: {
                 query?: never;
@@ -5586,7 +6189,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchItem"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5595,7 +6198,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5604,7 +6207,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5613,7 +6216,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5622,8 +6225,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5648,7 +6260,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Сводка обсуждения моделью: недостающие аргументы и вопросы (участник команды) */
+        /** A model summary of the discussion: the missing arguments and questions (team members) */
         post: {
             parameters: {
                 query?: never;
@@ -5669,7 +6281,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchWorkspace"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5678,7 +6290,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5687,7 +6299,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5696,7 +6308,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5705,7 +6317,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
                     headers: {
                         [name: string]: unknown;
@@ -5714,7 +6326,16 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Модель недоступна или нарушила схему */
+                /** @description Too many requests */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The model was unavailable or broke the schema */
                 502: {
                     headers: {
                         [name: string]: unknown;
@@ -5740,7 +6361,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Отправить вывод преподавателю: каждое утверждение со ссылками на доску */
+        /** Send the conclusion to the teacher: every claim links to the board */
         post: {
             parameters: {
                 query?: never;
@@ -5765,7 +6386,7 @@ export interface paths {
                         "application/json": components["schemas"]["ResearchWorkspace"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5774,7 +6395,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5783,7 +6404,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5792,7 +6413,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5801,8 +6422,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5827,7 +6457,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Решение бизнеса по заявке; при принятии задача закрепляется и попадает в трекер Startup Sprint */
+        /** The business decision on the application; on acceptance the task is assigned and lands in Startup Sprint */
         post: {
             parameters: {
                 query?: never;
@@ -5852,7 +6482,7 @@ export interface paths {
                         "application/json": components["schemas"]["DecisionResult"];
                     };
                 };
-                /** @description Нет или неверный токен */
+                /** @description No or invalid token */
                 401: {
                     headers: {
                         [name: string]: unknown;
@@ -5861,7 +6491,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Недостаточно прав */
+                /** @description Insufficient permissions */
                 403: {
                     headers: {
                         [name: string]: unknown;
@@ -5870,7 +6500,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Объект не найден */
+                /** @description Resource not found */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -5879,7 +6509,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Конфликт состояния */
+                /** @description State conflict */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -5888,8 +6518,17 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Ошибка валидации или нарушено правило */
+                /** @description Validation error or broken rule */
                 422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests */
+                429: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -5929,7 +6568,7 @@ export interface components {
             requestId?: string;
         };
         /** @enum {string} */
-        ErrorCode: "unauthorized" | "forbidden" | "not_found" | "conflict" | "validation_failed" | "business_rule" | "sensitive_data" | "ai_unavailable" | "turn_limit" | "internal";
+        ErrorCode: "unauthorized" | "forbidden" | "not_found" | "conflict" | "validation_failed" | "business_rule" | "sensitive_data" | "ai_unavailable" | "turn_limit" | "rate_limited" | "internal";
         SignUpInput: {
             email: string;
             password: string;
@@ -5957,7 +6596,7 @@ export interface components {
             createdAt: string;
         } | null;
         /**
-         * @description Роль пользователя на платформе
+         * @description The user role on the platform
          * @enum {string}
          */
         Role: "student" | "mentor" | "business" | "teacher";
@@ -5965,14 +6604,14 @@ export interface components {
             displayName: string;
             /** @enum {string} */
             role: "student" | "business";
-            /** @description Для роли business: название компании */
+            /** @description For the business role: the company name */
             orgName?: string;
         };
         Skill: {
             slug: string;
             title: string;
             category: string;
-            /** @description Сложность от 1 до 3 */
+            /** @description Difficulty from 1 to 3 */
             difficulty: number;
         };
         StudentSearchItem: {
@@ -6006,7 +6645,7 @@ export interface components {
         };
         TeamSkill: {
             slug: string;
-            /** @description Сложность от 1 до 3 */
+            /** @description Difficulty from 1 to 3 */
             level: number;
         };
         CreateTeamInput: {
@@ -6047,7 +6686,7 @@ export interface components {
             summary: string;
             readiness: number;
             topic: string;
-            /** @description Сложность от 1 до 3 */
+            /** @description Difficulty from 1 to 3 */
             difficulty: number;
             estHours: number;
             skills: components["schemas"]["TaskSkillReq"][];
@@ -6073,7 +6712,7 @@ export interface components {
         CardField: {
             text: string;
             /**
-             * @description Откуда взято: из ответов бизнеса или «не указано»
+             * @description Where it comes from: the business's answers, or 'not specified'
              * @enum {string}
              */
             source: "dialog" | "not_specified";
@@ -6142,12 +6781,12 @@ export interface components {
             reviewedAt: string | null;
             /** Format: date-time */
             createdAt: string;
-            /** @description Временная ссылка на файл (если он загружен) */
+            /** @description A temporary link to the file (when one is uploaded) */
             downloadUrl: string | null;
         };
         ReviewResult: {
             evidence: components["schemas"]["Evidence"];
-            /** @description Все начисления, связанные с этим подтверждением */
+            /** @description All awards linked to this evidence */
             awarded: components["schemas"]["PointEvent"][];
         };
         Evidence: {
@@ -6187,7 +6826,7 @@ export interface components {
             module: string;
             ruleId: string;
             points: number;
-            /** @description Человекочитаемое объяснение начисления */
+            /** @description A human-readable explanation of the award */
             explanation: string;
             /** Format: uuid */
             evidenceId: string | null;
@@ -6201,7 +6840,7 @@ export interface components {
             decision: "approve" | "reject" | "adjust";
             /** @default  */
             comment: string;
-            /** @description Только для adjust: поправка с обязательным комментарием — команде, а работе без команды — её автору */
+            /** @description Only for adjust: a mandatory-comment adjustment — to the team, or to the author for individual work */
             adjustPoints?: number;
         };
         LeaderboardEntry: {
@@ -6259,7 +6898,7 @@ export interface components {
             status: "active" | "completed" | "archived";
             stages: components["schemas"]["SprintStage"][];
             tasks: components["schemas"]["SprintTask"][];
-            /** @description Для бизнеса — только подтверждённые */
+            /** @description For a business — only confirmed items */
             evidence: components["schemas"]["Evidence"][];
             points: {
                 team: number;
@@ -6306,7 +6945,7 @@ export interface components {
             idea: string;
             /**
              * Format: date
-             * @description Начало спринта; по умолчанию сегодня. Плановые даты этапов считаются от неё.
+             * @description Sprint start; defaults to today. Planned stage dates are computed from it.
              */
             startDate?: string;
         };
@@ -6332,7 +6971,7 @@ export interface components {
         };
         SubmitSprintEvidenceInput: {
             /**
-             * @description stage — закрыть текущий этап; task — закрыть задачу; interview — ещё одно интервью с клиентом (не закрывает этап)
+             * @description stage — close the current stage; task — close a task; interview — another client interview (does not close the stage)
              * @enum {string}
              */
             target: "stage" | "task" | "interview";
@@ -6374,9 +7013,9 @@ export interface components {
         NextStep: {
             ruleId: string;
             potentialPoints: number;
-            /** @description Что сделать (выбрано кодом) */
+            /** @description What to do (chosen by code) */
             action: string;
-            /** @description Формулировка рекомендации (модель или шаблон) */
+            /** @description The recommendation text (model or template) */
             text: string;
             /** @enum {string} */
             generatedBy: "ai" | "template";
@@ -6389,7 +7028,7 @@ export interface components {
             readyToCompose: boolean;
             fields: components["schemas"]["FieldState"][];
             questions: components["schemas"]["BcbQuestion"][];
-            /** @description Что изменилось относительно прошлого хода */
+            /** @description What changed relative to the previous turn */
             changes: components["schemas"]["FieldChange"][];
             turnsLeft: number;
         };
@@ -6402,7 +7041,7 @@ export interface components {
             quote: string;
             weight: number;
             earned: number;
-            /** @description Цитата найдена в репликах бизнеса */
+            /** @description The quote was found in the business's messages */
             quoteVerified: boolean;
         };
         BcbQuestion: {
@@ -6460,9 +7099,9 @@ export interface components {
         };
         TaskRequirements: {
             topic: string;
-            /** @description Сложность от 1 до 3 */
+            /** @description Difficulty from 1 to 3 */
             difficulty: number;
-            /** @description Оценка трудоёмкости в часах на весь проект */
+            /** @description Estimated effort in hours for the whole project */
             estHours: number;
             skills: components["schemas"]["TaskSkillReq"][];
         } | null;
@@ -6488,10 +7127,15 @@ export interface components {
         };
         PublishInput: {
             /**
-             * @description Явное подтверждение представителя бизнеса
+             * @description The business representative's explicit confirmation
              * @enum {boolean}
              */
             confirm: true;
+            /**
+             * @description The business representative saw and confirmed the team requirements
+             * @enum {boolean}
+             */
+            requirementsConfirmed: true;
         };
         DraftDiff: {
             before: {
@@ -6521,7 +7165,7 @@ export interface components {
             title: string;
             orgName: string;
             topic: string;
-            /** @description Сложность от 1 до 3 */
+            /** @description Difficulty from 1 to 3 */
             difficulty: number;
             estHours: number;
             readiness: number;
@@ -6540,7 +7184,7 @@ export interface components {
                 title: string;
                 required: boolean;
             }[];
-            /** @description Объяснение соответствия для команды */
+            /** @description Why the team fits the task */
             reasons: string[];
         };
         FitComponents: {
@@ -6551,7 +7195,7 @@ export interface components {
         };
         Growth: {
             teamLevel: number;
-            /** @description Навыки, которых не хватает для более сложных задач, и сколько задач они откроют */
+            /** @description Skills missing for harder tasks, and how many tasks they would unlock */
             skillsToAdd: {
                 slug: string;
                 title: string;
@@ -6629,7 +7273,7 @@ export interface components {
         PracticeQuizResult: {
             correct: number;
             total: number;
-            /** @description Начислено за этот тест (только за первую попытку) */
+            /** @description Awarded for this quiz (first attempt only) */
             points: number;
             perQuestion: {
                 /** Format: uuid */
@@ -6655,7 +7299,7 @@ export interface components {
             title: string;
             condition: string;
             materials: string;
-            /** @description Сложность от 1 до 3 */
+            /** @description Difficulty from 1 to 3 */
             difficulty: number;
             criteria: components["schemas"]["PracticeCriterion"][];
             /** Format: date-time */
@@ -6677,7 +7321,7 @@ export interface components {
             condition: string;
             /** @default  */
             materials: string;
-            /** @description Сложность от 1 до 3 */
+            /** @description Difficulty from 1 to 3 */
             difficulty: number;
             criteria: {
                 title: string;
@@ -6695,7 +7339,7 @@ export interface components {
             profileId: string;
             attemptNo: number;
             answer: string;
-            /** @description null — модель была недоступна, работу проверит преподаватель */
+            /** @description null when the model was unavailable; the teacher reviews the work */
             check: {
                 criteria: components["schemas"]["PracticeCheckedCriterion"][];
                 droppedQuotes: number;
@@ -6737,7 +7381,7 @@ export interface components {
             profileId: string;
             attemptNo: number;
             answer: string;
-            /** @description null — модель была недоступна, работу проверит преподаватель */
+            /** @description null when the model was unavailable; the teacher reviews the work */
             check: {
                 criteria: components["schemas"]["PracticeCheckedCriterion"][];
                 droppedQuotes: number;
@@ -6784,7 +7428,7 @@ export interface components {
                     status: "checked" | "sent" | "approved" | "rejected";
                     /** Format: uuid */
                     evidenceId: string | null;
-                    /** @description Только как дополнительный показатель, баллов не даёт */
+                    /** @description Reference only — it does not add points */
                     minutesToSend: number | null;
                 }[];
             }[];
@@ -6845,7 +7489,7 @@ export interface components {
             items: components["schemas"]["ResearchItem"][];
             summary: components["schemas"]["ResearchSummary"];
             argumentMap: components["schemas"]["ResearchArgumentMap"];
-            /** @description Вклад по действиям; сообщения не учитываются */
+            /** @description Contribution by actions; messages do not count */
             contribution: components["schemas"]["ResearchContribution"][];
             conclusion: components["schemas"]["ResearchConclusion"];
             points: number;
@@ -6900,10 +7544,10 @@ export interface components {
                 threadId: string;
                 for: string[];
                 against: string[];
-                /** @description Аргументы без связанного источника */
+                /** @description Arguments without a linked source */
                 unsupported: string[];
             }[];
-            /** @description Ветки без аргументов «против» */
+            /** @description Threads without a counter-argument */
             noCounterArguments: string[];
         };
         ResearchContribution: {
@@ -7002,7 +7646,7 @@ export interface components {
         };
         ResearchMessagePage: {
             items: components["schemas"]["ResearchMessage"][];
-            /** @description Курсор следующей страницы или null */
+            /** @description The cursor of the next page, or null */
             nextCursor: string | null;
         };
         ResearchNewItem: {
@@ -7025,12 +7669,12 @@ export interface components {
             application: components["schemas"]["Application"];
             /**
              * Format: uuid
-             * @description Для принятой заявки — закрепление задачи за командой
+             * @description For an accepted application — the task assigned to the team
              */
             assignmentId: string | null;
             /**
              * Format: uuid
-             * @description Проект Startup Sprint, к которому привязана задача
+             * @description Startup Sprint project the task is attached to
              */
             projectId: string | null;
             projectCreated: boolean;

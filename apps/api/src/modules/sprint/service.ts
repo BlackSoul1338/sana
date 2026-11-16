@@ -19,6 +19,10 @@ import { NEXT_STEP_SYSTEM, NextStepPhrase, nextStepPrompt } from './prompts.js';
 import { refTaskTemplates, sprintAchievements, sprintProjects, sprintStages, sprintTasks } from './schema.js';
 import { MODULE, STAGE_ORDER, SUBJECT, type StageKey } from './types.js';
 
+/** The real-task bonus is awarded by the match module; modules do not import each other, so the rule is named here. */
+const REAL_TASK_BONUS_MODULE = 'match';
+const REAL_TASK_BONUS_RULE = 'real_task_bonus';
+
 type ProjectRow = typeof sprintProjects.$inferSelect;
 type StageRow = typeof sprintStages.$inferSelect;
 type TaskRow = typeof sprintTasks.$inferSelect;
@@ -29,11 +33,11 @@ const addDays = (date: string, days: number) => {
   return d.toISOString().slice(0, 10);
 };
 
-// ---------- доступ ----------
+// ---------- access ----------
 
 type Access = { project: ProjectRow; level: 'team' | 'mentor' | 'business' };
 
-/** Участник команды и куратор видят всё; бизнес — только проект по своей задаче и только подтверждённое. */
+/** A team member and a mentor see everything; a business sees only the project for its own task, and only the confirmed part. */
 async function projectAccess(ctx: Ctx, projectId: string): Promise<Access> {
   const p = requireProfile(ctx);
   const [project] = await ctx.db.select().from(sprintProjects).where(eq(sprintProjects.id, projectId)).limit(1);
@@ -54,7 +58,7 @@ async function requireTeamWrite(ctx: Ctx, projectId: string): Promise<ProjectRow
   return a.project;
 }
 
-// ---------- чтение ----------
+// ---------- reading ----------
 
 async function loadStages(db: DbLike, projectId: string): Promise<StageRow[]> {
   return db.select().from(sprintStages).where(eq(sprintStages.projectId, projectId)).orderBy(asc(sprintStages.order));
@@ -132,7 +136,7 @@ export async function listProjects(ctx: Ctx, q: { teamId?: string | undefined })
     const ids = q.teamId ? mine.filter((t) => t === q.teamId) : mine;
     rows = ids.length ? await ctx.db.select().from(sprintProjects).where(inArray(sprintProjects.teamId, ids)).orderBy(desc(sprintProjects.createdAt)) : [];
   } else {
-    // Бизнес видит проекты по задачам своей организации.
+    // A business sees the projects linked to its own organisation's tasks.
     const res = await ctx.db.execute<{ id: string }>(sql`
       select sp.id from sprint_projects sp
       join assignments a on a.id = sp.assignment_id
@@ -172,7 +176,7 @@ export async function listTemplates(ctx: Ctx): Promise<sprint.TaskTemplate[]> {
   return rows.sort((a, b) => STAGE_ORDER.indexOf(a.stageKey) - STAGE_ORDER.indexOf(b.stageKey));
 }
 
-// ---------- изменения ----------
+// ---------- write ----------
 
 export async function createProject(ctx: Ctx, input: z.infer<typeof sprint.CreateProjectInput>, opts: { assignmentId?: string } = {}) {
   const p = requireRole(ctx, 'student', 'mentor');
@@ -191,7 +195,7 @@ export async function createProject(ctx: Ctx, input: z.infer<typeof sprint.Creat
   return getProject(ctx, id);
 }
 
-/** Привязка проекта к закреплённой задаче бизнеса (вызывается сценарием принятия заявки). */
+/** Links a project to the business assignment it was created for (called by the accept-application flow). */
 export async function linkAssignment(ctx: Ctx, input: { teamId: string; assignmentId: string; taskTitle: string; taskSummary: string }) {
   const [existing] = await ctx.db
     .select()
@@ -282,8 +286,8 @@ export async function updateTask(ctx: Ctx, taskId: string, input: z.infer<typeof
 }
 
 /**
- * Подтверждение от участника. Этап можно сдать только текущий и только один раз до решения куратора;
- * интервью можно добавлять отдельно, этап они не закрывают.
+ * Evidence from a team member. Only the current stage can be submitted, and only once before the mentor's decision;
+ * interviews can be added separately and do not close the stage.
  */
 export async function submitEvidence(ctx: Ctx, projectId: string, input: z.infer<typeof sprint.SubmitSprintEvidenceInput>) {
   const p = requireRole(ctx, 'student');
@@ -329,7 +333,7 @@ export async function submitEvidence(ctx: Ctx, projectId: string, input: z.infer
   });
 }
 
-// ---------- лента, достижения, следующий шаг ----------
+// ---------- feed, achievements, next step ----------
 
 export async function interviewCounts(db: DbLike, projectId: string, excludeEvidenceId?: string) {
   const subjectIds = await projectSubjectIds(db, projectId);
@@ -375,10 +379,13 @@ export async function refreshAchievements(ctx: Ctx, projectId: string, evidenceI
 export async function getFeed(ctx: Ctx, projectId: string): Promise<sprint.Feed> {
   const { project } = await projectAccess(ctx, projectId);
   const members = await teamMemberIds(ctx.db, project.teamId);
-  const [events, achievements] = await Promise.all([
-    eventsForSubjects(ctx.db, [project.teamId, ...members]),
+  const [sprintEvents, matchEvents, achievements] = await Promise.all([
+    eventsForSubjects(ctx.db, [project.teamId, ...members], MODULE),
+    eventsForSubjects(ctx.db, [project.teamId, ...members], REAL_TASK_BONUS_MODULE),
     ctx.db.select().from(sprintAchievements).where(eq(sprintAchievements.projectId, projectId)).orderBy(desc(sprintAchievements.earnedAt)),
   ]);
+  // The bonus belongs to the sprint, but the match module awards it.
+  const events = [...sprintEvents, ...matchEvents.filter((e) => e.ruleId === REAL_TASK_BONUS_RULE)];
   const ach = achievements.map((a) => ({ code: a.code, title: ACHIEVEMENTS[a.code as AchievementCode] ?? a.code, earnedAt: iso(a.earnedAt) }));
   const items = [
     ...events

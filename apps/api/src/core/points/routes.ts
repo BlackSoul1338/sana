@@ -4,7 +4,7 @@ import { AdjustmentInput, LeaderboardEntry, LeaderboardQuery, PointEvent, Points
 import { createRouter, errorResponses, jsonBody, jsonRes, secured } from '../../platform/http.js';
 import * as ledger from './ledger.js';
 
-const tags = ['Баллы и рейтинг'];
+const tags = ['Points and leaderboard'];
 export const pointsRoutes = createRouter();
 
 pointsRoutes.openapi(
@@ -13,7 +13,7 @@ pointsRoutes.openapi(
     path: '/leaderboard',
     tags,
     security: secured,
-    summary: 'Рейтинг команд, участников или организаций (по всем модулям или одному)',
+    summary: 'Leaderboard of teams, members or organisations (all modules or one)',
     request: { query: LeaderboardQuery },
     responses: { 200: jsonRes(z.array(LeaderboardEntry)), ...errorResponses },
   }),
@@ -26,7 +26,7 @@ pointsRoutes.openapi(
     path: '/points',
     tags,
     security: secured,
-    summary: 'Журнал начислений с объяснениями: свой, своей команды или организации; проверяющему — любой',
+    summary: 'The ledger with explanations: yours, your teams or your organisation; any for a reviewer',
     request: { query: PointsQuery },
     responses: { 200: jsonRes(z.array(PointEvent)), ...errorResponses },
   }),
@@ -39,7 +39,7 @@ pointsRoutes.openapi(
     path: '/points/adjustments',
     tags,
     security: secured,
-    summary: 'Корректировка баллов куратором (новое событие с комментарием)',
+    summary: 'A mentor point adjustment (a new event with the comment)',
     request: { body: jsonBody(AdjustmentInput) },
     responses: { 201: jsonRes(PointEvent), ...errorResponses },
   }),

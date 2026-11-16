@@ -18,7 +18,7 @@ export type Award = {
   explanation: string;
   evidenceId?: string | null;
   actorId?: string | null;
-  /** Правило + объект: повторный вызов с тем же ключом ничего не начислит. */
+  /** Rule plus object: calling it again with the same key awards nothing. */
   idempotencyKey: string;
 };
 
@@ -38,8 +38,8 @@ export const toPointEvent = (r: Row): PointEvent => ({
 });
 
 /**
- * Единственная точка записи баллов. Журнал только дополняется; дубли по idempotency_key пропускаются.
- * Возвращает фактически записанные события.
+ * The only entry point for awarding points. The ledger is append-only; duplicates by idempotency_key are skipped.
+ * Returns the events that were actually written.
  */
 export async function award(db: DbLike, awards: Award[]): Promise<Row[]> {
   const rows = awards.filter((a) => a.points !== 0);
@@ -63,7 +63,7 @@ export async function award(db: DbLike, awards: Award[]): Promise<Row[]> {
     .returning();
 }
 
-/** Корректировка куратором: новое событие с комментарием, старые не меняются. */
+/** Adjustment by a mentor: a new event with the comment; old events do not change. */
 export async function adjust(ctx: Ctx, input: z.infer<typeof AdjustmentInput>): Promise<PointEvent> {
   const mentor = requireRole(ctx, 'mentor');
   // Learning-track points belong to the teacher, who adjusts them at review time.
@@ -103,9 +103,13 @@ export async function listEvents(ctx: Ctx, q: { subjectType: SubjectType; subjec
   return rows.map(toPointEvent);
 }
 
-export async function eventsForSubjects(db: DbLike, subjectIds: string[]): Promise<Row[]> {
+export async function eventsForSubjects(db: DbLike, subjectIds: string[], module?: string): Promise<Row[]> {
   if (!subjectIds.length) return [];
-  return db.select().from(pointEvents).where(inArray(pointEvents.subjectId, subjectIds)).orderBy(desc(pointEvents.createdAt));
+  return db
+    .select()
+    .from(pointEvents)
+    .where(and(inArray(pointEvents.subjectId, subjectIds), module ? eq(pointEvents.module, module) : undefined))
+    .orderBy(desc(pointEvents.createdAt));
 }
 
 export async function eventsForEvidence(db: DbLike, evidenceId: string): Promise<Row[]> {
@@ -164,7 +168,7 @@ const NAME_SQL: Record<SubjectType, ReturnType<typeof sql>> = {
   org: sql`(select name from orgs where orgs.id = s.subject_id)`,
 };
 
-/** Рейтинг: сумма журнала по субъекту, при необходимости — только по одному модулю. */
+/** Leaderboard: the sum of the ledger by subject, optionally narrowed to one module. */
 export async function leaderboard(
   ctx: Ctx,
   q: { subjectType: SubjectType; module?: string | undefined; limit: number },

@@ -85,6 +85,7 @@ export function BuilderDraftPage({ draftId }: { draftId: string }) {
           <PublishButton
             draftId={draft.id}
             readiness={draft.readiness}
+            requirements={draft.requirements ?? undefined}
             beforePublish={async () => {
               setTab('card');
               return (await editor.current?.saveIfDirty()) ?? true;

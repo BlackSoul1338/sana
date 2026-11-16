@@ -29,7 +29,7 @@ The API reaches Postgres through Cloudflare Hyperdrive, which pools connections 
    pnpm db:migrate
    ```
 
-3. Create the private `evidence` Storage bucket. Starting the Node API once against the cloud `.env` creates it (`pnpm dev`, then stop it). `pnpm seed --force` also creates it, but **deletes all data** first; use it only on an empty project to load demo data.
+3. Create the private `evidence` Storage bucket. Starting the Node API once against the cloud `.env` creates it (`pnpm dev`, then stop it) and every start re-applies its limits: 10 MB per file, only PNG, JPEG, WebP and PDF. `pnpm seed --force` also creates it, but **deletes all data** first; use it only on an empty project to load demo data.
 4. **Authentication → URL Configuration**: set **Site URL** to the web address. Sign-up goes through the API and creates confirmed accounts, so **Confirm email** and SMTP are not needed for it.
 
 ## 2. API on Cloudflare Workers

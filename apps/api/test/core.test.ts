@@ -32,6 +32,17 @@ describe('ядро: профиль, команды, права', () => {
     expect(bad.body.errors.map((e: any) => e.path).sort()).toEqual(['email', 'password']);
   });
 
+  it('регистрация ограничена по IP: сверх лимита — 429, неудачная попытка лимит не тратит', async () => {
+    const limited = http(makeApp({ signupRateLimit: 2 }));
+    // A failed sign-up does not count: a typo must not spend the quota.
+    expect((await limited.post('/auth/sign-up', null, { email: 'bad', password: 'short' })).status).toBe(422);
+    expect((await limited.post('/auth/sign-up', null, { email: 'one@x.local', password: 'secret-123' })).status).toBe(201);
+    expect((await limited.post('/auth/sign-up', null, { email: 'two@x.local', password: 'secret-123' })).status).toBe(201);
+    const blocked = await limited.post('/auth/sign-up', null, { email: 'three@x.local', password: 'secret-123' });
+    expect(blocked.status).toBe(429);
+    expect(blocked.body.code).toBe('rate_limited');
+  });
+
   it('сессия удалённого аккаунта (после пересева) получает 401, а не 500', async () => {
     const ghost = { id: randomUUID(), token: '', role: 'business' as const, orgId: null, name: 'x' };
     ghost.token = `test:${ghost.id}`;

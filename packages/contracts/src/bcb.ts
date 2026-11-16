@@ -6,12 +6,12 @@ export const FIELD_KEYS = CardFieldKey.options;
 export const FieldStatus = z.enum(['ok', 'weak', 'missing']);
 export type FieldStatus = z.infer<typeof FieldStatus>;
 
-// ---------- Схемы ответа модели: все поля обязательные, без union и optional ----------
+// ---------- model answer schemas: every field required, no union and no optional ----------
 
 const AiFieldAssessment = z.object({
-  status: looseEnum(['ok', 'weak', 'missing'], 'ok — конкретно и полно; weak — есть, но без конкретики; missing — нет в репликах бизнеса'),
-  value: z.string().describe('Краткая формулировка поля по словам бизнеса или "не указано"'),
-  quote: z.string().describe('Дословная цитата из реплик бизнеса, на которую опирается оценка, или пустая строка'),
+  status: looseEnum(['ok', 'weak', 'missing'], "ok — concrete and complete; weak — present but without specifics; missing — not in the business's messages"),
+  value: z.string().describe("A short phrasing of the field in the business's words, or 'not specified'"),
+  quote: z.string().describe("The verbatim quote from the business's messages the assessment is based on, or an empty string"),
 });
 
 export const AiAnalysis = z.object({
@@ -26,15 +26,15 @@ export const AiAnalysis = z.object({
     .array(
       z.object({
         field: looseEnum(['title', 'context', 'goal', 'users', 'data', 'constraints', 'criteria']),
-        text: z.string().describe('Один конкретный уточняющий вопрос к бизнесу'),
+        text: z.string().describe('One specific follow-up question for the business'),
       }),
     )
-    .describe('По одному вопросу к каждому полю со статусом weak или missing'),
+    .describe('One question per field with status weak or missing'),
 });
 export type AiAnalysis = z.infer<typeof AiAnalysis>;
 
 const AiCardField = z.object({
-  text: z.string().describe('Текст поля карточки только из сведений бизнеса; если сведений нет — "не указано"'),
+  text: z.string().describe('The card field text, only from the business\'s facts; when they are missing — "not specified"'),
   source: looseEnum(['dialog', 'not_specified']),
 });
 
@@ -46,10 +46,10 @@ export const AiCard = z.object({
   data: AiCardField,
   constraints: AiCardField,
   criteria: AiCardField,
-  summary: z.string().describe('Одно-два предложения для каталога'),
+  summary: z.string().describe('One or two sentences for the catalog'),
   commercialSecretWarnings: z
     .array(z.string())
-    .describe('Фрагменты, похожие на коммерческую тайну или закрытые данные; пустой список, если таких нет'),
+    .describe('Fragments resembling a trade secret or closed data; an empty list when there are none'),
 });
 export type AiCard = z.infer<typeof AiCard>;
 
@@ -63,7 +63,7 @@ export const FieldState = z
     quote: z.string(),
     weight: z.number().int(),
     earned: z.number(),
-    quoteVerified: z.boolean().meta({ description: 'Цитата найдена в репликах бизнеса' }),
+    quoteVerified: z.boolean().meta({ description: 'The quote was found in the business\'s messages' }),
   })
   .meta({ id: 'FieldState' });
 export type FieldState = z.infer<typeof FieldState>;
@@ -83,7 +83,7 @@ export const TurnResult = z
     readyToCompose: z.boolean(),
     fields: z.array(FieldState),
     questions: z.array(Question),
-    changes: z.array(FieldChange).meta({ description: 'Что изменилось относительно прошлого хода' }),
+    changes: z.array(FieldChange).meta({ description: 'What changed relative to the previous turn' }),
     turnsLeft: z.number().int(),
   })
   .meta({ id: 'TurnResult' });
@@ -122,8 +122,8 @@ export const TurnInput = z.object({ text: z.string().trim().min(1).max(4000) }).
 export const SensitiveFinding = z
   .object({
     kind: z.enum(['email', 'phone', 'iin', 'card']),
-    excerpt: z.string().meta({ description: 'Замаскированный фрагмент' }),
-    where: z.string().meta({ description: 'Реплика или поле карточки' }),
+    excerpt: z.string().meta({ description: 'The masked fragment' }),
+    where: z.string().meta({ description: 'A message or a card field' }),
   })
   .meta({ id: 'SensitiveFinding' });
 export type SensitiveFinding = z.infer<typeof SensitiveFinding>;
@@ -146,7 +146,10 @@ export const UpdateCardInput = z
   .meta({ id: 'UpdateCardInput' });
 
 export const PublishInput = z
-  .object({ confirm: z.literal(true).meta({ description: 'Явное подтверждение представителя бизнеса' }) })
+  .object({
+    confirm: z.literal(true).meta({ description: 'The business representative\'s explicit confirmation' }),
+    requirementsConfirmed: z.literal(true).meta({ description: 'The business representative saw and confirmed the team requirements' }),
+  })
   .meta({ id: 'PublishInput' });
 
 export const PublishResult = z

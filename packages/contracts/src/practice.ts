@@ -31,7 +31,7 @@ export const QuizResult = z
   .object({
     correct: z.number().int(),
     total: z.number().int(),
-    points: z.number().int().meta({ description: 'Начислено за этот тест (только за первую попытку)' }),
+    points: z.number().int().meta({ description: 'Awarded for this quiz (first attempt only)' }),
     perQuestion: z.array(z.object({ questionId: Id, option: z.number().int().nullable(), correct: z.number().int(), ok: z.boolean(), explanation: z.string() })),
   })
   .meta({ id: 'PracticeQuizResult' });
@@ -108,7 +108,7 @@ export const Attempt = z
     profileId: Id,
     attemptNo: z.number().int(),
     answer: z.string(),
-    check: Check.nullable().meta({ description: 'null — модель была недоступна, работу проверит преподаватель' }),
+    check: Check.nullable().meta({ description: 'null when the model was unavailable; the teacher reviews the work' }),
     status: AttemptStatus,
     evidenceId: Id.nullable(),
     /** Preliminary points by the rules; the teacher confirms them. */
@@ -141,7 +141,7 @@ export const Dashboard = z
             attempts: z.number().int(),
             status: AttemptStatus,
             evidenceId: Id.nullable(),
-            minutesToSend: z.number().int().nullable().meta({ description: 'Только как дополнительный показатель, баллов не даёт' }),
+            minutesToSend: z.number().int().nullable().meta({ description: 'Reference only — it does not add points' }),
           }),
         ),
       }),

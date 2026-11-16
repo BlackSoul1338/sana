@@ -37,7 +37,7 @@ export const ReviewInput = z
       .min(-200)
       .max(200)
       .optional()
-      .meta({ description: 'Только для adjust: поправка с обязательным комментарием — команде, а работе без команды — её автору' }),
+      .meta({ description: 'Only for adjust: a mandatory-comment adjustment — to the team, or to the author for individual work' }),
   })
   .refine((v) => v.decision !== 'adjust' || (v.adjustPoints !== undefined && v.comment.length >= 5), {
     path: ['comment'],
@@ -69,12 +69,12 @@ export const EvidenceQueueQuery = z.object({
 export const EvidenceQueueItem = Evidence.extend({ submitterName: z.string() }).meta({ id: 'EvidenceQueueItem' });
 
 export const EvidenceDetail = Evidence.extend({
-  downloadUrl: z.string().nullable().meta({ description: 'Временная ссылка на файл (если он загружен)' }),
+  downloadUrl: z.string().nullable().meta({ description: 'A temporary link to the file (when one is uploaded)' }),
 }).meta({ id: 'EvidenceDetail' });
 
 export const ReviewResult = z
   .object({
     evidence: Evidence,
-    awarded: z.array(PointEvent).meta({ description: 'Все начисления, связанные с этим подтверждением' }),
+    awarded: z.array(PointEvent).meta({ description: 'All awards linked to this evidence' }),
   })
   .meta({ id: 'ReviewResult' });

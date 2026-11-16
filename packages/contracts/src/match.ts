@@ -16,7 +16,7 @@ export const Fit = z
     components: FitComponents,
     matched: z.array(z.object({ slug: z.string(), title: z.string(), required: z.boolean() })),
     gaps: z.array(z.object({ slug: z.string(), title: z.string(), required: z.boolean() })),
-    reasons: z.array(z.string()).meta({ description: 'Объяснение соответствия для команды' }),
+    reasons: z.array(z.string()).meta({ description: 'Why the team fits the task' }),
   })
   .meta({ id: 'Fit' });
 export type Fit = z.infer<typeof Fit>;
@@ -39,7 +39,7 @@ export const Growth = z
     teamLevel: z.number().int(),
     skillsToAdd: z
       .array(z.object({ slug: z.string(), title: z.string(), unlocks: z.number().int() }))
-      .meta({ description: 'Навыки, которых не хватает для более сложных задач, и сколько задач они откроют' }),
+      .meta({ description: 'Skills missing for harder tasks, and how many tasks they would unlock' }),
   })
   .meta({ id: 'Growth' });
 
@@ -102,8 +102,8 @@ export const FeedbackResult = z
 export const DecisionResult = z
   .object({
     application: Application,
-    assignmentId: Id.nullable().meta({ description: 'Для принятой заявки — закрепление задачи за командой' }),
-    projectId: Id.nullable().meta({ description: 'Проект Startup Sprint, к которому привязана задача' }),
+    assignmentId: Id.nullable().meta({ description: 'For an accepted application — the task assigned to the team' }),
+    projectId: Id.nullable().meta({ description: 'Startup Sprint project the task is attached to' }),
     projectCreated: z.boolean(),
   })
   .meta({ id: 'DecisionResult' });

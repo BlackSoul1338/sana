@@ -8,12 +8,12 @@ const tags = ['Practice Lab'];
 export const practiceRoutes = createRouter();
 
 practiceRoutes.openapi(
-  createRoute({ method: 'get', path: '/practice/modules', tags, security: secured, summary: 'Учебные модули; для студента — результат теста', responses: { 200: jsonRes(z.array(practice.Module)), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/practice/modules', tags, security: secured, summary: 'The learning modules; for a student — the quiz result', responses: { 200: jsonRes(z.array(practice.Module)), ...errorResponses } }),
   async (c) => c.json(await svc.listModules(c.get('ctx')), 200),
 );
 
 practiceRoutes.openapi(
-  createRoute({ method: 'get', path: '/practice/modules/{id}/quiz', tags, security: secured, summary: 'Вопросы теста без ключа; последний результат студента', request: { params: IdParam }, responses: { 200: jsonRes(practice.Quiz), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/practice/modules/{id}/quiz', tags, security: secured, summary: 'The quiz questions without the key; the student last result', request: { params: IdParam }, responses: { 200: jsonRes(practice.Quiz), ...errorResponses } }),
   async (c) => c.json(await svc.getQuiz(c.get('ctx'), c.req.valid('param').id), 200),
 );
 
@@ -23,7 +23,7 @@ practiceRoutes.openapi(
     path: '/practice/modules/{id}/quiz',
     tags,
     security: secured,
-    summary: 'Сдать тест: разбор по вопросам; баллы только за первую попытку',
+    summary: 'Submit the quiz: the per-question breakdown; points for the first attempt only',
     request: { params: IdParam, body: jsonBody(practice.QuizInput) },
     responses: { 200: jsonRes(practice.QuizResult), ...errorResponses },
   }),
@@ -31,7 +31,7 @@ practiceRoutes.openapi(
 );
 
 practiceRoutes.openapi(
-  createRoute({ method: 'get', path: '/practice/assignments', tags, security: secured, summary: 'Практические задания модуля', request: { query: practice.AssignmentsQuery }, responses: { 200: jsonRes(z.array(practice.Assignment)), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/practice/assignments', tags, security: secured, summary: 'The practice assignments of the module', request: { query: practice.AssignmentsQuery }, responses: { 200: jsonRes(z.array(practice.Assignment)), ...errorResponses } }),
   async (c) => c.json(await svc.listAssignments(c.get('ctx'), c.req.valid('query')), 200),
 );
 
@@ -41,7 +41,7 @@ practiceRoutes.openapi(
     path: '/practice/assignments',
     tags,
     security: secured,
-    summary: 'Новое задание с критериями (преподаватель)',
+    summary: 'A new assignment with criteria (teacher)',
     request: { body: jsonBody(practice.NewAssignment) },
     responses: { 201: jsonRes(practice.Assignment), ...errorResponses },
   }),
@@ -49,7 +49,7 @@ practiceRoutes.openapi(
 );
 
 practiceRoutes.openapi(
-  createRoute({ method: 'get', path: '/practice/assignments/{id}/attempts', tags, security: secured, summary: 'Мои попытки по заданию', request: { params: IdParam }, responses: { 200: jsonRes(z.array(practice.Attempt)), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/practice/assignments/{id}/attempts', tags, security: secured, summary: 'My attempts for the assignment', request: { params: IdParam }, responses: { 200: jsonRes(z.array(practice.Attempt)), ...errorResponses } }),
   async (c) => c.json(await svc.listAttempts(c.get('ctx'), c.req.valid('param').id), 200),
 );
 
@@ -59,7 +59,7 @@ practiceRoutes.openapi(
     path: '/practice/assignments/{id}/attempts',
     tags,
     security: secured,
-    summary: 'Новая попытка: проверка моделью по критериям задания (без оценки)',
+    summary: 'A new attempt: the model checks it against the assignment criteria (no grading yet)',
     request: { params: IdParam, body: jsonBody(practice.AttemptInput) },
     responses: { 201: jsonRes(practice.Attempt), ...errorResponses },
   }),
@@ -67,21 +67,21 @@ practiceRoutes.openapi(
 );
 
 practiceRoutes.openapi(
-  createRoute({ method: 'post', path: '/practice/attempts/{id}/send', tags, security: secured, summary: 'Отправить последнюю попытку преподавателю', request: { params: IdParam }, responses: { 200: jsonRes(practice.Attempt), ...errorResponses } }),
+  createRoute({ method: 'post', path: '/practice/attempts/{id}/send', tags, security: secured, summary: 'Send the last attempt to the teacher', request: { params: IdParam }, responses: { 200: jsonRes(practice.Attempt), ...errorResponses } }),
   async (c) => c.json(await svc.sendAttempt(c.get('ctx'), c.req.valid('param').id), 200),
 );
 
 practiceRoutes.openapi(
-  createRoute({ method: 'get', path: '/practice/attempts/{id}', tags, security: secured, summary: 'Попытка с заданием и проверкой (владелец или преподаватель)', request: { params: IdParam }, responses: { 200: jsonRes(practice.AttemptDetail), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/practice/attempts/{id}', tags, security: secured, summary: 'An attempt with the assignment and the check (owner or teacher)', request: { params: IdParam }, responses: { 200: jsonRes(practice.AttemptDetail), ...errorResponses } }),
   async (c) => c.json(await svc.getAttempt(c.get('ctx'), c.req.valid('param').id), 200),
 );
 
 practiceRoutes.openapi(
-  createRoute({ method: 'get', path: '/practice/dashboard', tags, security: secured, summary: 'Панель преподавателя: студенты × задания, проблемные темы', request: { query: practice.DashboardQuery }, responses: { 200: jsonRes(practice.Dashboard), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/practice/dashboard', tags, security: secured, summary: 'The teacher dashboard: students × assignments, problem topics', request: { query: practice.DashboardQuery }, responses: { 200: jsonRes(practice.Dashboard), ...errorResponses } }),
   async (c) => c.json(await svc.dashboard(c.get('ctx'), c.req.valid('query').moduleId), 200),
 );
 
 practiceRoutes.openapi(
-  createRoute({ method: 'get', path: '/practice/recommendation', tags, security: secured, summary: 'Следующее задание по найденным пробелам', responses: { 200: jsonRes(practice.Recommendation), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/practice/recommendation', tags, security: secured, summary: 'The next assignment from the observed weaknesses', responses: { 200: jsonRes(practice.Recommendation), ...errorResponses } }),
   async (c) => c.json(await svc.recommendation(c.get('ctx')), 200),
 );

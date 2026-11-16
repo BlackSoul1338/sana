@@ -17,7 +17,7 @@ export const Profile = z
   .meta({ id: 'Profile' });
 export type Profile = z.infer<typeof Profile>;
 
-/** Самостоятельная регистрация: куратор (mentor) назначается только администратором/seed. */
+/** Self-service sign-up: the mentor role is assigned only by an administrator/seed. */
 export const SignUpInput = z
   .object({
     email: z.string().trim().toLowerCase().pipe(z.email('Похоже, в адресе опечатка')),
@@ -30,7 +30,7 @@ export const CreateProfileInput = z
   .object({
     displayName: z.string().trim().min(2).max(80),
     role: z.enum(['student', 'business']),
-    orgName: z.string().trim().min(2).max(120).optional().meta({ description: 'Для роли business: название компании' }),
+    orgName: z.string().trim().min(2).max(120).optional().meta({ description: 'For the business role: the company name' }),
   })
   .refine((v) => v.role !== 'business' || !!v.orgName, { path: ['orgName'], message: 'Для бизнеса укажите компанию' })
   .meta({ id: 'CreateProfileInput' });

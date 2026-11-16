@@ -3,7 +3,7 @@ import { match } from '@sana/contracts';
 import { createRouter, errorResponses, IdParam, jsonBody, jsonRes, secured } from '../platform/http.js';
 import { decideApplication } from './accept-application.js';
 
-/** Маршруты межмодульных сценариев. */
+/** Cross-module scenario routes. */
 export const flowRoutes = createRouter();
 
 flowRoutes.openapi(
@@ -12,7 +12,7 @@ flowRoutes.openapi(
     path: '/match/applications/{id}/decision',
     tags: ['Challenge Match'],
     security: secured,
-    summary: 'Решение бизнеса по заявке; при принятии задача закрепляется и попадает в трекер Startup Sprint',
+    summary: 'The business decision on the application; on acceptance the task is assigned and lands in Startup Sprint',
     request: { params: IdParam, body: jsonBody(match.DecisionInput) },
     responses: { 200: jsonRes(match.DecisionResult), ...errorResponses },
   }),

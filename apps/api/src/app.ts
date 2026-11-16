@@ -12,6 +12,7 @@ import type { AccountsPort } from './platform/accounts.js';
 import { EventBus } from './platform/events.js';
 import { AppError, unauthorized } from './platform/errors.js';
 import { errorResponses, jsonBody, jsonRes, sendProblem, zodIssuesToFieldErrors, type AppEnv } from './platform/http.js';
+import { clientIp, createRateLimiter } from './platform/ratelimit.js';
 import { SignUpInput, SignUpResult } from '@sana/contracts';
 import { loadActorProfile } from './core/identity/service.js';
 import { identityRoutes } from './core/identity/routes.js';
@@ -30,6 +31,8 @@ export type AppDeps = {
   accounts: AccountsPort;
   clock?: () => Date;
   corsOrigins?: string[];
+  /** Sign-ups per IP per hour. Accounts are created already confirmed, so this limit is the only barrier against bulk sign-ups. */
+  signupRateLimit?: number;
 };
 
 export const API_INFO = {
@@ -38,13 +41,13 @@ export const API_INFO = {
     title: 'AI Sana Platform API',
     version: '0.1.0',
     description:
-      'Ядро платформы практических заданий (профили, команды, каталог, подтверждения, баллы) и модули: ' +
-      'Startup Sprint (кейс 1), Business Challenge Builder (кейс 2), Challenge Match (кейс 3). ' +
-      'Авторизация: access token Supabase Auth в заголовке Authorization: Bearer.',
+      'The practical-task platform core (profiles, teams, catalog, evidence, points) and the modules: ' +
+      'Startup Sprint (case 1), Business Challenge Builder (case 2), Challenge Match (case 3). ' +
+      'Authorisation: a Supabase Auth access token in the Authorization: Bearer header.',
   },
 } as const;
 
-/** Корень композиции: здесь собираются ядро, модули, их обработчики событий и сценарии. */
+/** Composition root: the core, the modules, their event handlers and the flows are wired here. */
 export function createApp(deps: AppDeps) {
   const bus = new EventBus();
   const modules = registerModules(bus);
@@ -86,12 +89,26 @@ export function createApp(deps: AppDeps) {
   app.doc31('/openapi.json', API_INFO);
   app.get('/docs', Scalar({ url: '/openapi.json', pageTitle: 'AI Sana API' }));
 
+  const signups = createRateLimiter(deps.signupRateLimit ?? 30, 60 * 60 * 1000);
+  app.use('/auth/sign-up', async (c, next) => {
+    const key = clientIp(c);
+    if (!signups.allow(key)) {
+      return sendProblem(c, new AppError('rate_limited', 429, 'Слишком много регистраций с одного адреса. Попробуйте позже.'));
+    }
+    try {
+      await next();
+    } finally {
+      // Only successful registrations count, so a typo does not spend the quota.
+      if (c.res?.status !== 201) signups.refund(key);
+    }
+  });
+
   app.openapi(
     createRoute({
       method: 'post',
       path: '/auth/sign-up',
-      tags: ['Профиль'],
-      summary: 'Регистрация по почте и паролю без письма подтверждения; дальше клиент входит паролем',
+      tags: ['Profile'],
+      summary: 'Sign-up with email and password, no confirmation email; the client then signs in with the password',
       request: { body: jsonBody(SignUpInput) },
       responses: { 201: jsonRes(SignUpResult), ...errorResponses },
     }),
@@ -101,7 +118,7 @@ export function createApp(deps: AppDeps) {
     },
   );
 
-  // Всё под /api требует токен. Профиль подгружается один раз и кладётся в контекст use case.
+  // Everything under /api requires a token. The profile is loaded once and placed in the use-case context.
   app.use('/api/*', async (c, next) => {
     const header = c.req.header('authorization') ?? '';
     const token = header.startsWith('Bearer ') ? header.slice(7).trim() : '';

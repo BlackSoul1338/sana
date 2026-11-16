@@ -8,7 +8,7 @@ import { ReturnNote } from '@/entities/evidence';
 import { assignmentsQuery, attemptsQuery, CheckResult, practiceKeys, type PracticeAttempt } from '@/entities/practice';
 import { api, problemMessage, unwrap } from '@/shared/api';
 import { DIFFICULTY } from '@/shared/config';
-import { formatRelative } from '@/shared/lib/format';
+import { formatRelative, points } from '@/shared/lib/format';
 import { Button } from '@/shared/ui/button';
 import { FormError } from '@/shared/ui/field';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -47,6 +47,8 @@ export function PracticeAssignmentPage({ assignmentId }: { assignmentId: string 
   });
 
   if (assignment.isPending || attempts.isPending) return <Skeleton className="h-96 max-w-3xl" />;
+  if (assignment.isError || attempts.isError)
+    return <p className="text-destructive max-w-3xl">Не удалось загрузить задание. Обновите страницу.</p>;
   const a = assignment.data;
   if (!a) return <p className="text-muted-foreground">Задание не найдено.</p>;
   const list = attempts.data ?? [];
@@ -93,7 +95,7 @@ export function PracticeAssignmentPage({ assignmentId }: { assignmentId: string 
           <CheckResult criteria={a.criteria} check={last.check} corrected={last.corrected} reveal={last.id === freshId} />
           {last.check && (
             <p className="text-muted-foreground mt-4 text-sm">
-              Предварительно: {last.preview.correctness + last.preview.completeness + last.preview.selfCorrection + last.preview.completion} баллов. Итог подтвердит преподаватель.
+              Предварительно: {points(last.preview.correctness + last.preview.completeness + last.preview.selfCorrection + last.preview.completion)}. Итог подтвердит преподаватель.
             </p>
           )}
         </section>

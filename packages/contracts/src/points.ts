@@ -12,7 +12,7 @@ export const PointEvent = z
     module: z.string(),
     ruleId: z.string(),
     points: z.number().int(),
-    explanation: z.string().meta({ description: 'Человекочитаемое объяснение начисления' }),
+    explanation: z.string().meta({ description: 'A human-readable explanation of the award' }),
     evidenceId: Id.nullable(),
     actorId: Id.nullable(),
     createdAt: Timestamp,

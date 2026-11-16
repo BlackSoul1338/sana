@@ -27,7 +27,8 @@ export function PracticeQuizPage({ moduleId }: { moduleId: string }) {
   });
 
   if (quiz.isPending) return <Skeleton className="h-96 max-w-3xl" />;
-  if (!quiz.data) return null;
+  if (quiz.isError) return <p className="text-destructive max-w-3xl">Не удалось загрузить тест. Обновите страницу.</p>;
+  if (!quiz.data) return <p className="text-muted-foreground max-w-3xl">Тест не найден.</p>;
   const shown = result ?? null;
   const verdict = new Map((shown?.perQuestion ?? []).map((q) => [q.questionId, q]));
   const total = quiz.data.questions.length;
@@ -85,7 +86,7 @@ export function PracticeQuizPage({ moduleId }: { moduleId: string }) {
             <span className="text-2xl font-semibold tabular-nums">
               {shown.correct} из {shown.total}
             </span>
-            {shown.points > 0 && <span className="text-success ml-3 font-medium">+{shown.points} баллов</span>}
+            {shown.points > 0 && <span className="text-success ml-3 font-medium">+{shown.points} {plural(shown.points, ['балл', 'балла', 'баллов'])}</span>}
           </p>
           <Button asChild>
             <Link to="/practice">К заданиям</Link>

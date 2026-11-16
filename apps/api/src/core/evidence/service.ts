@@ -7,6 +7,7 @@ import type { DbLike } from '../../platform/db/client.js';
 import { iso, isoOrNull } from '../../platform/db/columns.js';
 import { conflict, forbidden, invalid, notFound } from '../../platform/errors.js';
 import type { EvidenceSnapshot } from '../../platform/events.js';
+import { ALLOWED_UPLOAD_TYPES, MAX_UPLOAD_BYTES } from '../../platform/storage.js';
 import { profiles } from '../identity/schema.js';
 import { teamIdsOf, isTeamMember } from '../identity/service.js';
 import { award, eventsForEvidence, toPointEvent } from '../points/ledger.js';
@@ -48,8 +49,18 @@ const snapshot = (r: Row): EvidenceSnapshot => ({
 
 export const isApprovedStatus = (s: Row['status']) => s === 'approved' || s === 'adjusted';
 
-/** Путь файла привязан к пользователю: чужой загруженный файл к подтверждению не приложить. */
+/** The storage path is bound to the user, so a file uploaded by someone else cannot be attached to evidence. */
 const storagePrefix = (userId: string) => `${userId}/`;
+
+/** A signed upload URL does not limit the file: size and type are checked on the stored object. */
+async function assertUploadAllowed(ctx: Ctx, storagePath: string) {
+  const object = await ctx.storage.stat(storagePath);
+  if (!object) throw invalid('Файл не найден в хранилище — загрузите его заново');
+  if (object.size > MAX_UPLOAD_BYTES) throw invalid(`Файл больше ${MAX_UPLOAD_BYTES / 1024 / 1024} МБ`);
+  if (object.contentType && !ALLOWED_UPLOAD_TYPES.includes(object.contentType)) {
+    throw invalid('Поддерживаются только изображения PNG, JPEG, WebP и PDF');
+  }
+}
 
 export async function requestUploadUrl(ctx: Ctx, input: z.infer<typeof UploadUrlInput>) {
   const p = requireRole(ctx, 'student');
@@ -72,12 +83,13 @@ export type NewEvidence = {
   reviewerRole?: 'mentor' | 'teacher';
 };
 
-/** Создание подтверждения. Модуль заранее проверил, что субъект существует и принадлежит команде. */
+/** Creates evidence. The module has already checked that the subject exists and belongs to the team. */
 export async function createEvidence(ctx: Ctx, input: NewEvidence): Promise<Row> {
   const p = requireRole(ctx, 'student');
   if (input.storagePath && !input.storagePath.startsWith(storagePrefix(p.id))) {
     throw invalid('Файл загружен другим пользователем', [{ path: 'storagePath', message: 'Чужой путь' }]);
   }
+  if (input.storagePath) await assertUploadAllowed(ctx, input.storagePath);
   const [row] = await ctx.db
     .insert(evidence)
     .values({
@@ -115,7 +127,7 @@ export async function evidenceForTeam(db: DbLike, teamId: string, module?: strin
     .orderBy(desc(evidence.createdAt));
 }
 
-/** Очередь проверки: проверяющий видит подтверждения своей роли, студент — подтверждения своих команд. */
+/** Review queue: a reviewer sees evidence for their role, a student sees their teams' evidence. */
 export async function listEvidence(ctx: Ctx, q: z.infer<typeof EvidenceQueueQuery>): Promise<z.infer<typeof EvidenceQueueItem>[]> {
   const p = requireRole(ctx, 'mentor', 'teacher', 'student');
   let teamFilter: string[] | undefined;
@@ -158,8 +170,8 @@ export async function getEvidence(ctx: Ctx, id: string) {
 const ADJUSTMENT_BY: Record<'mentor' | 'teacher', string> = { mentor: 'куратора', teacher: 'преподавателя' };
 
 /**
- * Решение проверяющего (куратор или преподаватель — по reviewer_role подтверждения). В одной транзакции: статус → событие evidence.reviewed (модуль начисляет баллы по своим правилам)
- * → для adjust — отдельное событие-поправка с комментарием.
+ * The reviewer's decision (mentor or teacher, by the evidence's reviewer_role). In one transaction: status →
+ * the evidence.reviewed event (the module awards points by its own rules) → for adjust, a separate adjustment event with the comment.
  */
 export async function reviewEvidence(ctx: Ctx, id: string, input: z.infer<typeof ReviewInput>): Promise<z.infer<typeof ReviewResult>> {
   const reviewer = requireRole(ctx, 'mentor', 'teacher');

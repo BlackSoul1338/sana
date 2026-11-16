@@ -6,12 +6,12 @@ export const TaskKind = z.enum(['business_challenge']);
 
 export const TaskSkillReq = z.object({ slug: z.string(), required: z.boolean() }).meta({ id: 'TaskSkillReq' });
 
-/** Структурные требования задачи — нужны подбору команд (кейс 3). */
+/** The structural task requirements — used by team matching (case 3). */
 export const TaskRequirements = z
   .object({
     topic: z.string().trim().min(2).max(60),
     difficulty: Difficulty,
-    estHours: z.number().int().min(4).max(400).meta({ description: 'Оценка трудоёмкости в часах на весь проект' }),
+    estHours: z.number().int().min(4).max(400).meta({ description: 'Estimated effort in hours for the whole project' }),
     skills: z.array(TaskSkillReq).min(1).max(12),
   })
   .meta({ id: 'TaskRequirements' });
@@ -23,11 +23,11 @@ export type CardFieldKey = z.infer<typeof CardFieldKey>;
 export const CardField = z
   .object({
     text: z.string(),
-    source: z.enum(['dialog', 'not_specified']).meta({ description: 'Откуда взято: из ответов бизнеса или «не указано»' }),
+    source: z.enum(['dialog', 'not_specified']).meta({ description: "Where it comes from: the business's answers, or 'not specified'" }),
   })
   .meta({ id: 'CardField' });
 
-/** Карточка практической задачи: семь полей из кейса 2. */
+/** The practical-task card: the seven fields of case 2. */
 export const TaskCard = z
   .object({
     title: CardField,
@@ -68,7 +68,7 @@ export const TaskListQuery = PageQuery.extend({
   mine: z
     .enum(['true', 'false'])
     .optional()
-    .meta({ description: 'Для бизнеса: задачи своей организации в любом статусе' }),
+    .meta({ description: "For a business: tasks of its own organisation, whatever their status" }),
 });
 
 export const Assignment = z

@@ -4,7 +4,7 @@ import { EvidenceDetail, EvidenceQueueItem, EvidenceQueueQuery, ReviewInput, Rev
 import { createRouter, errorResponses, IdParam, jsonBody, jsonRes, secured } from '../../platform/http.js';
 import * as svc from './service.js';
 
-const tags = ['Подтверждения'];
+const tags = ['Evidence'];
 export const evidenceRoutes = createRouter();
 
 evidenceRoutes.openapi(
@@ -13,7 +13,7 @@ evidenceRoutes.openapi(
     path: '/evidence/upload-url',
     tags,
     security: secured,
-    summary: 'Подписанная ссылка для загрузки скриншота или отчёта в Storage',
+    summary: 'A signed URL for uploading a screenshot or report to Storage',
     request: { body: jsonBody(UploadUrlInput) },
     responses: { 200: jsonRes(UploadUrl), ...errorResponses },
   }),
@@ -26,7 +26,7 @@ evidenceRoutes.openapi(
     path: '/evidence',
     tags,
     security: secured,
-    summary: 'Очередь проверки (куратор или преподаватель — по своей роли) или подтверждения своих команд (студент)',
+    summary: 'The review queue (mentor or teacher, by reviewer role) or your teams confirmations (student)',
     request: { query: EvidenceQueueQuery },
     responses: { 200: jsonRes(z.array(EvidenceQueueItem)), ...errorResponses },
   }),
@@ -34,7 +34,7 @@ evidenceRoutes.openapi(
 );
 
 evidenceRoutes.openapi(
-  createRoute({ method: 'get', path: '/evidence/{id}', tags, security: secured, summary: 'Подтверждение со ссылкой на файл', request: { params: IdParam }, responses: { 200: jsonRes(EvidenceDetail), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/evidence/{id}', tags, security: secured, summary: 'Evidence with a link to its file', request: { params: IdParam }, responses: { 200: jsonRes(EvidenceDetail), ...errorResponses } }),
   async (c) => c.json(await svc.getEvidence(c.get('ctx'), c.req.valid('param').id), 200),
 );
 
@@ -44,7 +44,7 @@ evidenceRoutes.openapi(
     path: '/evidence/{id}/review',
     tags,
     security: secured,
-    summary: 'Решение куратора: подтвердить, отклонить или скорректировать баллы с пояснением',
+    summary: 'The decision: confirm, reject or adjust the points, with a comment',
     request: { params: IdParam, body: jsonBody(ReviewInput) },
     responses: { 200: jsonRes(ReviewResult), ...errorResponses },
   }),

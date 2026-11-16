@@ -11,12 +11,13 @@ export const ErrorCode = z
     'sensitive_data',
     'ai_unavailable',
     'turn_limit',
+    'rate_limited',
     'internal',
   ])
   .meta({ id: 'ErrorCode' });
 export type ErrorCode = z.infer<typeof ErrorCode>;
 
-/** Ответ об ошибке в формате RFC 9457 (application/problem+json). */
+/** The RFC 9457 problem detail response (application/problem+json). */
 export const Problem = z
   .object({
     type: z.string(),

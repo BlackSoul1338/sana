@@ -99,10 +99,10 @@ export const ArgumentMap = z
         threadId: Id,
         for: z.array(Id),
         against: z.array(Id),
-        unsupported: z.array(Id).meta({ description: 'Аргументы без связанного источника' }),
+        unsupported: z.array(Id).meta({ description: 'Arguments without a linked source' }),
       }),
     ),
-    noCounterArguments: z.array(Id).meta({ description: 'Ветки без аргументов «против»' }),
+    noCounterArguments: z.array(Id).meta({ description: 'Threads without a counter-argument' }),
   })
   .meta({ id: 'ResearchArgumentMap' });
 export type ArgumentMap = z.infer<typeof ArgumentMap>;
@@ -175,7 +175,7 @@ export const Workspace = z
     items: z.array(Item),
     summary: Summary.nullable(),
     argumentMap: ArgumentMap,
-    contribution: z.array(Contribution).meta({ description: 'Вклад по действиям; сообщения не учитываются' }),
+    contribution: z.array(Contribution).meta({ description: 'Contribution by actions; messages do not count' }),
     conclusion: Conclusion.nullable(),
     points: z.number().int(),
     createdAt: Timestamp,

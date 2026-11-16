@@ -45,7 +45,7 @@ export const Project = z
     status: z.enum(['active', 'completed', 'archived']),
     stages: z.array(Stage),
     tasks: z.array(SprintTask),
-    evidence: z.array(Evidence).meta({ description: 'Для бизнеса — только подтверждённые' }),
+    evidence: z.array(Evidence).meta({ description: 'For a business — only confirmed items' }),
     points: z.object({ team: z.number().int(), byMember: z.record(z.string(), z.number().int()) }),
     createdAt: Timestamp,
   })
@@ -69,7 +69,7 @@ export const CreateProjectInput = z
     teamId: Id,
     title: z.string().trim().min(2).max(120),
     idea: z.string().trim().min(10).max(4000),
-    startDate: DateOnly.optional().meta({ description: 'Начало спринта; по умолчанию сегодня. Плановые даты этапов считаются от неё.' }),
+    startDate: DateOnly.optional().meta({ description: 'Sprint start; defaults to today. Planned stage dates are computed from it.' }),
   })
   .meta({ id: 'CreateProjectInput' });
 
@@ -100,7 +100,7 @@ export const UpdateSprintTaskInput = z
 export const SubmitSprintEvidenceInput = z
   .object({
     target: z.enum(['stage', 'task', 'interview']).meta({
-      description: 'stage — закрыть текущий этап; task — закрыть задачу; interview — ещё одно интервью с клиентом (не закрывает этап)',
+      description: 'stage — close the current stage; task — close a task; interview — another client interview (does not close the stage)',
     }),
     stageKey: StageKey.optional(),
     taskId: Id.optional(),
@@ -141,8 +141,8 @@ export const NextStep = z
   .object({
     ruleId: z.string(),
     potentialPoints: z.number().int(),
-    action: z.string().meta({ description: 'Что сделать (выбрано кодом)' }),
-    text: z.string().meta({ description: 'Формулировка рекомендации (модель или шаблон)' }),
+    action: z.string().meta({ description: 'What to do (chosen by code)' }),
+    text: z.string().meta({ description: 'The recommendation text (model or template)' }),
     generatedBy: z.enum(['ai', 'template']),
   })
   .meta({ id: 'NextStep' });

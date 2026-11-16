@@ -8,7 +8,7 @@ const tags = ['Startup Sprint'];
 export const sprintRoutes = createRouter();
 
 sprintRoutes.openapi(
-  createRoute({ method: 'get', path: '/sprint/templates', tags, security: secured, summary: '25 типовых задач по этапам', responses: { 200: jsonRes(z.array(sprint.TaskTemplate)), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/sprint/templates', tags, security: secured, summary: 'The 25 stage task templates', responses: { 200: jsonRes(z.array(sprint.TaskTemplate)), ...errorResponses } }),
   async (c) => c.json(await svc.listTemplates(c.get('ctx')), 200),
 );
 
@@ -18,7 +18,7 @@ sprintRoutes.openapi(
     path: '/sprint/projects',
     tags,
     security: secured,
-    summary: 'Проекты: свои (студент), все (куратор), по задачам организации (бизнес)',
+    summary: 'Projects: your own (student), all (mentor), your organisation tasks (business)',
     request: { query: z.object({ teamId: z.uuid().optional() }) },
     responses: { 200: jsonRes(z.array(sprint.ProjectSummary)), ...errorResponses },
   }),
@@ -31,7 +31,7 @@ sprintRoutes.openapi(
     path: '/sprint/projects',
     tags,
     security: secured,
-    summary: 'Создать проект команды: пять этапов с плановыми сроками',
+    summary: 'Create a team project: the five stages with planned dates',
     request: { body: jsonBody(sprint.CreateProjectInput) },
     responses: { 201: jsonRes(sprint.Project), ...errorResponses },
   }),
@@ -39,7 +39,7 @@ sprintRoutes.openapi(
 );
 
 sprintRoutes.openapi(
-  createRoute({ method: 'get', path: '/sprint/projects/{id}', tags, security: secured, summary: 'Карта этапов, задачи, подтверждения и баллы проекта', request: { params: IdParam }, responses: { 200: jsonRes(sprint.Project), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/sprint/projects/{id}', tags, security: secured, summary: 'The stage map, tasks, evidence and points of a project', request: { params: IdParam }, responses: { 200: jsonRes(sprint.Project), ...errorResponses } }),
   async (c) => c.json(await svc.getProject(c.get('ctx'), c.req.valid('param').id), 200),
 );
 
@@ -49,7 +49,7 @@ sprintRoutes.openapi(
     path: '/sprint/projects/{id}/stages/{stageKey}',
     tags,
     security: secured,
-    summary: 'Изменить плановую дату этапа (куратор)',
+    summary: 'Change a planned stage date (mentor)',
     request: { params: z.object({ id: z.uuid(), stageKey: sprint.StageKey }), body: jsonBody(sprint.UpdateStagePlanInput) },
     responses: { 200: jsonRes(sprint.Project), ...errorResponses },
   }),
@@ -65,7 +65,7 @@ sprintRoutes.openapi(
     path: '/sprint/projects/{id}/tasks',
     tags,
     security: secured,
-    summary: 'Добавить задачу (из шаблона или свою) с технологией и исполнителем',
+    summary: 'Add a task (from a template or your own) with a technology and an assignee',
     request: { params: IdParam, body: jsonBody(sprint.CreateSprintTaskInput) },
     responses: { 201: jsonRes(sprint.SprintTask), ...errorResponses },
   }),
@@ -78,7 +78,7 @@ sprintRoutes.openapi(
     path: '/sprint/tasks/{id}',
     tags,
     security: secured,
-    summary: 'Изменить задачу: исполнитель, технология, статус',
+    summary: 'Update a task: assignee, technology, status',
     request: { params: IdParam, body: jsonBody(sprint.UpdateSprintTaskInput) },
     responses: { 200: jsonRes(sprint.SprintTask), ...errorResponses },
   }),
@@ -91,7 +91,7 @@ sprintRoutes.openapi(
     path: '/sprint/projects/{id}/evidence',
     tags,
     security: secured,
-    summary: 'Отправить подтверждение этапа, задачи или интервью на проверку куратору',
+    summary: 'Submit stage, task or interview evidence for the mentor to review',
     request: { params: IdParam, body: jsonBody(sprint.SubmitSprintEvidenceInput) },
     responses: { 201: jsonRes(Evidence), ...errorResponses },
   }),
@@ -99,7 +99,7 @@ sprintRoutes.openapi(
 );
 
 sprintRoutes.openapi(
-  createRoute({ method: 'get', path: '/sprint/projects/{id}/feed', tags, security: secured, summary: 'Лента начислений и достижений с объяснениями', request: { params: IdParam }, responses: { 200: jsonRes(sprint.Feed), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/sprint/projects/{id}/feed', tags, security: secured, summary: 'The feed of awards and achievements with explanations', request: { params: IdParam }, responses: { 200: jsonRes(sprint.Feed), ...errorResponses } }),
   async (c) => c.json(await svc.getFeed(c.get('ctx'), c.req.valid('param').id), 200),
 );
 
@@ -109,7 +109,7 @@ sprintRoutes.openapi(
     path: '/sprint/projects/{id}/next-step',
     tags,
     security: secured,
-    summary: 'Следующее полезное действие: выбирает код, формулирует модель (или шаблон)',
+    summary: 'The next useful action: code picks it, the model (or a template) phrases it',
     request: { params: IdParam },
     responses: { 200: jsonRes(sprint.NextStep.nullable()), ...errorResponses },
   }),

@@ -7,6 +7,7 @@ import { fitQuery, FitScore, SkillChips } from '@/entities/recommendation';
 import { taskQuery, TaskMeta } from '@/entities/task';
 import { useActiveTeam } from '@/entities/viewer';
 import { CARD_FIELD_ORDER, CARD_FIELDS } from '@/shared/config';
+import { Button } from '@/shared/ui/button';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { SectionTitle } from '@/shared/ui/status';
 
@@ -19,7 +20,15 @@ function FitPanel({ taskId, teamId, teamName }: { taskId: string; teamId: string
   const existing = apps.data?.find((a) => a.taskId === taskId && (a.status === 'pending' || a.status === 'accepted'));
 
   if (fit.isPending) return <Skeleton className="h-64" />;
-  if (fit.isError) return null;
+  if (fit.isError)
+    return (
+      <div className="bg-card grid gap-3 rounded-xl border p-5">
+        <p className="text-destructive text-sm">Не удалось подобрать задачи</p>
+        <Button variant="outline" size="sm" disabled={fit.isFetching} onClick={() => void fit.refetch()}>
+          Повторить
+        </Button>
+      </div>
+    );
   const f = fit.data;
 
   return (

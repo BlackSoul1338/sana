@@ -3,7 +3,7 @@ import { Page, Task, TaskListQuery } from '@sana/contracts';
 import { createRouter, errorResponses, IdParam, jsonRes, secured } from '../../platform/http.js';
 import * as svc from './service.js';
 
-const tags = ['Каталог задач'];
+const tags = ['Task catalog'];
 export const catalogRoutes = createRouter();
 
 catalogRoutes.openapi(
@@ -12,7 +12,7 @@ catalogRoutes.openapi(
     path: '/tasks',
     tags,
     security: secured,
-    summary: 'Каталог опубликованных задач с фильтрами по теме и сложности',
+    summary: 'The catalog of published tasks, with topic and difficulty filters',
     request: { query: TaskListQuery },
     responses: { 200: jsonRes(Page(Task)), ...errorResponses },
   }),
@@ -20,6 +20,6 @@ catalogRoutes.openapi(
 );
 
 catalogRoutes.openapi(
-  createRoute({ method: 'get', path: '/tasks/{id}', tags, security: secured, summary: 'Карточка задачи', request: { params: IdParam }, responses: { 200: jsonRes(Task), ...errorResponses } }),
+  createRoute({ method: 'get', path: '/tasks/{id}', tags, security: secured, summary: 'A task card', request: { params: IdParam }, responses: { 200: jsonRes(Task), ...errorResponses } }),
   async (c) => c.json(await svc.getTask(c.get('ctx'), c.req.valid('param').id), 200),
 );

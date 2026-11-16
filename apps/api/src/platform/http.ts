@@ -17,6 +17,7 @@ const TITLES: Record<ErrorCode, string> = {
   sensitive_data: 'Найдены чувствительные данные',
   ai_unavailable: 'Модель недоступна',
   turn_limit: 'Лимит ходов исчерпан',
+  rate_limited: 'Слишком много запросов',
   internal: 'Внутренняя ошибка',
 };
 
@@ -44,7 +45,7 @@ export function zodIssuesToFieldErrors(error: z.ZodError) {
   return error.issues.map((i) => ({ path: i.path.join('.') || '(root)', message: i.message }));
 }
 
-/** Роутер модуля: ошибки валидации запроса превращаются в problem+json 422 с полевыми ошибками. */
+/** The module router: request validation failures become a 422 problem+json with the offending fields. */
 export function createRouter() {
   return new OpenAPIHono<AppEnv>({
     defaultHook: (result, c) => {
@@ -68,16 +69,17 @@ export const jsonRes = <S extends z.ZodType>(schema: S, description = 'OK') => (
 
 const problemRes = (description: string) => ({ content: { 'application/problem+json': { schema: Problem } }, description });
 
-/** Стандартный набор ответов об ошибках для документации. */
+/** The standard set of error responses, used by the docs. */
 export const errorResponses = {
-  401: problemRes('Нет или неверный токен'),
-  403: problemRes('Недостаточно прав'),
-  404: problemRes('Объект не найден'),
-  409: problemRes('Конфликт состояния'),
-  422: problemRes('Ошибка валидации или нарушено правило'),
+  401: problemRes('No or invalid token'),
+  403: problemRes('Insufficient permissions'),
+  404: problemRes('Resource not found'),
+  409: problemRes('State conflict'),
+  422: problemRes('Validation error or broken rule'),
+  429: problemRes('Too many requests'),
 } as const;
 
-export const aiErrorResponses = { ...errorResponses, 502: problemRes('Модель недоступна или нарушила схему') } as const;
+export const aiErrorResponses = { ...errorResponses, 502: problemRes('The model was unavailable or broke the schema') } as const;
 
 export const IdParam = z.object({ id: z.uuid() });
 

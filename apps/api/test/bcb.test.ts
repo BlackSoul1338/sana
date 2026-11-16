@@ -2,9 +2,9 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { createUser, http, makeApp, mockAi, resetDb } from './helpers/env.js';
 
 /**
- * Детерминированная «модель»: поле считается заполненным, если в репликах бизнеса есть ключевая фраза.
- * Для цели модель всегда «уверена» и цитирует то, чего нет в тексте, — проверка цитат должна это поймать,
- * пока бизнес сам не назовёт цель.
+ * Deterministic "model": a field is considered filled when the business's messages contain the keyword.
+ * The model is always "confident" about the goal and quotes text that is not in the messages — the quote check
+ * has to catch it until the business names the goal itself.
  */
 const KEYS: Record<string, string> = {
   title: 'прогноз спроса',
@@ -69,7 +69,7 @@ describe('Business Challenge Builder', () => {
     const start = await api.post('/api/bcb/drafts', biz, { text: 'Нужен прогноз спроса, а то много выбрасываем.' });
     expect(start.status).toBe(201);
     const t1 = start.body;
-    // Выдуманная цель не прошла проверку цитаты.
+    // The invented goal did not pass the quote check.
     expect(t1.fields.find((f: any) => f.key === 'goal')).toMatchObject({ status: 'missing', quoteVerified: false });
     expect(t1.fields.find((f: any) => f.key === 'title')).toMatchObject({ status: 'ok', quoteVerified: true });
     expect(t1.readiness).toBe(5);
@@ -81,7 +81,7 @@ describe('Business Challenge Builder', () => {
         text: 'Мы сеть из 12 кофеен. Хотим сократить списания. Дадим выгрузка продаж за 2 года в CSV.',
       })
     ).body;
-    expect(t2.readiness).toBe(48); // 5 + 15 + 7.5 (цель weak) + 20 = 47.5 → 48
+    expect(t2.readiness).toBe(48); // 5 + 15 + 7.5 (weak goal) + 20 = 47.5 → 48
     expect(t2.changes.map((c: any) => c.field).sort()).toEqual(['context', 'data', 'goal']);
     expect(t2.questions.length).toBeLessThanOrEqual(3);
 
@@ -92,19 +92,21 @@ describe('Business Challenge Builder', () => {
 
     const composed = await api.post(`/api/bcb/drafts/${t1.draftId}/compose`, biz);
     expect(composed.status).toBe(200);
-    // Ограничения не названы бизнесом → «не указано», даже если модель что-то придумала.
+    // The business never named constraints → "not specified", even if the model made something up.
     expect(composed.body.card.constraints).toEqual({ text: 'не указано', source: 'not_specified' });
-    // Требования приведены к допустимым диапазонам, дубли навыков убраны.
+    // Requirements are clamped to the allowed ranges; duplicate skills are removed.
     expect(composed.body.requirementsSuggestion).toMatchObject({ topic: 'ритейл', difficulty: 3, estHours: 4 });
     expect(composed.body.requirementsSuggestion.skills).toHaveLength(2);
 
-    // Нельзя опубликовать без подтверждения.
+    // Publishing requires explicit confirmation.
     expect((await api.post(`/api/bcb/drafts/${t1.draftId}/publish`, biz, {})).status).toBe(422);
+    // The model proposes the requirements; publishing requires the business to confirm them.
+    expect((await api.post(`/api/bcb/drafts/${t1.draftId}/publish`, biz, { confirm: true })).status).toBe(422);
     const edited = await api.patch(`/api/bcb/drafts/${t1.draftId}/card`, biz, {
       requirements: { topic: 'ритейл', difficulty: 2, estHours: 80, skills: [{ slug: 'pandas', required: true }, { slug: 'ml-classic', required: true }, { slug: 'data-viz', required: false }] },
     });
     expect(edited.status).toBe(200);
-    const pub = await api.post(`/api/bcb/drafts/${t1.draftId}/publish`, biz, { confirm: true });
+    const pub = await api.post(`/api/bcb/drafts/${t1.draftId}/publish`, biz, { confirm: true, requirementsConfirmed: true });
     expect(pub.status).toBe(201);
     expect(pub.body.points).toBe(t3.readiness);
 
@@ -123,8 +125,8 @@ describe('Business Challenge Builder', () => {
     const orgBoard = (await api.get('/api/leaderboard?subjectType=org', student)).body;
     expect(orgBoard[0]).toMatchObject({ total: t3.readiness, name: 'ООО Кофейни' });
 
-    // Повторная публикация невозможна.
-    expect((await api.post(`/api/bcb/drafts/${t1.draftId}/publish`, biz, { confirm: true })).status).toBe(409);
+    // Publishing a second time is not possible.
+    expect((await api.post(`/api/bcb/drafts/${t1.draftId}/publish`, biz, { confirm: true, requirementsConfirmed: true })).status).toBe(409);
   });
 
   it('персональные данные блокируют сборку карточки', async () => {
